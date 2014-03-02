@@ -54,19 +54,6 @@ int main( void )
    
    ALLEGRO_BITMAP* pitch = al_load_bitmap( "soccerPitch.png" );
    //***********************
-   //myBaseGameEntityList->
-   //tempME->draw();
-
-   struct temp
-   {
-   //int x;
-   //char xas;
-      int blabsd;
-   char basvvla;
-   char bassvvla;
-   char basvvvla;
-   };
-   std::cout<<sizeof(temp);
    
    while( !done )
    {
