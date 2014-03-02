@@ -1,3 +1,6 @@
+/**
+This class is not used. It was created basically for testing purposes , and to get started with a basic code structure for the implementation. 
+**/
 #pragma once
 #include "MovingEntity.h"
 

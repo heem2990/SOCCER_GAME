@@ -1,22 +1,23 @@
 #include <iostream>
-#include<allegro5\allegro.h>
-#include<allegro5\allegro_primitives.h>
-#include <allegro5\allegro_native_dialog.h>
+#include <allegro5\allegro.h>
 #include <allegro5\allegro_image.h>
 #include <allegro5\allegro_font.h>
+#include <allegro5\allegro_native_dialog.h>
+#include <allegro5\allegro_primitives.h>
 #include <allegro5\allegro_ttf.h>
+#include <vector> 
 #include "Constants.h"
-#include<vector> 
-
-#include"SoccerGame.h"
+#include "SoccerGame.h"
 
 using namespace std;
 
 int main( void )
 {
+   // initializing ALLEGRO's diplay,  event_queue ,and timer. 
    ALLEGRO_DISPLAY * display = NULL;
    ALLEGRO_EVENT_QUEUE *eventQueue = NULL;
    ALLEGRO_TIMER *timer = NULL;
+
    float timeKeeper = 0.0f;
    bool done = false;
    
@@ -35,15 +36,17 @@ int main( void )
        return -1;
    }
 
+   // Initializing , keyboard, primitives and fonts. 
    al_init_primitives_addon();
    al_install_keyboard();
    al_init_font_addon();
 	al_init_ttf_addon();
 
-
+   // Creating the timer for 1/60 seconds so that we can get an update 60 times a second = 60F PS
    timer = al_create_timer( 1.0 / 60.0  );
    eventQueue = al_create_event_queue();
 
+   // Registering timer events, so that the update  loop can be called 60 times a seconds, and registering events for keyboard inputs. 
    al_register_event_source( eventQueue, al_get_timer_event_source( timer ) );
    al_register_event_source( eventQueue, al_get_keyboard_event_source() );
    al_start_timer( timer );
@@ -55,6 +58,7 @@ int main( void )
    ALLEGRO_BITMAP* pitch = al_load_bitmap( "soccerPitch.png" );
    //***********************
    
+   // WIP. 
    while( !done )
    {
      timeKeeper = GetCurrentTime() - timeKeeper;
