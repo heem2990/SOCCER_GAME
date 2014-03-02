@@ -69,6 +69,7 @@
     <ClCompile Include="FieldPlayers.cpp" />
     <ClCompile Include="FieldPlayersState.cpp" />
     <ClCompile Include="GoalKeeper.cpp" />
+    <ClCompile Include="GoalKeeperStates.cpp" />
     <ClCompile Include="GoalPosts.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MovingEntity.cpp" />
@@ -77,6 +78,7 @@
     <ClCompile Include="SoccerBall.cpp" />
     <ClCompile Include="SoccerGame.cpp" />
     <ClCompile Include="Teams.cpp" />
+    <ClCompile Include="TeamStates.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Agent.h" />
@@ -87,6 +89,7 @@
     <ClInclude Include="FieldPlayers.h" />
     <ClInclude Include="FieldPlayersState.h" />
     <ClInclude Include="GoalKeeper.h" />
+    <ClInclude Include="GoalKeeperStates.h" />
     <ClInclude Include="GoalPosts.h" />
     <ClInclude Include="MovingEntity.h" />
     <ClInclude Include="Players.h" />
@@ -96,6 +99,7 @@
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="Teams.h" />
+    <ClInclude Include="TeamStates.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

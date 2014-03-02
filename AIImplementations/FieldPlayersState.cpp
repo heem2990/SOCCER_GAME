@@ -1,15 +1,15 @@
 #include "FieldPlayersState.h"
 
 // Wait State functions
-void Wait::enter( FieldPlayers* )
+void Wait::enter( FieldPlayers* pPlayer )
 {
 }
 
-void Wait::execute( FieldPlayers* )
+void Wait::execute( FieldPlayers* pPlayer )
 {
 }
 
-void Wait::exit( FieldPlayers* )
+void Wait::exit( FieldPlayers* pPlayer )
 {
 }
 
@@ -19,16 +19,18 @@ Wait* Wait::getInstance()
    return &waitState;
 }
 
+//*****************************************************************
 // ChaseBall State functions
-void ChaseBall::enter( FieldPlayers* )
+
+void ChaseBall::enter( FieldPlayers* pPlayer )
 {
 }
 
-void ChaseBall::execute( FieldPlayers* )
+void ChaseBall::execute( FieldPlayers* pPlayer )
 {
 }
 
-void ChaseBall::exit( FieldPlayers* )
+void ChaseBall::exit( FieldPlayers* pPlayer )
 {
 }
 
@@ -38,16 +40,18 @@ ChaseBall* ChaseBall::getInstance()
    return &chaseBallState;
 }
 
+//*****************************************************************
 // ReceiveBall State functions
-void ReceiveBall::enter( FieldPlayers* )
+
+void ReceiveBall::enter( FieldPlayers* pPlayer )
 {
 }
 
-void ReceiveBall::execute( FieldPlayers* )
+void ReceiveBall::execute( FieldPlayers* pPlayer )
 {
 }
 
-void ReceiveBall::exit( FieldPlayers* )
+void ReceiveBall::exit( FieldPlayers* pPlayer )
 {
 }
 
@@ -57,16 +61,18 @@ ReceiveBall* ReceiveBall::getInstance()
    return &receiveBallState;
 }
 
+//*****************************************************************
 // Dribble State functions
-void Dribble::enter( FieldPlayers* )
+
+void Dribble::enter( FieldPlayers* pPlayer )
 {
 }
 
-void Dribble::execute( FieldPlayers* )
+void Dribble::execute( FieldPlayers* pPlayer )
 {
 }
 
-void Dribble::exit( FieldPlayers* )
+void Dribble::exit( FieldPlayers* pPlayer )
 {
 }
 
@@ -76,16 +82,18 @@ Dribble* Dribble::getInstance()
    return &dribbleState;
 }
 
+//*****************************************************************
 // KickBall State functions
-void KickBall::enter( FieldPlayers* )
+
+void KickBall::enter( FieldPlayers* pPlayer )
 {
 }
 
-void KickBall::execute( FieldPlayers* )
+void KickBall::execute( FieldPlayers* pPlayer )
 {
 }
 
-void KickBall::exit( FieldPlayers* )
+void KickBall::exit( FieldPlayers* pPlayer )
 {
 }
 
@@ -95,16 +103,18 @@ KickBall* KickBall::getInstance()
    return &kickBallState;
 }
 
+//*****************************************************************
 // SupportPlayerWithBall State functions
-void SupportPlayerWithBall::enter( FieldPlayers* )
+
+void SupportPlayerWithBall::enter( FieldPlayers* pPlayer )
 {
 }
 
-void SupportPlayerWithBall::execute( FieldPlayers* )
+void SupportPlayerWithBall::execute( FieldPlayers* pPlayer )
 {
 }
 
-void SupportPlayerWithBall::exit( FieldPlayers* )
+void SupportPlayerWithBall::exit( FieldPlayers* pPlayer )
 {
 }
 
