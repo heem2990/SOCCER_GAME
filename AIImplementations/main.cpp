@@ -1,0 +1,88 @@
+#include <iostream>
+#include<allegro5\allegro.h>
+#include<allegro5\allegro_primitives.h>
+#include <allegro5\allegro_native_dialog.h>
+#include <allegro5\allegro_image.h>
+#include <allegro5\allegro_font.h>
+#include <allegro5\allegro_ttf.h>
+#include "Constants.h"
+#include<vector> 
+
+#include"SoccerGame.h"
+
+using namespace std;
+
+int main( void )
+{
+   ALLEGRO_DISPLAY * display = NULL;
+   ALLEGRO_EVENT_QUEUE *eventQueue = NULL;
+   ALLEGRO_TIMER *timer = NULL;
+   float timeKeeper = 0.0f;
+   bool done = false;
+   
+   if( !al_init() )
+   {
+      al_show_native_message_box(NULL, NULL, NULL,"FAILED TO INITIALIZE",NULL,NULL);
+      return -1;
+   }
+
+   al_init_image_addon();
+   display = al_create_display( SCREEN_WIDTH, SCREEN_HEIGHT );
+
+   if( !display )
+   {
+      al_show_native_message_box(NULL, NULL, NULL,"FAILED TO INITIALIZE",NULL,NULL);
+       return -1;
+   }
+
+   al_init_primitives_addon();
+   al_install_keyboard();
+   al_init_font_addon();
+	al_init_ttf_addon();
+
+
+   timer = al_create_timer( 1.0 / 60.0  );
+   eventQueue = al_create_event_queue();
+
+   al_register_event_source( eventQueue, al_get_timer_event_source( timer ) );
+   al_register_event_source( eventQueue, al_get_keyboard_event_source() );
+   al_start_timer( timer );
+
+   //***********************
+   SoccerGame::initRegions();
+   SoccerGame* mainSoccerGame = new SoccerGame();
+   
+   ALLEGRO_BITMAP* pitch = al_load_bitmap( "soccerPitch.png" );
+   //***********************
+   //myBaseGameEntityList->
+   //tempME->draw();
+
+   struct temp
+   {
+   //int x;
+   //char xas;
+      int blabsd;
+   char basvvla;
+   char bassvvla;
+   char basvvvla;
+   };
+   std::cout<<sizeof(temp);
+   
+   while( !done )
+   {
+     timeKeeper = GetCurrentTime() - timeKeeper;
+
+     al_clear_to_color(al_map_rgb(0,0,0));
+     mainSoccerGame->update();
+
+	  ALLEGRO_EVENT ev;
+	  al_wait_for_event( eventQueue, &ev );
+      
+     al_flip_display();
+   }
+
+   al_destroy_event_queue( eventQueue );
+   al_destroy_display(display);
+   
+   return 0;
+}
