@@ -19,7 +19,7 @@ void MessageDispatcher::dispatchMessage( double delay, BaseGameEntity* sender, B
    else
    {
       double currentTime = GetCurrentTime();
-      messagePacket.setDispatchTime( currentTime + messagePacket.getDispatchTime() );
+      messagePacket.setDispatchTime( currentTime + ( messagePacket.getDispatchTime() * 1000 ) );
       m_priorityQueue.insert( messagePacket );
    }
 }

@@ -58,14 +58,6 @@ void Players::draw()
 
 void Players::update()
 {
-   steeringBehavior();
    draw();
    MovingEntity::update();
-}
-
-void Players::steeringBehavior()
-{
-   glm::vec2 target = getTarget();
-   glm::vec2 directionToGoto = glm::normalize( target - getPosition() );
-   setVelocity( 3.0f * directionToGoto );   
 }

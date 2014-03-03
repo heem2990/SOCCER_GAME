@@ -40,7 +40,6 @@ public:
    ~Players(void);
    void draw();
    void update();
-   void steeringBehavior(); // TODO: RENAME FUNCTION
 
 private:
 

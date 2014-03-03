@@ -79,6 +79,7 @@
     <ClCompile Include="MyRect.cpp" />
     <ClCompile Include="SoccerBall.cpp" />
     <ClCompile Include="SoccerGame.cpp" />
+    <ClCompile Include="SteeringBehaviors.cpp" />
     <ClCompile Include="Teams.cpp" />
     <ClCompile Include="TeamStates.cpp" />
   </ItemGroup>
@@ -102,6 +103,7 @@
     <ClInclude Include="SoccerGame.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
+    <ClInclude Include="SteeringBehaviors.h" />
     <ClInclude Include="Teams.h" />
     <ClInclude Include="TeamStates.h" />
   </ItemGroup>

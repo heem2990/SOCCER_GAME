@@ -4,26 +4,25 @@
 #include<math.h>
 #include"Constants.h"
 
-static const float MAX_FORCE = 10.0f;
-static const float MAX_VELOCITY = 10.0f;
+static const double MAX_FORCE = 10.0f;
+static const double MAX_VELOCITY = 10.0f;
 
-// Move the following somehwere else
-float sqrMag( glm::vec2 currVector )
+// TODO: Move the following somehwere else
+double sqrMag( glm::vec2 currVector )
 {
 	return ( currVector.x * currVector.x + currVector.y * currVector.y );
 }
 
-MovingEntity::MovingEntity( char* imageName, glm::vec2 startingPosition, glm::vec2 startingVelocity , glm::vec2 heading )
+MovingEntity::MovingEntity( char* imageName, glm::vec2 startingPosition, glm::vec2 startingVelocity , glm::vec2 heading, int maxSpeed )
    : BaseGameEntity( imageName,  startingPosition )
-   , m_myTarget( SCREEN_WIDTH>>1 , SCREEN_HEIGHT>>1 )
    , m_heading( heading )
    , m_velocity( startingVelocity )
    , m_acceleration()
    , m_force()
    , m_side()
+   , m_maxSpeed( maxSpeed )
 {
 }
-
  
 MovingEntity::~MovingEntity(void)
 {
@@ -62,4 +61,9 @@ void MovingEntity::update()
 bool MovingEntity::handleMessage( const Message& msg )
 {
    return true; // TODO: Should return whether the message has been handled successfull or not!
+}
+
+double MovingEntity::getCurrentSpeed() const
+{
+   return( sqrt( sqrMag( m_velocity ) ) );
 }

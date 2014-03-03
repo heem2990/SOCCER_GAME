@@ -18,7 +18,7 @@ int main( void )
    ALLEGRO_EVENT_QUEUE *eventQueue = NULL;
    ALLEGRO_TIMER *timer = NULL;
 
-   float timeKeeper = 0.0f;
+   double timeKeeper = 0.0;
    bool done = false;
    
    if( !al_init() )
@@ -57,12 +57,11 @@ int main( void )
    
    ALLEGRO_BITMAP* pitch = al_load_bitmap( "soccerPitch.png" );
    //***********************
-   
+   int i = 0;
+   //timeKeeper = GetCurrentTime();
    // WIP. 
    while( !done )
    {
-     timeKeeper = GetCurrentTime() - timeKeeper;
-
      al_clear_to_color(al_map_rgb(0,0,0));
      mainSoccerGame->update();
 
