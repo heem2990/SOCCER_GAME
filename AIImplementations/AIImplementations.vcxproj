@@ -72,6 +72,8 @@
     <ClCompile Include="GoalKeeperStates.cpp" />
     <ClCompile Include="GoalPosts.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Message.cpp" />
+    <ClCompile Include="MessageDispatcher.cpp" />
     <ClCompile Include="MovingEntity.cpp" />
     <ClCompile Include="Players.cpp" />
     <ClCompile Include="MyRect.cpp" />
@@ -91,6 +93,8 @@
     <ClInclude Include="GoalKeeper.h" />
     <ClInclude Include="GoalKeeperStates.h" />
     <ClInclude Include="GoalPosts.h" />
+    <ClInclude Include="Message.h" />
+    <ClInclude Include="MessageDispatcher.h" />
     <ClInclude Include="MovingEntity.h" />
     <ClInclude Include="Players.h" />
     <ClInclude Include="MyRect.h" />

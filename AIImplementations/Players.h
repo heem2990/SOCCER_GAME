@@ -48,6 +48,6 @@ private:
    bool m_bHasBall;
    StateMachine<Players>* m_myStateMachine;   
    ALLEGRO_FONT* m_playerStateFont;
-   u32 m_homeRegion;
+   int m_homeRegion;
 };
 

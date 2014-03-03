@@ -8,8 +8,8 @@ public:
 	MovingEntity( char* imageName, glm::vec2 startingPosition, glm::vec2 startingVelocity, glm::vec2 heading );
 	~MovingEntity(void);
 
-   u32 getHeight() const {  return m_height; }
-   u32 getWidth() const { return m_width; }
+   int getHeight() const {  return m_height; }
+   int getWidth() const { return m_width; }
 
    glm::vec2 getVelocity() const { return m_velocity; }
    glm::vec2 getAcceleration() const { return m_acceleration; }
@@ -22,6 +22,7 @@ public:
 
    virtual void draw();
    virtual void update();
+   virtual bool handleMessage( const Message& msg );
 
 private:
 
@@ -32,9 +33,9 @@ private:
 	glm::vec2 m_force;
 	glm::vec2 m_side;
 	
-	u32 m_width;
-   u32 m_height;	
-	u32 m_mass;
+	int m_width;
+   int m_height;	
+	int m_mass;
 
 };
 

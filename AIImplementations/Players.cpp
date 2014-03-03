@@ -3,10 +3,10 @@
 #include<iostream>
 #include<glm\glm.hpp>
 
-const u32 NUM_PLAYERS = 5;
+const int NUM_PLAYERS = 5;
 
 // Initial starting region of the players. 
-const u32 PLAYER_POSITONS[ TEAM::NUM_TEAMS ][ NUM_PLAYERS ] =
+const int PLAYER_POSITONS[ TEAM::NUM_TEAMS ][ NUM_PLAYERS ] =
 {
    {
       16,

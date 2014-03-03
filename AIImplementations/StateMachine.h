@@ -49,8 +49,8 @@ public:
    void revertToPreviousState() const
    {
       changeState( m_pPreviousState );
+   } 
 
-   }
    bool isInState( const State< entityType >& rState ) const
    {
       if( m_pCurrentState == rState )

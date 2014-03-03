@@ -3,16 +3,16 @@
 #include <allegro5\allegro.h>
 #include "glm\vec2.hpp"
 
-typedef unsigned int u32;
-typedef signed int s32;
+class Message;
 
 class BaseGameEntity
 {
 public:
 	BaseGameEntity( const char* imageName, glm::vec2 position );
 
-	virtual void draw() ;
+	virtual void draw() = 0;
    virtual void update() = 0;
+   virtual bool handleMessage( const Message& msg ) = 0;
 
 	int getId() const { return m_id; }
    ALLEGRO_BITMAP* getImage()  { return m_sprite; }

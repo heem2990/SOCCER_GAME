@@ -31,7 +31,7 @@ void SoccerGame::initRegions()
 {
    std::cout<<"INITIALIZING MAIN GAME"<<std::endl;
    m_sRegions.reserve( 18 );
-   for( u32 i = 0 ; i < 18 ; ++i ) // 18 regions. 
+   for( int i = 0 ; i < 18 ; ++i ) // 18 regions. 
    {
       switch( i % 3 )
       {

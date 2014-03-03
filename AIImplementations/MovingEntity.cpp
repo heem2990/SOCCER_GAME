@@ -58,3 +58,8 @@ void MovingEntity::update()
    }
    draw();
 }
+
+bool MovingEntity::handleMessage( const Message& msg )
+{
+   return true; // TODO: Should return whether the message has been handled successfull or not!
+}
