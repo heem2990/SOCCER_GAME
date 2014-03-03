@@ -1,7 +1,8 @@
 #include "Players.h"
-#include"SoccerGame.h"
-#include<iostream>
-#include<glm\glm.hpp>
+#include "SoccerGame.h"
+#include <iostream>
+#include <glm\glm.hpp>
+#include "SteeringBehaviors.h"
 
 const int NUM_PLAYERS = 5;
 
@@ -41,13 +42,16 @@ Players::Players( TEAM::id myTeam, PlayerPositions::id myPosition )
    , m_myStateMachine()
    , m_playerStateFont( al_load_font( "arial.ttf" , 24, 0 ) )
    , m_homeRegion( PLAYER_POSITONS[ myTeam ][ myPosition ] )
+   , m_pSteeringBehavior( NULL )
 {
+   m_pSteeringBehavior = new SteeringBehaviors( this );
 }
 
 
 Players::~Players(void)
 {
    al_destroy_font( m_playerStateFont );
+   delete m_pSteeringBehavior;
 }
 
 void Players::draw()
@@ -59,5 +63,6 @@ void Players::draw()
 void Players::update()
 {
    draw();
+   m_pSteeringBehavior->calculateForce();
    MovingEntity::update();
 }

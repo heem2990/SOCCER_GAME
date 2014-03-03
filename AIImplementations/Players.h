@@ -5,7 +5,9 @@
 #include<allegro5\allegro_ttf.h>
 
 static const char* teamImages[ 2 ]  = { "bluePlayer.png", "redPlayer.png" };
-  
+
+class SteeringBehaviors;
+
 struct TEAM
 {
    enum id
@@ -48,5 +50,6 @@ private:
    StateMachine<Players>* m_myStateMachine;   
    ALLEGRO_FONT* m_playerStateFont;
    int m_homeRegion;
+   SteeringBehaviors* m_pSteeringBehavior;
 };
 

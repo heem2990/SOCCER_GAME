@@ -18,6 +18,7 @@ SteeringBehaviors::SteeringBehaviors( MovingEntity* pOwner )
 
 void SteeringBehaviors::calculateForce()
 {
+   m_pOwner->setVelocity( calcSeekForce( glm::vec2( 512, 320 ) ) ); // temp debug code
 }
 
 glm::vec2 SteeringBehaviors::calcArriveForce()
