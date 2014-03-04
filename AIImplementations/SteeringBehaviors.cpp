@@ -4,10 +4,10 @@
 #include "BaseGameEntity.h"
 #include "MovingEntity.h"
 
-static const double DECELERATION = 2;
-static const double TURN_AROUND_SPEED = 0.5;
+static const float DECELERATION = 2;
+static const float TURN_AROUND_SPEED = 0.5;
 
-double sqrmag( glm::vec2 currvector )
+float sqrmag( glm::vec2 currvector )
 {
 	return ( currvector.x * currvector.x + currvector.y * currvector.y );
 }
@@ -20,20 +20,19 @@ SteeringBehaviors::SteeringBehaviors( MovingEntity* pOwner )
 void SteeringBehaviors::calculateForce()
 {
 	glm::vec2 force = calcArriveForce( glm::vec2( 300, 300 ) );
-	//	glm::vec2 force = ( glm::vec2( 512, 320 ) );
-	m_pOwner->setForce( force ); // temp debug code
+	m_pOwner->setForce( force ); 
 }
 
 glm::vec2 SteeringBehaviors::calcArriveForce( glm::vec2 target )
 {
-   glm::vec2 velocityToTarget = /*m_pTarget->getPosition()*/target - m_pOwner->getPosition();
-   double distanceToTarget = sqrt( sqrmag( velocityToTarget ) );
+   glm::vec2 velocityToTarget = target - m_pOwner->getPosition();
+   float distanceToTarget = sqrt( sqrmag( velocityToTarget ) );
    std::cout<<velocityToTarget.x<<" "<<velocityToTarget.y <<std::endl;
    
    if( distanceToTarget > 0.5f )
    {
-      const double decelarationTweaker = 0.3;
-      double initialSpeed = sqrt( 2 * distanceToTarget * 0.005 );  // TODO : Maybe allow custom deceleration?
+      const float decelarationTweaker = 0.3;
+      float initialSpeed = sqrt( 2 * distanceToTarget * 0.005 );  // TODO : Maybe allow custom deceleration?
       initialSpeed = min( initialSpeed , m_pOwner->getMaxSpeed() );
       glm::vec2 velocityRequired = static_cast< float>( initialSpeed ) * velocityToTarget;
       return ( velocityRequired - m_pOwner->getVelocity() );
@@ -51,32 +50,38 @@ glm::vec2 SteeringBehaviors::calcSeekForce( glm::vec2 target )
    return ( velocityToTarget - m_pOwner->getVelocity() );
 }
 
-glm::vec2 SteeringBehaviors::calcInterposeForce()
+glm::vec2 SteeringBehaviors::calcInterposeForce( MovingEntity* pMovingTargetA , MovingEntity* pMovingTargetB )
 {
+   glm::vec2 midPoint = ( pMovingTargetA->getPosition() + pMovingTargetB->getPosition() )/ 2.0f;
+   float timeToReachMidPoint = sqrtf( sqrmag( midPoint - m_pOwner->getPosition() ) ) / m_pOwner->getMaxSpeed();
 
-   return glm::vec2();
+   glm::vec2 futureTargetAPos = pMovingTargetA->getPosition() + ( pMovingTargetA->getVelocity() * timeToReachMidPoint ) ;
+   glm::vec2 futureTargetBPos = pMovingTargetB->getPosition() + ( pMovingTargetB->getVelocity() * timeToReachMidPoint ) ;
+   glm::vec2 futureMidPoint = ( futureTargetAPos + futureTargetBPos ) / 2.0f;
+
+   return calcArriveForce( futureMidPoint );
 }
 
-glm::vec2 SteeringBehaviors::calcPursuitForce( MovingEntity* movingTarget )
+glm::vec2 SteeringBehaviors::calcPursuitForce( MovingEntity* pMovingTarget )
 {
-   glm::vec2 toTarget =  movingTarget->getPosition() - m_pOwner->getPosition();
+   glm::vec2 toTarget =  pMovingTarget->getPosition() - m_pOwner->getPosition();
 
-   double relativeHeading = glm::dot( m_pOwner->getHeading(), movingTarget->getHeading() );
+   float relativeHeading = glm::dot( m_pOwner->getHeading(), pMovingTarget->getHeading() );
    if( ( glm::dot( m_pOwner->getHeading(), toTarget ) > 0 ) // this ensures that the vehical is in the same direction as the vector from owner to target
               && relativeHeading < -0.95 ) // this ensures that the owner and target are facing the opposite direction. 
    {
-      return calcSeekForce( movingTarget->getPosition() );
+      return calcSeekForce( pMovingTarget->getPosition() );
    }
 
-   double turnAroundTime = calcTurnAroundTime( movingTarget ) + ( sqrt( sqrmag( toTarget ) ) / ( m_pOwner->getMaxSpeed() + movingTarget->getCurrentSpeed() ) );
+   float turnAroundTime = calcTurnAroundTime( pMovingTarget ) + ( sqrt( sqrmag( toTarget ) ) / ( m_pOwner->getMaxSpeed() + pMovingTarget->getCurrentSpeed() ) );
 
-   return calcSeekForce( ( movingTarget->getPosition() ) + ( movingTarget->getVelocity() * static_cast< float >( turnAroundTime ) ) ); // seeking a point which is at currentPosition + ( time*velocity )
+   return calcSeekForce( ( pMovingTarget->getPosition() ) + ( pMovingTarget->getVelocity() * static_cast< float >( turnAroundTime ) ) ); // seeking a point which is at currentPosition + ( time*velocity )
 }
 
-double SteeringBehaviors::calcTurnAroundTime( MovingEntity* movingTarget )
+float SteeringBehaviors::calcTurnAroundTime( MovingEntity* pMovingTarget )
 {
-   glm::vec2 toTarget = glm::normalize( movingTarget->getPosition() - m_pOwner->getPosition() );
-   double dotPro = glm::dot( toTarget, m_pOwner->getHeading() );
+   glm::vec2 toTarget = glm::normalize( pMovingTarget->getPosition() - m_pOwner->getPosition() );
+   float dotPro = glm::dot( toTarget, m_pOwner->getHeading() );
 
    return( ( dotPro - 1 ) * TURN_AROUND_SPEED * -1 );
 }
