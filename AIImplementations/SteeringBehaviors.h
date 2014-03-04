@@ -37,7 +37,7 @@ public:
 private:
 
    glm::vec2 calcSeekForce( glm::vec2 target );
-   glm::vec2 calcArriveForce();
+   glm::vec2 calcArriveForce( glm::vec2 target );
    glm::vec2 calcPursuitForce( MovingEntity* movingTarget );
    glm::vec2 calcInterposeForce();
    glm::vec2 calcSeparationForce();

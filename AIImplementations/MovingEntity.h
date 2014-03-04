@@ -31,15 +31,15 @@ public:
 
 private:
 
-	glm::vec2 m_heading;
-	glm::vec2 m_velocity;
-	glm::vec2 m_acceleration;
-	glm::vec2 m_force;
-	glm::vec2 m_side;
+   glm::vec2 m_heading;
+   glm::vec2 m_velocity;
+   glm::vec2 m_acceleration;
+   glm::vec2 m_force;
+   glm::vec2 m_side;
 	
-	int m_width;
+   int m_width;
    int m_height;	
-	int m_mass;
+   int m_mass;
    double m_maxSpeed;
 
 };

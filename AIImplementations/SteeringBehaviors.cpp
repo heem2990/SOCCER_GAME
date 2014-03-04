@@ -1,5 +1,6 @@
 #include "SteeringBehaviors.h"
 #include <math.h>
+#include <iostream>
 #include "BaseGameEntity.h"
 #include "MovingEntity.h"
 
@@ -18,29 +19,34 @@ SteeringBehaviors::SteeringBehaviors( MovingEntity* pOwner )
 
 void SteeringBehaviors::calculateForce()
 {
-   m_pOwner->setVelocity( calcSeekForce( glm::vec2( 512, 320 ) ) ); // temp debug code
+	glm::vec2 force = calcArriveForce( glm::vec2( 300, 300 ) );
+	//	glm::vec2 force = ( glm::vec2( 512, 320 ) );
+	m_pOwner->setForce( force ); // temp debug code
 }
 
-glm::vec2 SteeringBehaviors::calcArriveForce()
+glm::vec2 SteeringBehaviors::calcArriveForce( glm::vec2 target )
 {
-   glm::vec2 velocityToTarget = m_pTarget->getPosition() - m_pOwner->getPosition();
+   glm::vec2 velocityToTarget = /*m_pTarget->getPosition()*/target - m_pOwner->getPosition();
    double distanceToTarget = sqrt( sqrmag( velocityToTarget ) );
-
-   if( distanceToTarget > 0.0f )
+   std::cout<<velocityToTarget.x<<" "<<velocityToTarget.y <<std::endl;
+   
+   if( distanceToTarget > 0.5f )
    {
       const double decelarationTweaker = 0.3;
-      double initialSpeed = sqrt( 2 * distanceToTarget * DECELERATION );  // TODO : Maybe allow custom deceleration?
+      double initialSpeed = sqrt( 2 * distanceToTarget * 0.005 );  // TODO : Maybe allow custom deceleration?
       initialSpeed = min( initialSpeed , m_pOwner->getMaxSpeed() );
       glm::vec2 velocityRequired = static_cast< float>( initialSpeed ) * velocityToTarget;
       return ( velocityRequired - m_pOwner->getVelocity() );
-   }
-
+   }  
+   
    return glm::vec2();
 }
 
 glm::vec2 SteeringBehaviors::calcSeekForce( glm::vec2 target )
 {
    glm::vec2 velocityToTarget = target - m_pOwner->getPosition();
+   std::cout<<" Velocity x = "<<velocityToTarget.x << " y = "<<velocityToTarget.y<<std::endl;
+   std::cout<<" Normalized Velocity x = "<<glm::normalize( velocityToTarget ).x << " y = "<<glm::normalize( velocityToTarget ).y<<std::endl;
    velocityToTarget = ( static_cast< float > ( m_pOwner->getMaxSpeed() ) ) * glm::normalize( velocityToTarget ) ;
    return ( velocityToTarget - m_pOwner->getVelocity() );
 }

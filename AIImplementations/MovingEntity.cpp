@@ -20,6 +20,9 @@ MovingEntity::MovingEntity( char* imageName, glm::vec2 startingPosition, glm::ve
    , m_acceleration()
    , m_force()
    , m_side()
+   , m_width( 15 )
+   , m_height( 15 )	
+   , m_mass( 3000 )
    , m_maxSpeed( maxSpeed )
 {
 }
