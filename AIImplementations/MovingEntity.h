@@ -5,7 +5,7 @@ class MovingEntity :
 	public BaseGameEntity
 {
 public:
-	MovingEntity( char* imageName, glm::vec2 startingPosition, glm::vec2 startingVelocity, glm::vec2 heading, int maxSpeed = 10 ); // change 10 to appropriate units
+	MovingEntity( char* imageName, glm::vec2 startingPosition, glm::vec2 startingVelocity, glm::vec2 heading, int maxSpeed ); // change 5 to appropriate units
 	~MovingEntity(void);
 
    int getHeight() const {  return m_height; }

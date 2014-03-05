@@ -22,7 +22,7 @@ MovingEntity::MovingEntity( char* imageName, glm::vec2 startingPosition, glm::ve
    , m_side()
    , m_width( 15 )
    , m_height( 15 )	
-   , m_mass( 3000 )
+   , m_mass( 1 )
    , m_maxSpeed( maxSpeed )
 {
 }
@@ -53,7 +53,7 @@ void MovingEntity::update()
       setPosition( newPosition ); 
    }
  
-   if( sqrMag( m_velocity ) > 0.0f )
+   if( sqrMag( m_velocity ) > 5.0f )
    {
 	   m_heading = glm::normalize( m_velocity );
 	   m_side = glm::vec2( m_heading.y , -1 * m_heading.x );

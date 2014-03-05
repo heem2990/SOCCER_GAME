@@ -5,7 +5,7 @@
 #include "SteeringBehaviors.h"
 
 const int NUM_PLAYERS = 5;
-
+static const int PLAYERS_MAX_SPEED = 5;
 // Initial starting region of the players. 
 const int PLAYER_POSITONS[ TEAM::NUM_TEAMS ][ NUM_PLAYERS ] =
 {
@@ -38,7 +38,7 @@ const glm::vec2 PLAYER_DIRECTION[ TEAM::NUM_TEAMS ] =
 };
 
 Players::Players( TEAM::id myTeam, PlayerPositions::id myPosition )
-   : MovingEntity( PLAYER_IMAGES[ myTeam ], SoccerGame::getRegions()[ PLAYER_POSITONS[ myTeam ][ myPosition ] ]->getCenter(), glm::vec2() ,PLAYER_DIRECTION[ myTeam ] ) // change this according to playerPosition and team
+   : MovingEntity( PLAYER_IMAGES[ myTeam ], SoccerGame::getRegions()[ PLAYER_POSITONS[ myTeam ][ myPosition ] ]->getCenter(), glm::vec2() ,PLAYER_DIRECTION[ myTeam ], PLAYERS_MAX_SPEED ) // change this according to playerPosition and team
    , m_myStateMachine()
    , m_playerStateFont( al_load_font( "arial.ttf" , 24, 0 ) )
    , m_homeRegion( PLAYER_POSITONS[ myTeam ][ myPosition ] )

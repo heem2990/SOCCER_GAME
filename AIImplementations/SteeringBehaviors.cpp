@@ -6,10 +6,11 @@
 
 static const float DECELERATION = 2;
 static const float TURN_AROUND_SPEED = 0.5;
+static const float SLOW_DOWN_RADIUS = 10.0;
 
 float sqrmag( glm::vec2 currvector )
 {
-	return ( currvector.x * currvector.x + currvector.y * currvector.y );
+	return ( ( currvector.x * currvector.x ) + ( currvector.y * currvector.y ) );
 }
 
 SteeringBehaviors::SteeringBehaviors( MovingEntity* pOwner )
@@ -30,19 +31,24 @@ void SteeringBehaviors::calculateForce()
 
 glm::vec2 SteeringBehaviors::calcArriveForce( glm::vec2 target )
 {
-   glm::vec2 velocityToTarget = target - m_pOwner->getPosition();
+   float timeToArrive = 1;
+   glm::vec2 velocityToTarget = /*m_pTarget->getPosition()*/target - m_pOwner->getPosition();
    float distanceToTarget = sqrt( sqrmag( velocityToTarget ) );
-   
-   if( distanceToTarget > 0.5f )
+   float speed = 0.0f;
+   if( distanceToTarget < 1.0f )
    {
-      const float decelarationTweaker = 0.3;
-      float initialSpeed = sqrt( 2 * distanceToTarget * 0.005 );  // TODO : Maybe allow custom deceleration?
-      initialSpeed = min( initialSpeed , m_pOwner->getMaxSpeed() );
-      glm::vec2 velocityRequired = static_cast< float>( initialSpeed ) * velocityToTarget;
-      return ( velocityRequired - m_pOwner->getVelocity() );
-   }  
-   
-   return glm::vec2();
+      return glm::vec2( 0, 0 );
+   }
+
+   if( distanceToTarget > SLOW_DOWN_RADIUS )
+   {
+      speed = m_pOwner->getMaxSpeed();
+   }
+   else
+   {
+      speed = m_pOwner->getMaxSpeed() * distanceToTarget/ 10.0f; 
+   }
+   return( glm::normalize( velocityToTarget ) * speed );
 }
 
 glm::vec2 SteeringBehaviors::calcSeekForce( glm::vec2 target )

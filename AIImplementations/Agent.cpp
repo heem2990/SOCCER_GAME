@@ -6,7 +6,7 @@ This class is not used. It was created basically for testing purposes , and to g
 #include<iostream>
 
 Agent::Agent( char* imageName, glm::vec2 startingPosition, glm::vec2 startingVelocity, MovingEntity* target )
-   : MovingEntity( imageName, startingPosition, startingVelocity, glm::vec2() )
+   : MovingEntity( imageName, startingPosition, startingVelocity, glm::vec2(), 0 )
    , m_myTarget( target )
 {
 }
