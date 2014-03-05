@@ -3,6 +3,7 @@
 #include <iostream>
 #include "BaseGameEntity.h"
 #include "MovingEntity.h"
+#include "SoccerBall.h"
 
 static const float DECELERATION = 2;
 static const float TURN_AROUND_SPEED = 0.5;
@@ -16,20 +17,15 @@ float sqrmag( glm::vec2 currvector )
 SteeringBehaviors::SteeringBehaviors( MovingEntity* pOwner )
    : m_pOwner( pOwner )
    , m_pTarget( NULL )
-   , m_steeringBehaviorsFlag( 0 )
+   , m_steeringBehaviorsFlag( 1 )
 {
 }
 
 void SteeringBehaviors::calculateForce()
 {
-	if( isArriveOn() )
-	{
-		glm::vec2 force = calcArriveForce( glm::vec2( 300, 300 ) );
-		m_pOwner->setForce( force ); 
-	}
 }
 
-glm::vec2 SteeringBehaviors::calcArriveForce( glm::vec2 target )
+glm::vec2 SteeringBehaviors::calcArriveVelocity( glm::vec2 target ) 
 {
    float timeToArrive = 1;
    glm::vec2 velocityToTarget = /*m_pTarget->getPosition()*/target - m_pOwner->getPosition();
@@ -51,16 +47,14 @@ glm::vec2 SteeringBehaviors::calcArriveForce( glm::vec2 target )
    return( glm::normalize( velocityToTarget ) * speed );
 }
 
-glm::vec2 SteeringBehaviors::calcSeekForce( glm::vec2 target )
+glm::vec2 SteeringBehaviors::calcSeekForce( glm::vec2 target )// this should be set as a force. Why? 
 {
    glm::vec2 velocityToTarget = target - m_pOwner->getPosition();
-   std::cout<<" Velocity x = "<<velocityToTarget.x << " y = "<<velocityToTarget.y<<std::endl;
-   std::cout<<" Normalized Velocity x = "<<glm::normalize( velocityToTarget ).x << " y = "<<glm::normalize( velocityToTarget ).y<<std::endl;
-   velocityToTarget = ( static_cast< float > ( m_pOwner->getMaxSpeed() ) ) * glm::normalize( velocityToTarget ) ;
+   velocityToTarget = ( static_cast< float > ( 10 ) ) * glm::normalize( velocityToTarget ) ;
    return ( velocityToTarget - m_pOwner->getVelocity() );
 }
 
-glm::vec2 SteeringBehaviors::calcInterposeForce( MovingEntity* pMovingTargetA , MovingEntity* pMovingTargetB )
+glm::vec2 SteeringBehaviors::calcInterposeVelocity( MovingEntity* pMovingTargetA , MovingEntity* pMovingTargetB )
 {
    glm::vec2 midPoint = ( pMovingTargetA->getPosition() + pMovingTargetB->getPosition() )/ 2.0f;
    float timeToReachMidPoint = sqrtf( sqrmag( midPoint - m_pOwner->getPosition() ) ) / m_pOwner->getMaxSpeed();
@@ -69,10 +63,10 @@ glm::vec2 SteeringBehaviors::calcInterposeForce( MovingEntity* pMovingTargetA , 
    glm::vec2 futureTargetBPos = pMovingTargetB->getPosition() + ( pMovingTargetB->getVelocity() * timeToReachMidPoint ) ;
    glm::vec2 futureMidPoint = ( futureTargetAPos + futureTargetBPos ) / 2.0f;
 
-   return calcArriveForce( futureMidPoint );
+   return calcArriveVelocity( futureMidPoint );
 }
 
-glm::vec2 SteeringBehaviors::calcPursuitForce( MovingEntity* pMovingTarget )
+glm::vec2 SteeringBehaviors::calcPursuitVelocity( MovingEntity* pMovingTarget )
 {
    glm::vec2 toTarget =  pMovingTarget->getPosition() - m_pOwner->getPosition();
 

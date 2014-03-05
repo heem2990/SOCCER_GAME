@@ -53,7 +53,7 @@ void MovingEntity::update()
       setPosition( newPosition ); 
    }
  
-   if( sqrMag( m_velocity ) > 5.0f )
+   if( sqrMag( m_velocity ) > 1.0f )
    {
 	   m_heading = glm::normalize( m_velocity );
 	   m_side = glm::vec2( m_heading.y , -1 * m_heading.x );

@@ -38,9 +38,9 @@ public:
 private:
 
    glm::vec2 calcSeekForce( glm::vec2 target );
-   glm::vec2 calcArriveForce( glm::vec2 target );
-   glm::vec2 calcPursuitForce( MovingEntity* pMovingTarget );
-   glm::vec2 calcInterposeForce( MovingEntity* pMovingTargetA , MovingEntity* pMovingTargetB );
+   glm::vec2 calcArriveVelocity( glm::vec2 target );
+   glm::vec2 calcPursuitVelocity( MovingEntity* pMovingTarget );
+   glm::vec2 calcInterposeVelocity( MovingEntity* pMovingTargetA , MovingEntity* pMovingTargetB );
    glm::vec2 calcSeparationForce();
 
    float calcTurnAroundTime( MovingEntity* pMovingTarget );
