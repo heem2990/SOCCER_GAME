@@ -43,6 +43,8 @@ public:
    void draw();
    void update();
 
+   bool isPlayerHome();
+
 private:
 
    TEAM::id m_myTeam;

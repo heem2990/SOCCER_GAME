@@ -14,20 +14,24 @@ float sqrmag( glm::vec2 currvector )
 
 SteeringBehaviors::SteeringBehaviors( MovingEntity* pOwner )
    : m_pOwner( pOwner )
+   , m_pTarget( NULL )
+   , m_steeringBehaviorsFlag( 0 )
 {
 }
 
 void SteeringBehaviors::calculateForce()
 {
-	glm::vec2 force = calcArriveForce( glm::vec2( 300, 300 ) );
-	m_pOwner->setForce( force ); 
+	if( isArriveOn() )
+	{
+		glm::vec2 force = calcArriveForce( glm::vec2( 300, 300 ) );
+		m_pOwner->setForce( force ); 
+	}
 }
 
 glm::vec2 SteeringBehaviors::calcArriveForce( glm::vec2 target )
 {
    glm::vec2 velocityToTarget = target - m_pOwner->getPosition();
    float distanceToTarget = sqrt( sqrmag( velocityToTarget ) );
-   std::cout<<velocityToTarget.x<<" "<<velocityToTarget.y <<std::endl;
    
    if( distanceToTarget > 0.5f )
    {

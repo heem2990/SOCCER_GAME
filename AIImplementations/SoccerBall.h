@@ -6,12 +6,12 @@ class SoccerBall :
 {
 public:
 
-   SoccerBall(void);
-   ~SoccerBall(void);
    virtual void update(){};
    //virtual void draw(){};
-
+   static SoccerBall* getSoccerBallInstance();
 private:
+   SoccerBall(void);
+   ~SoccerBall(void);
 
 };
 

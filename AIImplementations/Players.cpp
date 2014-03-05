@@ -66,3 +66,9 @@ void Players::update()
    m_pSteeringBehavior->calculateForce();
    MovingEntity::update();
 }
+
+bool Players::isPlayerHome()
+{
+	return false;
+	//TODO check if the player is home and return true
+}

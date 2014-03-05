@@ -10,3 +10,9 @@ SoccerBall::SoccerBall(void)
 SoccerBall::~SoccerBall(void)
 {
 }
+
+SoccerBall* SoccerBall::getSoccerBallInstance()
+{
+	static SoccerBall pBall;
+	return &pBall;
+}

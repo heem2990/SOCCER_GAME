@@ -34,7 +34,7 @@ public:
 
    }
 
-   void changeState( const State< entityType* > pState )
+   void changeState( State< entityType >* pState )
    {
       if( pState )
       {

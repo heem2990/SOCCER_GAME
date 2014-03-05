@@ -36,6 +36,7 @@ private:
    SoccerBall* m_mySoccerBall;
    ALLEGRO_BITMAP* m_background;
    gameState m_stateFunction;
+
    bool m_hasInitialized;
 };
 
