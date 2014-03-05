@@ -28,6 +28,7 @@ public:
    void pursuitOn(){ m_steeringBehaviorsFlag |= FLAG_PURSUIT; }
    void pursuitOff(){ m_steeringBehaviorsFlag &= ~FLAG_PURSUIT; }
 
+   // TODO HEEM - check why the following commented code is returning an error. 
    bool isArriveOn(); //{ return m_steeringBehaviorsFlag & FLAG_ARRIVE ; }
    bool isPusuitOn(); //{ return m_steeringBehaviorsFlag & FLAG_PURSUIT; }
    bool isSeekOn(); //{ return m_steeringBehaviorsFlag & FLAG_SEEK; }

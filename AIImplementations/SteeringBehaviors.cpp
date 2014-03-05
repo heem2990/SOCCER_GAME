@@ -94,7 +94,7 @@ glm::vec2 SteeringBehaviors::calcSeparationForce()
 bool SteeringBehaviors::isArriveOn()
 {
    int temp = m_steeringBehaviorsFlag & FLAG_ARRIVE;
-   if( temp == 0 )
+   if( temp != 0 )
    {
       return true;
    }
@@ -107,7 +107,7 @@ bool SteeringBehaviors::isArriveOn()
 bool SteeringBehaviors::isInterposeOn()
 {
    int temp = m_steeringBehaviorsFlag & FLAG_INTERPOSE;
-   if( temp == 0 )
+   if( temp != 0 )
    {
       return true;
    }
@@ -120,7 +120,7 @@ bool SteeringBehaviors::isInterposeOn()
 bool SteeringBehaviors::isSeekOn()
 {
    int temp = m_steeringBehaviorsFlag & FLAG_SEEK;
-   if( temp == 0 )
+   if( temp != 0 )
    {
       return true;
    }
@@ -133,7 +133,7 @@ bool SteeringBehaviors::isSeekOn()
 bool SteeringBehaviors::isPusuitOn()
 {
    int temp = m_steeringBehaviorsFlag & FLAG_PURSUIT;
-   if( temp == 0 )
+   if( temp != 0 )
    {
       return true;
    }
@@ -146,7 +146,7 @@ bool SteeringBehaviors::isPusuitOn()
 bool SteeringBehaviors::isSeparationOn()
 {
    int temp = m_steeringBehaviorsFlag & FLAG_SEPARATION;
-   if( temp == 0 )
+   if( temp != 0 )
    {
       return true;
    }
