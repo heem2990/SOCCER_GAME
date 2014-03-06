@@ -17,12 +17,30 @@ float sqrmag( glm::vec2 currvector )
 SteeringBehaviors::SteeringBehaviors( MovingEntity* pOwner )
    : m_pOwner( pOwner )
    , m_pTarget( NULL )
-   , m_steeringBehaviorsFlag( 1 )
+   , m_steeringBehaviorsFlag( 0 )
 {
 }
 
 void SteeringBehaviors::calculateForce()
 {
+	glm::vec2 totalVelocity = glm::vec2();
+	glm::vec2 totalForce = glm::vec2();
+	if( isSeekOn() )
+	{
+		totalForce += calcSeekForce( m_pTarget->getPosition() );
+	}
+	if( isArriveOn() )
+	{
+		totalVelocity += calcArriveVelocity( m_pTarget->getPosition() );
+	}
+	if( isInterposeOn() )
+	{
+		totalVelocity += calcInterposeVelocity( SoccerBall::getSoccerBallInstance(), m_pTarget );
+	}
+	if( isPusuitOn() )
+	{
+		totalVelocity += calcPursuitVelocity( m_pTarget );
+	}
 }
 
 glm::vec2 SteeringBehaviors::calcArriveVelocity( glm::vec2 target ) 

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <glm\glm.hpp>
 #include "SteeringBehaviors.h"
+#include "SoccerBall.h"
 
 const int NUM_PLAYERS = 5;
 static const int PLAYERS_MAX_SPEED = 5;
@@ -39,10 +40,13 @@ const glm::vec2 PLAYER_DIRECTION[ TEAM::NUM_TEAMS ] =
 
 Players::Players( TEAM::id myTeam, PlayerPositions::id myPosition )
    : MovingEntity( PLAYER_IMAGES[ myTeam ], SoccerGame::getRegions()[ PLAYER_POSITONS[ myTeam ][ myPosition ] ]->getCenter(), glm::vec2() ,PLAYER_DIRECTION[ myTeam ], PLAYERS_MAX_SPEED ) // change this according to playerPosition and team
-   , m_myStateMachine()
    , m_playerStateFont( al_load_font( "arial.ttf" , 24, 0 ) )
-   , m_homeRegion( PLAYER_POSITONS[ myTeam ][ myPosition ] )
+   , m_myTeam( myTeam )
+   , m_pMyStateMachine()
    , m_pSteeringBehavior( NULL )
+   , m_bHasBall( false )
+   , m_isClosestPlayerToBall( false )
+   , m_homeRegion( PLAYER_POSITONS[ myTeam ][ myPosition ] )
 {
    m_pSteeringBehavior = new SteeringBehaviors( this );
 }
@@ -71,4 +75,18 @@ bool Players::isPlayerHome()
 {
 	return false;
 	//TODO check if the player is home and return true
+}
+
+bool Players::isInKickingRangeOfTheBall()
+{
+	glm::vec2 vectorToBall = getPosition() - SoccerBall::getSoccerBallInstance()->getPosition();
+	float sqrDistance = ( vectorToBall.x * vectorToBall.x ) + ( vectorToBall.y * vectorToBall.y );
+	if( sqrDistance <= 100.0f )
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

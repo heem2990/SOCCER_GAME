@@ -1,15 +1,19 @@
 #include "FieldPlayersState.h"
+#include "FieldPlayers.h"
+#include "SteeringBehaviors.h"
+#include "SoccerBall.h"
+#include <iostream>
 
 // Wait State functions
-void Wait::enter( FieldPlayers* pPlayer )
+void Wait::enter( Players* pPlayer )
 {
 }
 
-void Wait::execute( FieldPlayers* pPlayer )
+void Wait::execute( Players* pPlayer )
 {
 }
 
-void Wait::exit( FieldPlayers* pPlayer )
+void Wait::exit( Players* pPlayer )
 {
 }
 
@@ -22,16 +26,32 @@ Wait* Wait::getInstance()
 //*****************************************************************
 // ChaseBall State functions
 
-void ChaseBall::enter( FieldPlayers* pPlayer )
+void ChaseBall::enter( Players* pPlayer )
 {
+	pPlayer->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
+	pPlayer->getSteeringBehavior()->seekOn();
 }
 
-void ChaseBall::execute( FieldPlayers* pPlayer )
+void ChaseBall::execute( Players* pPlayer )
 {
+	if( pPlayer->isInKickingRangeOfTheBall() )
+	{
+		pPlayer->getStateMachine()->changeState( KickBall::getInstance() );
+		return;
+	}
+
+	if( pPlayer->isPlayerClosestToBall() )
+	{
+		pPlayer->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
+		return;
+	}
+
+	pPlayer->getStateMachine()->changeState( ReturnHome::getInstance() );
 }
 
-void ChaseBall::exit( FieldPlayers* pPlayer )
+void ChaseBall::exit( Players* pPlayer )
 {
+	pPlayer->getSteeringBehavior()->seekOff();
 }
 
 ChaseBall* ChaseBall::getInstance()
@@ -43,15 +63,15 @@ ChaseBall* ChaseBall::getInstance()
 //*****************************************************************
 // ReceiveBall State functions
 
-void ReceiveBall::enter( FieldPlayers* pPlayer )
+void ReceiveBall::enter( Players* pPlayer )
 {
 }
 
-void ReceiveBall::execute( FieldPlayers* pPlayer )
+void ReceiveBall::execute( Players* pPlayer )
 {
 }
 
-void ReceiveBall::exit( FieldPlayers* pPlayer )
+void ReceiveBall::exit( Players* pPlayer )
 {
 }
 
@@ -64,15 +84,15 @@ ReceiveBall* ReceiveBall::getInstance()
 //*****************************************************************
 // Dribble State functions
 
-void Dribble::enter( FieldPlayers* pPlayer )
+void Dribble::enter( Players* pPlayer )
 {
 }
 
-void Dribble::execute( FieldPlayers* pPlayer )
+void Dribble::execute( Players* pPlayer )
 {
 }
 
-void Dribble::exit( FieldPlayers* pPlayer )
+void Dribble::exit( Players* pPlayer )
 {
 }
 
@@ -85,15 +105,15 @@ Dribble* Dribble::getInstance()
 //*****************************************************************
 // KickBall State functions
 
-void KickBall::enter( FieldPlayers* pPlayer )
+void KickBall::enter( Players* pPlayer )
 {
 }
 
-void KickBall::execute( FieldPlayers* pPlayer )
+void KickBall::execute( Players* pPlayer )
 {
 }
 
-void KickBall::exit( FieldPlayers* pPlayer )
+void KickBall::exit( Players* pPlayer )
 {
 }
 
@@ -106,15 +126,15 @@ KickBall* KickBall::getInstance()
 //*****************************************************************
 // SupportPlayerWithBall State functions
 
-void SupportPlayerWithBall::enter( FieldPlayers* pPlayer )
+void SupportPlayerWithBall::enter( Players* pPlayer )
 {
 }
 
-void SupportPlayerWithBall::execute( FieldPlayers* pPlayer )
+void SupportPlayerWithBall::execute( Players* pPlayer )
 {
 }
 
-void SupportPlayerWithBall::exit( FieldPlayers* pPlayer )
+void SupportPlayerWithBall::exit( Players* pPlayer )
 {
 }
 
@@ -122,4 +142,25 @@ SupportPlayerWithBall* SupportPlayerWithBall::getInstance()
 {
    static SupportPlayerWithBall supportPlayerState;
    return &supportPlayerState;
+}
+
+//*****************************************************************
+// ReturnHome State functions
+
+void ReturnHome::enter( Players* pPlayer )
+{
+}
+
+void ReturnHome::execute( Players* pPlayer )
+{
+}
+
+void ReturnHome::exit( Players* pPlayer )
+{
+}
+
+ReturnHome* ReturnHome::getInstance()
+{
+   static ReturnHome returnHomeState;
+   return &returnHomeState;
 }

@@ -44,14 +44,23 @@ public:
    void update();
 
    bool isPlayerHome();
+   bool isInKickingRangeOfTheBall();
+
+   StateMachine< Players >* getStateMachine() const { return m_pMyStateMachine; }
+   SteeringBehaviors* getSteeringBehavior() const { return m_pSteeringBehavior; }
+
+   bool isPlayerClosestToBall() const { return m_isClosestPlayerToBall; }
 
 private:
-
-   TEAM::id m_myTeam;
-   bool m_bHasBall;
-   StateMachine<Players>* m_myStateMachine;   
+	
    ALLEGRO_FONT* m_playerStateFont;
-   int m_homeRegion;
+   TEAM::id m_myTeam;
+   StateMachine< Players >* m_pMyStateMachine;  
    SteeringBehaviors* m_pSteeringBehavior;
+
+   bool m_bHasBall; 
+   bool m_isClosestPlayerToBall;
+
+   int m_homeRegion;
 };
 

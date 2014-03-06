@@ -8,7 +8,6 @@
 #define FLAG_PURSUIT ( 1<<4 );
 
 class MovingEntity;
-class BaseGameEntity;
 
 class SteeringBehaviors
 {
@@ -35,6 +34,8 @@ public:
    bool isSeparationOn(); //{ return m_steeringBehaviorsFlag & FLAG_SEPARATION; }
    bool isInterposeOn(); //{ return m_steeringBehaviorsFlag & FLAG_INTERPOSE; }
 
+   void setTarget( MovingEntity* target ){ m_pTarget = target; }
+
 private:
 
    glm::vec2 calcSeekForce( glm::vec2 target );
@@ -46,7 +47,7 @@ private:
    float calcTurnAroundTime( MovingEntity* pMovingTarget );
 
    MovingEntity* m_pOwner;
-   BaseGameEntity* m_pTarget;
+   MovingEntity* m_pTarget;
 
    int m_steeringBehaviorsFlag;
 
