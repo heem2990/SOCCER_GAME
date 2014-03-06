@@ -2,15 +2,50 @@
 #include "FieldPlayers.h"
 #include "SteeringBehaviors.h"
 #include "SoccerBall.h"
+#include "Teams.h"
+#include "SoccerGame.h"
 #include <iostream>
 
 // Wait State functions
 void Wait::enter( Players* pPlayer )
 {
+   std::cout<<"Entering the Wait state"<<std::endl;
 }
 
 void Wait::execute( Players* pPlayer )
 {
+   if( !pPlayer->isAtTarget() )
+   {
+      pPlayer->getSteeringBehavior()->arriveOn();
+      return;
+   }
+   else
+   {
+      pPlayer->getSteeringBehavior()->arriveOff();
+      pPlayer->setVelocity( glm::vec2( 0, 0 ) );
+
+      // TODO: track ball
+   }
+
+   if( pPlayer->getMyTeam()->hasControl() &&
+      !pPlayer->isPlayerControllingTheBall() &&
+       pPlayer->isPlayerAheadOfAttacker() )
+   {
+      // TODO request pass
+      return;
+   }
+
+   if( SoccerGame::getGameInstance()->isGameOn() )
+   {
+      if( pPlayer->isPlayerClosestToBall() &&
+          pPlayer->getMyTeam()->getReceivingPlayer() == NULL &&
+          SoccerGame::getGameInstance()->doGoalkeepersHaveBall() ) 
+      {
+         pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
+         return;
+      }
+   }
+
 }
 
 void Wait::exit( Players* pPlayer )
@@ -46,7 +81,7 @@ void ChaseBall::execute( Players* pPlayer )
 		return;
 	}
 
-	pPlayer->getStateMachine()->changeState( ReturnHome::getInstance() );
+	pPlayer->getStateMachine()->changeState( FieldPlayerReturnHome::getInstance() );
 }
 
 void ChaseBall::exit( Players* pPlayer )
@@ -147,20 +182,20 @@ SupportPlayerWithBall* SupportPlayerWithBall::getInstance()
 //*****************************************************************
 // ReturnHome State functions
 
-void ReturnHome::enter( Players* pPlayer )
+void FieldPlayerReturnHome::enter( Players* pPlayer )
 {
 }
 
-void ReturnHome::execute( Players* pPlayer )
+void FieldPlayerReturnHome::execute( Players* pPlayer )
 {
 }
 
-void ReturnHome::exit( Players* pPlayer )
+void FieldPlayerReturnHome::exit( Players* pPlayer )
 {
 }
 
-ReturnHome* ReturnHome::getInstance()
+FieldPlayerReturnHome* FieldPlayerReturnHome::getInstance()
 {
-   static ReturnHome returnHomeState;
+   static FieldPlayerReturnHome returnHomeState;
    return &returnHomeState;
 }

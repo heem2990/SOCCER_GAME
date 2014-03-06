@@ -104,17 +104,17 @@ private:
 
 //*****************************************************************
 
-class ReturnHome :
+class FieldPlayerReturnHome :
    public State< Players >
 {
 public:
    void enter( Players* );
    void execute( Players* );
    void exit( Players* );
-   const char* getStateName() const { return "ReturnHome"; }
+   const char* getStateName() const { return "FieldPlayerReturnHome"; }
 
-   static ReturnHome* getInstance();
+   static FieldPlayerReturnHome* getInstance();
 
 private:
-   ReturnHome(void){};
+   FieldPlayerReturnHome(void){};
 };

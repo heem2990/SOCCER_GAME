@@ -4,6 +4,7 @@
 #include <glm\glm.hpp>
 #include "SteeringBehaviors.h"
 #include "SoccerBall.h"
+#include "Teams.h"
 
 const int NUM_PLAYERS = 5;
 static const int PLAYERS_MAX_SPEED = 5;
@@ -38,15 +39,16 @@ const glm::vec2 PLAYER_DIRECTION[ TEAM::NUM_TEAMS ] =
    glm::vec2( -1, 0 )
 };
 
-Players::Players( TEAM::id myTeam, PlayerPositions::id myPosition )
-   : MovingEntity( PLAYER_IMAGES[ myTeam ], SoccerGame::getRegions()[ PLAYER_POSITONS[ myTeam ][ myPosition ] ]->getCenter(), glm::vec2() ,PLAYER_DIRECTION[ myTeam ], PLAYERS_MAX_SPEED ) // change this according to playerPosition and team
+Players::Players( Teams* pMyTeam, PlayerPositions::id myPosition )
+   : MovingEntity( PLAYER_IMAGES[ pMyTeam->getTeamColor() ], SoccerGame::getRegions()[ PLAYER_POSITONS[ pMyTeam->getTeamColor() ][ myPosition ] ]->getCenter(), glm::vec2() ,PLAYER_DIRECTION[ pMyTeam->getTeamColor() ], PLAYERS_MAX_SPEED ) // change this according to playerPosition and team
    , m_playerStateFont( al_load_font( "arial.ttf" , 24, 0 ) )
-   , m_myTeam( myTeam )
    , m_pMyStateMachine()
    , m_pSteeringBehavior( NULL )
+   , m_pMyTeam( pMyTeam )
+   , m_myTeamColor( pMyTeam->getTeamColor() )
    , m_bHasBall( false )
    , m_isClosestPlayerToBall( false )
-   , m_homeRegion( PLAYER_POSITONS[ myTeam ][ myPosition ] )
+   , m_homeRegion( PLAYER_POSITONS[ pMyTeam->getTeamColor() ][ myPosition ] )
 {
    m_pSteeringBehavior = new SteeringBehaviors( this );
 }
@@ -89,4 +91,25 @@ bool Players::isInKickingRangeOfTheBall()
 	{
 		return false;
 	}
+}
+
+bool Players::isAtTarget()
+{
+   glm::vec2 toTarget = getPosition() - m_pSteeringBehavior->getTarget()->getPosition();
+   float distanceToTarget = toTarget.x * toTarget.x + toTarget.y * toTarget.y;
+
+   if( distanceToTarget <= 10.0f ) // 10 so that it might be at max about 3 pixels away/ 
+   {
+      return true;
+   }
+   else
+   {
+      return false;
+   }
+}
+
+bool Players::isPlayerAheadOfAttacker()
+{
+   return false;
+   // TODO Check the 
 }

@@ -1,7 +1,8 @@
 #include "GoalKeeper.h"
+#include "Teams.h"
 
-GoalKeeper::GoalKeeper( TEAM::id myTeam )
-   : Players( myTeam, PlayerPositions::GOALKEEPER )
+GoalKeeper::GoalKeeper( Teams* pMyTeam )
+   : Players( pMyTeam, PlayerPositions::GOALKEEPER )
 {
 }
 

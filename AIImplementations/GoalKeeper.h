@@ -1,11 +1,13 @@
 #pragma once
 #include "Players.h"
 
+class Teams;
+
 class GoalKeeper :
    public Players
 {
 public:
-   GoalKeeper( TEAM::id myTeam );
+   GoalKeeper(  Teams* pMyTeam  );
    ~GoalKeeper(void);
 };
 

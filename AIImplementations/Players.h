@@ -6,6 +6,7 @@
 
 static const char* teamImages[ 2 ]  = { "bluePlayer.png", "redPlayer.png" };
 
+class Teams;
 class SteeringBehaviors;
 
 struct TEAM
@@ -38,26 +39,30 @@ class Players :
 {
 
 public:
-   Players( TEAM::id myTeam, PlayerPositions::id );
+   Players( Teams* myTeam, PlayerPositions::id );
    ~Players(void);
    void draw();
    void update();
 
    bool isPlayerHome();
    bool isInKickingRangeOfTheBall();
+   bool isAtTarget();
+   bool isPlayerClosestToBall() const { return m_isClosestPlayerToBall; }
+   bool isPlayerControllingTheBall() const { return m_bHasBall; }
+   bool isPlayerAheadOfAttacker();
 
    StateMachine< Players >* getStateMachine() const { return m_pMyStateMachine; }
    SteeringBehaviors* getSteeringBehavior() const { return m_pSteeringBehavior; }
-
-   bool isPlayerClosestToBall() const { return m_isClosestPlayerToBall; }
+   Teams* getMyTeam() const { return m_pMyTeam; }
 
 private:
 	
    ALLEGRO_FONT* m_playerStateFont;
-   TEAM::id m_myTeam;
    StateMachine< Players >* m_pMyStateMachine;  
    SteeringBehaviors* m_pSteeringBehavior;
+   Teams* m_pMyTeam;
 
+   TEAM::id m_myTeamColor;
    bool m_bHasBall; 
    bool m_isClosestPlayerToBall;
 

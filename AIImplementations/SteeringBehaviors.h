@@ -35,6 +35,7 @@ public:
    bool isInterposeOn(); //{ return m_steeringBehaviorsFlag & FLAG_INTERPOSE; }
 
    void setTarget( MovingEntity* target ){ m_pTarget = target; }
+   MovingEntity* getTarget() const { return m_pTarget ; }
 
 private:
 

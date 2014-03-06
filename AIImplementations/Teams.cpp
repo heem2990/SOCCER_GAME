@@ -5,6 +5,7 @@
 #include "StateMachine.h"
 #include "TeamStates.h"
 #include <iostream>
+#include "Teams.h"
 
 static const char* TEAMS_NAME[2] = 
 {
@@ -16,7 +17,7 @@ static const int TOTAL_PLAYERS = 4;
 Teams::Teams( TEAM::id myTeam )
    : m_myTeam( myTeam )
    , m_playersOnTeam()
-   , m_pGoalkeeper( new GoalKeeper( m_myTeam ) )
+   , m_pGoalkeeper( new GoalKeeper( this ) )
    , m_pPlayerWithBall( NULL )
    , m_pSupportingPlayer( NULL )
    , m_pPlayerClosestToBall( NULL )
@@ -27,7 +28,7 @@ Teams::Teams( TEAM::id myTeam )
 {
    for( int i = 0 ; i < TOTAL_PLAYERS ; ++i )
    {
-      m_playersOnTeam.push_back( new FieldPlayers( m_myTeam, ( PlayerPositions::id )( i+1 ) ) ); 
+      m_playersOnTeam.push_back( new FieldPlayers( this, ( PlayerPositions::id )( i+1 ) ) ); 
    }
    //m_pMyStateMachine->setPreviousState( Defending::getInstance() );
    m_pMyStateMachine->setCurrentState( Defending::getInstance() );
@@ -98,4 +99,9 @@ bool Teams::arePlayersHome()
 		return true; // returns true if all fieldPlayers are home and goalKepeer is home.
 	}
 	return false; // returns false if goalkeeper is not home but the other players are. 
+}
+
+bool Teams::doesGoalKeeperHaveBall() const 
+{
+   return m_pGoalkeeper->isPlayerControllingTheBall();
 }

@@ -30,6 +30,12 @@ SoccerGame::~SoccerGame(void)
    al_destroy_bitmap( m_background );
 }
 
+SoccerGame* SoccerGame::getGameInstance()
+{ 
+   static SoccerGame soccerGame; 
+   return &soccerGame;
+}    
+
 void SoccerGame::initRegions()
 {
    std::cout<<"INITIALIZING MAIN GAME"<<std::endl;
@@ -82,4 +88,9 @@ void SoccerGame::draw()
 
 void SoccerGame::paused()
 {
+}
+
+bool SoccerGame::doGoalkeepersHaveBall() const 
+{ 
+   return ( m_redTeam->doesGoalKeeperHaveBall() || m_blueTeam->doesGoalKeeperHaveBall() );
 }

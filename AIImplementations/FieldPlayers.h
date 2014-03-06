@@ -1,11 +1,13 @@
 #pragma once
 #include "Players.h"
 
+class Teams;
+
 class FieldPlayers :
    public Players
 {
 public:
-   FieldPlayers( TEAM::id myTeam, PlayerPositions::id myPosition );
+   FieldPlayers( Teams* pMyTeam, PlayerPositions::id myPosition );
    ~FieldPlayers(void);
 
 private:

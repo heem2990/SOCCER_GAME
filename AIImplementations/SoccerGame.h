@@ -21,13 +21,13 @@ public:
    void draw();
    void paused();
 
-   inline static SoccerGame* getGameInstance(){ return m_soccerGame; }   
+   static SoccerGame* getGameInstance(); 
    inline static std::vector< MyRect* > getRegions(){ return m_sRegions; }
-
+   bool isGameOn() const{ return m_isGameOn; }
+   bool doGoalkeepersHaveBall() const ;
 private:
    
    static std::vector< MyRect* > m_sRegions;
-   static SoccerGame* m_soccerGame;
 
    GoalPosts* m_redTeamPost;
    GoalPosts* m_blueTeamPost;
@@ -38,5 +38,6 @@ private:
    gameState m_stateFunction;
 
    bool m_hasInitialized;
+   bool m_isGameOn;
 };
 
