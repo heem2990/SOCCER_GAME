@@ -17,6 +17,7 @@ float sqrmag( glm::vec2 currvector )
 SteeringBehaviors::SteeringBehaviors( MovingEntity* pOwner )
    : m_pOwner( pOwner )
    , m_pTarget( NULL )
+   , m_arriveTarget( glm::vec2() )
    , m_steeringBehaviorsFlag( 0 )
 {
 }
@@ -31,7 +32,7 @@ void SteeringBehaviors::calculateForce()
 	}
 	if( isArriveOn() )
 	{
-		totalVelocity += calcArriveVelocity( m_pTarget->getPosition() );
+		totalVelocity += calcArriveVelocity( m_arriveTarget );
 	}
 	if( isInterposeOn() )
 	{

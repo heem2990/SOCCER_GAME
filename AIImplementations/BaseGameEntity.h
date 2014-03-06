@@ -15,8 +15,8 @@ public:
    virtual bool handleMessage( const Message& msg ) = 0;
 
 	int getId() const { return m_id; }
-   ALLEGRO_BITMAP* getImage()  { return m_sprite; }
-   glm::vec2 getPosition(){ return m_position; }
+   ALLEGRO_BITMAP* getImage() const { return m_sprite; }
+   glm::vec2 getPosition() const { return m_position; }
    void setPosition( glm::vec2 position ){ m_position = position; }
    // something for bounds. 
 

@@ -45,15 +45,19 @@ public:
    void update();
 
    bool isPlayerHome();
-   bool isInKickingRangeOfTheBall();
-   bool isAtTarget();
+   bool isInKickingRangeOfTheBall() const; 
+   bool isAtTarget() const;
+   bool isAtArriveTarget() const;
    bool isPlayerClosestToBall() const { return m_isClosestPlayerToBall; }
    bool isPlayerControllingTheBall() const { return m_bHasBall; }
-   bool isPlayerAheadOfAttacker();
+   bool isPlayerAheadOfAttacker() const;
+   bool isPlayerWithinReceivingRange() const; // should be a const function, but is not because we are calculating the sqrMag manually in there. CHANGE
 
    StateMachine< Players >* getStateMachine() const { return m_pMyStateMachine; }
    SteeringBehaviors* getSteeringBehavior() const { return m_pSteeringBehavior; }
    Teams* getMyTeam() const { return m_pMyTeam; }
+
+   void setHomeRegionAsTarget() const;
 
 private:
 	

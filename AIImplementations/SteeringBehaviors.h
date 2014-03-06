@@ -35,6 +35,8 @@ public:
    bool isInterposeOn(); //{ return m_steeringBehaviorsFlag & FLAG_INTERPOSE; }
 
    void setTarget( MovingEntity* target ){ m_pTarget = target; }
+   void setArriveTarget( glm::vec2 target ){ m_arriveTarget = target; }
+   glm::vec2 getArriveTarget() const { return m_arriveTarget; }
    MovingEntity* getTarget() const { return m_pTarget ; }
 
 private:
@@ -49,6 +51,7 @@ private:
 
    MovingEntity* m_pOwner;
    MovingEntity* m_pTarget;
+   glm::vec2 m_arriveTarget;
 
    int m_steeringBehaviorsFlag;
 

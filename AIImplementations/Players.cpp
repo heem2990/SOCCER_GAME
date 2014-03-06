@@ -39,6 +39,11 @@ const glm::vec2 PLAYER_DIRECTION[ TEAM::NUM_TEAMS ] =
    glm::vec2( -1, 0 )
 };
 
+float sqrMag( glm::vec2 vectorToProcess ) 
+{
+   return ( vectorToProcess.x * vectorToProcess.x + vectorToProcess.y * vectorToProcess.y );  
+}
+
 Players::Players( Teams* pMyTeam, PlayerPositions::id myPosition )
    : MovingEntity( PLAYER_IMAGES[ pMyTeam->getTeamColor() ], SoccerGame::getRegions()[ PLAYER_POSITONS[ pMyTeam->getTeamColor() ][ myPosition ] ]->getCenter(), glm::vec2() ,PLAYER_DIRECTION[ pMyTeam->getTeamColor() ], PLAYERS_MAX_SPEED ) // change this according to playerPosition and team
    , m_playerStateFont( al_load_font( "arial.ttf" , 24, 0 ) )
@@ -79,11 +84,9 @@ bool Players::isPlayerHome()
 	//TODO check if the player is home and return true
 }
 
-bool Players::isInKickingRangeOfTheBall()
+bool Players::isInKickingRangeOfTheBall() const
 {
-	glm::vec2 vectorToBall = getPosition() - SoccerBall::getSoccerBallInstance()->getPosition();
-	float sqrDistance = ( vectorToBall.x * vectorToBall.x ) + ( vectorToBall.y * vectorToBall.y );
-	if( sqrDistance <= 100.0f )
+	if( sqrMag( getPosition() - SoccerBall::getSoccerBallInstance()->getPosition() ) <= 100.0f ) // TODO: 100 is hardcoded, change. 
 	{
 		return true;
 	}
@@ -93,12 +96,9 @@ bool Players::isInKickingRangeOfTheBall()
 	}
 }
 
-bool Players::isAtTarget()
+bool Players::isAtTarget() const
 {
-   glm::vec2 toTarget = getPosition() - m_pSteeringBehavior->getTarget()->getPosition();
-   float distanceToTarget = toTarget.x * toTarget.x + toTarget.y * toTarget.y;
-
-   if( distanceToTarget <= 10.0f ) // 10 so that it might be at max about 3 pixels away/ 
+   if( sqrMag( getPosition() - m_pSteeringBehavior->getTarget()->getPosition() ) <= 10.0f ) // 10 so that it might be at max about 3 pixels away/ 
    {
       return true;
    }
@@ -108,8 +108,37 @@ bool Players::isAtTarget()
    }
 }
 
-bool Players::isPlayerAheadOfAttacker()
+bool Players::isAtArriveTarget() const
+{
+   if( sqrMag( getPosition() - m_pSteeringBehavior->getArriveTarget() ) <= 10.0f ) // 10 so that it might be at max about 3 pixels away/ 
+   {
+      return true;
+   }
+   else
+   {
+      return false;
+   }
+}
+
+bool Players::isPlayerAheadOfAttacker() const
 {
    return false;
    // TODO Check the 
+}
+
+bool Players::isPlayerWithinReceivingRange() const 
+{
+   if( sqrMag( getPosition() - SoccerBall::getSoccerBallInstance()->getPosition() ) <= ( 50 * 50.f) ) // if the ball is less 50 pixels away. 
+   {
+      return true;
+   }
+   else
+   {
+      return false;
+   }
+}
+
+void Players::setHomeRegionAsTarget() const
+{
+   m_pSteeringBehavior->setArriveTarget( SoccerGame::getRegions()[ m_homeRegion ]->getCenter() );
 }
