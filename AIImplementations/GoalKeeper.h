@@ -9,5 +9,7 @@ class GoalKeeper :
 public:
    GoalKeeper(  Teams* pMyTeam  );
    ~GoalKeeper(void);
+
+   bool handleMessage( const Message& msg );
 };
 

@@ -36,3 +36,9 @@ void MessageDispatcher::dispatchDelayedMessages()
       m_priorityQueue.erase( m_priorityQueue.begin() );
    }
 }
+
+MessageDispatcher* MessageDispatcher::getInstance()
+{
+   static MessageDispatcher messageDispatcher;
+   return &messageDispatcher;
+}

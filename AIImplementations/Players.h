@@ -43,6 +43,7 @@ public:
    ~Players(void);
    void draw();
    void update();
+   virtual bool handleMessage( const Message& msg );
 
    bool isPlayerHome();
    bool isInKickingRangeOfTheBall() const; 

@@ -1,15 +1,16 @@
 #include "GoalKeeperStates.h"
+#include "Players.h"
 
 // ReturnHome State functions
-void ReturnHome::enter( GoalKeeper* pGoalKeeper )
+void ReturnHome::enter( Players* pGoalKeeper )
 {
 }
 
-void ReturnHome::execute( GoalKeeper* pGoalKeeper )
+void ReturnHome::execute( Players* pGoalKeeper )
 {
 }
 
-void ReturnHome::exit( GoalKeeper* pGoalKeeper )
+void ReturnHome::exit( Players* pGoalKeeper )
 {
 }
 
@@ -18,19 +19,19 @@ ReturnHome* ReturnHome::getInstance()
    static ReturnHome returnHomeState;
    return &returnHomeState;
 }
-
+ 
 //*****************************************************************
 // TendGoal State functions
 
-void TendGoal::enter( GoalKeeper* pGoalKeeper )
+void TendGoal::enter( Players* pGoalKeeper )
 {
 }
 
-void TendGoal::execute( GoalKeeper* pGoalKeeper )
+void TendGoal::execute( Players* pGoalKeeper )
 {
 }
 
-void TendGoal::exit( GoalKeeper* pGoalKeeper )
+void TendGoal::exit( Players* pGoalKeeper )
 {
 }
 
@@ -43,15 +44,15 @@ TendGoal* TendGoal::getInstance()
 //*****************************************************************
 // goalKick State functions
 
-void GoalKick::enter( GoalKeeper* pGoalKeeper )
+void GoalKick::enter( Players* pGoalKeeper )
 {
 }
 
-void GoalKick::execute( GoalKeeper* pGoalKeeper )
+void GoalKick::execute( Players* pGoalKeeper )
 {
 }
 
-void GoalKick::exit( GoalKeeper* pGoalKeeper )
+void GoalKick::exit( Players* pGoalKeeper )
 {
 }
 
@@ -64,15 +65,15 @@ GoalKick* GoalKick::getInstance()
 //*****************************************************************
 // InterceptBall State functions
 
-void InterceptBall::enter( GoalKeeper* pGoalKeeper )
+void InterceptBall::enter( Players* pGoalKeeper )
 {
 }
 
-void InterceptBall::execute( GoalKeeper* pGoalKeeper )
+void InterceptBall::execute( Players* pGoalKeeper )
 {
 }
 
-void InterceptBall::exit( GoalKeeper* pGoalKeeper )
+void InterceptBall::exit( Players* pGoalKeeper )
 {
 }
 

@@ -142,3 +142,8 @@ void Players::setHomeRegionAsTarget() const
 {
    m_pSteeringBehavior->setArriveTarget( SoccerGame::getRegions()[ m_homeRegion ]->getCenter() );
 }
+
+bool Players::handleMessage( const Message& msg )
+{
+   return true;
+}

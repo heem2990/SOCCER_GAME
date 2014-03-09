@@ -9,7 +9,7 @@ public:
    void dispatchMessage( double delay, BaseGameEntity* sender, BaseGameEntity* receive, MESSAGE_TYPES::msg messageToSend, void* extraInfo );
    void dispatchDelayedMessages();
 
-   static MessageDispatcher* Instance();
+   static MessageDispatcher* getInstance();
 
 private:
    std::set<Message> m_priorityQueue;

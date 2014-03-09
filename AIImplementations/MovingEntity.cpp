@@ -55,7 +55,7 @@ void MovingEntity::update()
 
 bool MovingEntity::handleMessage( const Message& msg )
 {
-   return true; // TODO: Should return whether the message has been handled successfull or not!
+   return false; // TODO: Should return whether the message has been handled successfull or not!
 }
 
 double MovingEntity::getCurrentSpeed() const

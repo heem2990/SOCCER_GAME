@@ -1,5 +1,5 @@
 #pragma once
-
+class Message;
 template< class entityType >
 class State
 {

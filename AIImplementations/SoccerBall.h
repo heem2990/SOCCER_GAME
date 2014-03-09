@@ -1,7 +1,7 @@
 #pragma once
 #include "MovingEntity.h"
 
-class Player;
+class Players;
 
 class SoccerBall :
    public MovingEntity
@@ -11,7 +11,7 @@ public:
    static SoccerBall* getSoccerBallInstance();
 
    void kick( glm::vec2 direction, float force );
-   void trap( Player* pOwner );
+   void trap( Players* pOwner );
    void setBallPosition( glm::vec2 position );
 
    float timeToCoverDistance( glm::vec2 from, glm::vec2 to, float force ) const;
@@ -24,7 +24,7 @@ private:
 
    void testCollisionsWithWalls();
    
-   Player* m_pBallOwner;
+   Players* m_pBallOwner;
 
 };
 
