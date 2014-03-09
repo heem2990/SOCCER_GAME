@@ -3,7 +3,7 @@
 #include<vector>
 #include"MyRect.h"
 
-//class MyRect;
+class Wall;
 class GoalPosts;
 class Teams;
 class SoccerBall;
@@ -23,11 +23,14 @@ public:
 
    static SoccerGame* getGameInstance(); 
    inline static std::vector< MyRect* > getRegions(){ return m_sRegions; }
+   inline static std::vector< Wall* > getWalls(){ return m_sWalls; }
    bool isGameOn() const{ return m_isGameOn; }
    bool doGoalkeepersHaveBall() const ;
+
 private:
    
    static std::vector< MyRect* > m_sRegions;
+   static std::vector< Wall* > m_sWalls;
 
    GoalPosts* m_redTeamPost;
    GoalPosts* m_blueTeamPost;

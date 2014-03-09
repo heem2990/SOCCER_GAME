@@ -50,6 +50,7 @@ void Wait::execute( Players* pPlayer )
 
 void Wait::exit( Players* pPlayer )
 {
+   std::cout<<"Exiting the Wait state"<<std::endl;
 }
 
 Wait* Wait::getInstance()
@@ -179,6 +180,7 @@ Dribble* Dribble::getInstance()
 
 void KickBall::enter( Players* pPlayer )
 {
+
 }
 
 void KickBall::execute( Players* pPlayer )

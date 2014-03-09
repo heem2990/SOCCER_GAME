@@ -66,7 +66,7 @@ private:
    SteeringBehaviors* m_pSteeringBehavior;
    Teams* m_pMyTeam;
 
-   TEAM::id m_myTeamColor;
+   const TEAM::id m_myTeamColor;
    bool m_bHasBall; 
    bool m_isClosestPlayerToBall;
 

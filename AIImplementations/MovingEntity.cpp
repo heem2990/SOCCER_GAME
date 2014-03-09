@@ -13,16 +13,16 @@ double sqrMag( glm::vec2 currVector )
 	return ( currVector.x * currVector.x + currVector.y * currVector.y );
 }
 
-MovingEntity::MovingEntity( char* imageName, glm::vec2 startingPosition, glm::vec2 startingVelocity , glm::vec2 heading, int maxSpeed )
+MovingEntity::MovingEntity( char* imageName, glm::vec2 startingPosition, glm::vec2 startingVelocity , glm::vec2 heading, float maxSpeed, float mass )
    : BaseGameEntity( imageName,  startingPosition )
    , m_heading( heading )
    , m_velocity( startingVelocity )
-   , m_acceleration()
-   , m_force()
-   , m_side()
+   , m_acceleration( glm::vec2() )
+   , m_force( glm::vec2() )
+   , m_side( glm::vec2() )
    , m_width( 15 )
    , m_height( 15 )	
-   , m_mass( 1 )
+   , m_mass( mass )
    , m_maxSpeed( maxSpeed )
 {
 }
@@ -40,20 +40,12 @@ void MovingEntity::draw()
 
 void MovingEntity::update()
 {
-   m_acceleration = glm::vec2( m_force.x / m_mass, m_force.y / m_mass  );
+   m_acceleration = glm::vec2( m_force.x / m_mass, m_force.y / m_mass  ) ;
    m_velocity += m_acceleration;
    glm::vec2 newPosition = getPosition() + m_velocity;
    
-   // Checking for warp
-   {
-      newPosition.x = ( newPosition.x > SCREEN_WIDTH )? 0 : newPosition.x;
-      newPosition.y = ( newPosition.y > SCREEN_HEIGHT )? 0 : newPosition.y;
-      newPosition.x = ( newPosition.x < 0 )? SCREEN_WIDTH : newPosition.x;
-      newPosition.y = ( newPosition.y < 0 )? SCREEN_HEIGHT : newPosition.y;
-      setPosition( newPosition ); 
-   }
- 
-   if( sqrMag( m_velocity ) > 1.0f )
+   setPosition( newPosition ); 
+   if( sqrMag( m_velocity ) > 0.01f )
    {
 	   m_heading = glm::normalize( m_velocity );
 	   m_side = glm::vec2( m_heading.y , -1 * m_heading.x );

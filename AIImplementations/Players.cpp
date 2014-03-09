@@ -67,8 +67,8 @@ Players::~Players(void)
 
 void Players::draw()
 {
-   al_draw_text( m_playerStateFont, al_map_rgb( 255, 255, 255 ), getPosition().x , getPosition().y, 0, "state" );
    MovingEntity::draw();
+   al_draw_text( m_playerStateFont, al_map_rgb( 255, 255, 255 ), getPosition().x , getPosition().y, 0, "state" );
 }
 
 void Players::update()

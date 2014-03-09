@@ -6,6 +6,7 @@
 #include "TeamStates.h"
 #include <iostream>
 #include "Teams.h"
+#include "SteeringBehaviors.h"
 
 static const char* TEAMS_NAME[2] = 
 {
@@ -30,7 +31,7 @@ Teams::Teams( TEAM::id myTeam )
    {
       m_playersOnTeam.push_back( new FieldPlayers( this, ( PlayerPositions::id )( i+1 ) ) ); 
    }
-   //m_pMyStateMachine->setPreviousState( Defending::getInstance() );
+   m_pMyStateMachine->setPreviousState( Defending::getInstance() );
    m_pMyStateMachine->setCurrentState( Defending::getInstance() );
    m_pMyStateMachine->changeState( Defending::getInstance() );
    m_pMyStateMachine->setGlobalState( NULL );

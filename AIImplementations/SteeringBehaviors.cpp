@@ -7,7 +7,7 @@
 
 static const float DECELERATION = 2;
 static const float TURN_AROUND_SPEED = 0.5;
-static const float SLOW_DOWN_RADIUS = 10.0;
+static const float SLOW_DOWN_RADIUS = 35.0f;
 
 float sqrmag( glm::vec2 currvector )
 {
@@ -28,7 +28,7 @@ void SteeringBehaviors::calculateForce()
 	glm::vec2 totalForce = glm::vec2();
 	if( isSeekOn() )
 	{
-		totalForce += calcSeekForce( m_pTarget->getPosition() );
+      totalVelocity += calcSeekForce( m_pTarget->getPosition() );
 	}
 	if( isArriveOn() )
 	{
@@ -40,8 +40,10 @@ void SteeringBehaviors::calculateForce()
 	}
 	if( isPusuitOn() )
 	{
-		totalVelocity += calcPursuitVelocity( m_pTarget );
+		totalVelocity += calcPursuitVelocity( SoccerBall::getSoccerBallInstance() );
 	}
+   m_pOwner->setVelocity( totalVelocity );
+   m_pOwner->setForce( totalForce );
 }
 
 glm::vec2 SteeringBehaviors::calcArriveVelocity( glm::vec2 target ) 
@@ -50,6 +52,7 @@ glm::vec2 SteeringBehaviors::calcArriveVelocity( glm::vec2 target )
    glm::vec2 velocityToTarget = /*m_pTarget->getPosition()*/target - m_pOwner->getPosition();
    float distanceToTarget = sqrt( sqrmag( velocityToTarget ) );
    float speed = 0.0f;
+
    if( distanceToTarget < 1.0f )
    {
       return glm::vec2( 0, 0 );
@@ -61,7 +64,7 @@ glm::vec2 SteeringBehaviors::calcArriveVelocity( glm::vec2 target )
    }
    else
    {
-      speed = m_pOwner->getMaxSpeed() * distanceToTarget/ 10.0f; 
+      speed = m_pOwner->getMaxSpeed() * distanceToTarget/ ( SLOW_DOWN_RADIUS ); 
    }
    return( glm::normalize( velocityToTarget ) * speed );
 }
@@ -69,8 +72,8 @@ glm::vec2 SteeringBehaviors::calcArriveVelocity( glm::vec2 target )
 glm::vec2 SteeringBehaviors::calcSeekForce( glm::vec2 target )// this should be set as a force. Why? 
 {
    glm::vec2 velocityToTarget = target - m_pOwner->getPosition();
-   velocityToTarget = ( static_cast< float > ( 10 ) ) * glm::normalize( velocityToTarget ) ;
-   return ( velocityToTarget - m_pOwner->getVelocity() );
+   glm::vec2 desiredVelocity = m_pOwner->getMaxSpeed() * glm::normalize( velocityToTarget ) ;
+   return ( desiredVelocity - m_pOwner->getVelocity() );
 }
 
 glm::vec2 SteeringBehaviors::calcInterposeVelocity( MovingEntity* pMovingTargetA , MovingEntity* pMovingTargetB )
@@ -93,12 +96,12 @@ glm::vec2 SteeringBehaviors::calcPursuitVelocity( MovingEntity* pMovingTarget )
    if( ( glm::dot( m_pOwner->getHeading(), toTarget ) > 0 ) // this ensures that the vehical is in the same direction as the vector from owner to target
               && relativeHeading < -0.95 ) // this ensures that the owner and target are facing the opposite direction. 
    {
-      return calcSeekForce( pMovingTarget->getPosition() );
+      return calcArriveVelocity( pMovingTarget->getPosition() );
    }
 
    float turnAroundTime = calcTurnAroundTime( pMovingTarget ) + ( sqrt( sqrmag( toTarget ) ) / ( m_pOwner->getMaxSpeed() + pMovingTarget->getCurrentSpeed() ) );
 
-   return calcSeekForce( ( pMovingTarget->getPosition() ) + ( pMovingTarget->getVelocity() * static_cast< float >( turnAroundTime ) ) ); // seeking a point which is at currentPosition + ( time*velocity )
+   return calcArriveVelocity( ( pMovingTarget->getPosition() ) + ( pMovingTarget->getVelocity() /** static_cast< float >( turnAroundTime )*/ ) ); // seeking a point which is at currentPosition + ( time*velocity )
 }
 
 float SteeringBehaviors::calcTurnAroundTime( MovingEntity* pMovingTarget )
