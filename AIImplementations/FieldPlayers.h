@@ -1,5 +1,6 @@
 #pragma once
 #include "Players.h"
+#include"StateMachine.h"
 
 class Message;
 class Teams;
@@ -13,8 +14,11 @@ public:
 
    bool handleMessage( const Message& msg );
    virtual void update();
+   StateMachine< FieldPlayers >* getStateMachine() const { return m_pMyStateMachine; }
 
 private:
+
+   StateMachine< FieldPlayers >* m_pMyStateMachine;  
 
 };
 

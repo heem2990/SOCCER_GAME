@@ -1,5 +1,5 @@
 #include "GoalKeeperStates.h"
-#include "Players.h"
+#include "GoalKeeper.h"
 #include <iostream>
 #include "SteeringBehaviors.h"
 #include "Teams.h"
@@ -7,13 +7,13 @@
 #include "SoccerGame.h"
 
 // ReturnHome State functions
-void ReturnHome::enter( Players* pGoalKeeper )
+void ReturnHome::enter( GoalKeeper* pGoalKeeper )
 {
    std::cout<<"Goalkeeper going home"<<std::endl;
    pGoalKeeper->getSteeringBehavior()->arriveOn();
 }
 
-void ReturnHome::execute( Players* pGoalKeeper )
+void ReturnHome::execute( GoalKeeper* pGoalKeeper )
 {
    pGoalKeeper->setHomeRegionAsTarget();
 
@@ -23,7 +23,7 @@ void ReturnHome::execute( Players* pGoalKeeper )
    }
 }
 
-void ReturnHome::exit( Players* pGoalKeeper )
+void ReturnHome::exit( GoalKeeper* pGoalKeeper )
 {
    pGoalKeeper->getSteeringBehavior()->arriveOff();
 }
@@ -37,14 +37,14 @@ ReturnHome* ReturnHome::getInstance()
 //*****************************************************************
 // TendGoal State functions
 
-void TendGoal::enter( Players* pGoalKeeper )
+void TendGoal::enter( GoalKeeper* pGoalKeeper )
 {
    std::cout<<"GoalKeeper entering TendGoal state"<<std::endl;
    pGoalKeeper->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() ); // TODO: Change this to proper target.
    pGoalKeeper->getSteeringBehavior()->interposeOn();
 }
 
-void TendGoal::execute( Players* pGoalKeeper )
+void TendGoal::execute( GoalKeeper* pGoalKeeper )
 {
    // TODO: set target as interpose target.
    if( pGoalKeeper->isInKickingRangeOfTheBall() )
@@ -56,7 +56,7 @@ void TendGoal::execute( Players* pGoalKeeper )
    // TODO: if ball is within intercept range, intercept. 
 }
 
-void TendGoal::exit( Players* pGoalKeeper )
+void TendGoal::exit( GoalKeeper* pGoalKeeper )
 {
    pGoalKeeper->getSteeringBehavior()->interposeOff();
    std::cout<<"Goalkeeper exiting TendGoal Stae"<<std::endl;
@@ -71,7 +71,7 @@ TendGoal* TendGoal::getInstance()
 //*****************************************************************
 // goalKick State functions
 
-void GoalKick::enter( Players* pGoalKeeper )
+void GoalKick::enter( GoalKeeper* pGoalKeeper )
 {
    std::cout<<"Entering the goal kick state"<<std::endl;
    pGoalKeeper->getMyTeam()->setPlayerWithBall( pGoalKeeper );
@@ -79,12 +79,12 @@ void GoalKick::enter( Players* pGoalKeeper )
    pGoalKeeper->getMyTeam()->getOpponent()->sendPlayersHome();
 }
 
-void GoalKick::execute( Players* pGoalKeeper )
+void GoalKick::execute( GoalKeeper* pGoalKeeper )
 {
    //TODO: find pass, if found send message to the receiver else just attach ball to keeper;
 }
 
-void GoalKick::exit( Players* pGoalKeeper )
+void GoalKick::exit( GoalKeeper* pGoalKeeper )
 {
    std::cout<<"Exiting the goal kick state"<<std::endl;
 }
@@ -98,13 +98,13 @@ GoalKick* GoalKick::getInstance()
 //*****************************************************************
 // InterceptBall State functions
 
-void InterceptBall::enter( Players* pGoalKeeper )
+void InterceptBall::enter( GoalKeeper* pGoalKeeper )
 {
    std::cout<<"Entering the Intercept ball state"<<std::endl;
    pGoalKeeper->getSteeringBehavior()->pursuitOn();
 }
 
-void InterceptBall::execute( Players* pGoalKeeper )
+void InterceptBall::execute( GoalKeeper* pGoalKeeper )
 {
    //TODO: If keeper is too far from goal, and if keeper is not the closest player on pitch to ball change state to return home
    if( pGoalKeeper->isInKickingRangeOfTheBall() )
@@ -114,7 +114,7 @@ void InterceptBall::execute( Players* pGoalKeeper )
    }
 }
 
-void InterceptBall::exit( Players* pGoalKeeper )
+void InterceptBall::exit( GoalKeeper* pGoalKeeper )
 {
    std::cout<<"Exiting the Intercept ball state"<<std::endl;
 }

@@ -1,14 +1,14 @@
 #pragma once
 #include "State.h"
 
-class Players;
+class FieldPlayers;
 class Wait :
-   public State< Players >
+   public State< FieldPlayers >
 {
 public:
-   void enter( Players* );
-   void execute( Players* );
-   void exit( Players* );
+   void enter( FieldPlayers* );
+   void execute( FieldPlayers* );
+   void exit( FieldPlayers* );
    const char* getStateName() const { return "Wait"; }
    
    static Wait* getInstance();
@@ -20,12 +20,12 @@ private:
 //*****************************************************************
 
 class ChaseBall :
-   public State< Players >
+   public State< FieldPlayers >
 {
 public:
-   void enter( Players* );
-   void execute( Players* );
-   void exit( Players* );
+   void enter( FieldPlayers* );
+   void execute( FieldPlayers* );
+   void exit( FieldPlayers* );
    const char* getStateName() const { return "ChaseBall"; }
 
    static ChaseBall* getInstance();
@@ -37,12 +37,12 @@ private:
 //*****************************************************************
 
 class ReceiveBall :
-   public State< Players >
+   public State< FieldPlayers >
 {
 public:
-   void enter( Players* );
-   void execute( Players* );
-   void exit( Players* );
+   void enter( FieldPlayers* );
+   void execute( FieldPlayers* );
+   void exit( FieldPlayers* );
    const char* getStateName() const { return "ReceiveBall"; }
 
    static ReceiveBall* getInstance();
@@ -54,12 +54,12 @@ private:
 //*****************************************************************
 
 class Dribble :
-   public State< Players >
+   public State< FieldPlayers >
 {
 public:
-   void enter( Players* );
-   void execute( Players* );
-   void exit( Players* );
+   void enter( FieldPlayers* );
+   void execute( FieldPlayers* );
+   void exit( FieldPlayers* );
    const char* getStateName() const { return "Dribble"; }
    
    static Dribble* getInstance();
@@ -71,12 +71,12 @@ private:
 //*****************************************************************
 
 class KickBall :
-	public State< Players >
+	public State< FieldPlayers >
 {
 public:
-   void enter( Players* );
-   void execute( Players* );
-   void exit( Players* );
+   void enter( FieldPlayers* );
+   void execute( FieldPlayers* );
+   void exit( FieldPlayers* );
    const char* getStateName() const { return "KickBall"; }
 
    static KickBall* getInstance();
@@ -88,12 +88,12 @@ private:
 //*****************************************************************
 
 class SupportPlayerWithBall :
-   public State< Players >
+   public State< FieldPlayers >
 {
 public:
-   void enter( Players* );
-   void execute( Players* );
-   void exit( Players* );
+   void enter( FieldPlayers* );
+   void execute( FieldPlayers* );
+   void exit( FieldPlayers* );
    const char* getStateName() const { return "SupportPlayerWithBall"; }
 
    static SupportPlayerWithBall* getInstance();
@@ -105,12 +105,12 @@ private:
 //*****************************************************************
 
 class FieldPlayerReturnHome :
-   public State< Players >
+   public State< FieldPlayers >
 {
 public:
-   void enter( Players* );
-   void execute( Players* );
-   void exit( Players* );
+   void enter( FieldPlayers* );
+   void execute( FieldPlayers* );
+   void exit( FieldPlayers* );
    const char* getStateName() const { return "FieldPlayerReturnHome"; }
 
    static FieldPlayerReturnHome* getInstance();

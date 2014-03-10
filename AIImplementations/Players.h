@@ -1,6 +1,5 @@
 #pragma once
 #include"MovingEntity.h"
-#include"StateMachine.h"
 #include<allegro5\allegro_font.h>
 #include<allegro5\allegro_ttf.h>
 
@@ -54,7 +53,6 @@ public:
    bool isPlayerAheadOfAttacker() const;
    bool isPlayerWithinReceivingRange() const; // should be a const function, but is not because we are calculating the sqrMag manually in there. CHANGE
 
-   StateMachine< Players >* getStateMachine() const { return m_pMyStateMachine; }
    SteeringBehaviors* getSteeringBehavior() const { return m_pSteeringBehavior; }
    Teams* getMyTeam() const { return m_pMyTeam; }
 
@@ -63,7 +61,6 @@ public:
 private:
 	
    ALLEGRO_FONT* m_playerStateFont;
-   StateMachine< Players >* m_pMyStateMachine;  
    SteeringBehaviors* m_pSteeringBehavior;
    Teams* m_pMyTeam;
 

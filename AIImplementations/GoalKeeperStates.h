@@ -1,15 +1,15 @@
 #pragma once
 #include "State.h"
 
-class Players;
+class GoalKeeper;
 
 class ReturnHome :
-   public State< Players >
+   public State< GoalKeeper >
 {
 public:
-   void enter( Players* );
-   void execute( Players* );
-   void exit( Players* );
+   void enter( GoalKeeper* );
+   void execute( GoalKeeper* );
+   void exit( GoalKeeper* );
    const char* getStateName() const { return "ReturnHome"; }
    
    static ReturnHome* getInstance();
@@ -21,12 +21,12 @@ private:
 //*****************************************************************
 
 class TendGoal :
-   public State< Players >
+   public State< GoalKeeper >
 {
 public:
-   void enter( Players* );
-   void execute( Players* );
-   void exit( Players* );
+   void enter( GoalKeeper* );
+   void execute( GoalKeeper* );
+   void exit( GoalKeeper* );
    const char* getStateName() const { return "TendGoal"; }
    
    static TendGoal* getInstance();
@@ -38,12 +38,12 @@ private:
 //*****************************************************************
 
 class GoalKick :
-   public State< Players >
+   public State< GoalKeeper >
 {
 public:
-   void enter( Players* );
-   void execute( Players* );
-   void exit( Players* );
+   void enter( GoalKeeper* );
+   void execute( GoalKeeper* );
+   void exit( GoalKeeper* );
    const char* getStateName() const { return "GoalKick"; }
    
    static GoalKick* getInstance();
@@ -55,12 +55,12 @@ private:
 //*****************************************************************
 
 class InterceptBall :
-   public State< Players >
+   public State< GoalKeeper >
 {
 public:
-   void enter( Players* );
-   void execute( Players* );
-   void exit( Players* );
+   void enter( GoalKeeper* );
+   void execute( GoalKeeper* );
+   void exit( GoalKeeper* );
    const char* getStateName() const { return "InterceptBall"; }
    
    static InterceptBall* getInstance();

@@ -10,6 +10,7 @@ static const int MAX_PASSING_FORCE = 10.0f; // check values.
 
 FieldPlayers::FieldPlayers( Teams* pMyTeam, PlayerPositions::id myPosition )
    : Players( pMyTeam, myPosition )
+   , m_pMyStateMachine()
 {
 }
 
@@ -23,7 +24,7 @@ bool FieldPlayers::handleMessage( const Message& msg )
    {
    case MESSAGE_TYPES::GO_HOME:
       {
-         getStateMachine()->changeState( FieldPlayerReturnHome::getInstance() );
+         m_pMyStateMachine->changeState( FieldPlayerReturnHome::getInstance() );
 
          return true;
          break;
@@ -39,7 +40,7 @@ bool FieldPlayers::handleMessage( const Message& msg )
          
          SoccerBall::getSoccerBallInstance()->kick( receivingPlayerPos - SoccerBall::getSoccerBallInstance()->getPosition(), MAX_PASSING_FORCE );
          MessageDispatcher::getInstance()->dispatchMessage( 0.0f, this, msg.getSender(), MESSAGE_TYPES::RECEIVE_BALL, NULL );
-         getStateMachine()->changeState( Wait::getInstance() );
+         m_pMyStateMachine->changeState( Wait::getInstance() );
          // TODO: find support?
 
          return true;
@@ -48,26 +49,26 @@ bool FieldPlayers::handleMessage( const Message& msg )
    case MESSAGE_TYPES::RECEIVE_BALL:
       {
          getSteeringBehavior()->setArriveTarget( *( static_cast< glm::vec2* >( msg.getExtraInfo() ) ) );
-         getStateMachine()->changeState( ReceiveBall::getInstance() );
+         m_pMyStateMachine->changeState( ReceiveBall::getInstance() );
          return true;
          break;
       }
    case MESSAGE_TYPES::SUPPORT_ATTACKER:
       {
-         if( getStateMachine()->getCurrentState() == SupportPlayerWithBall::getInstance() )
+         if( m_pMyStateMachine->getCurrentState() == SupportPlayerWithBall::getInstance() )
          {
             return true;
          }
 
          getSteeringBehavior()->setArriveTarget( glm::vec2() /*TODO HEEM Get support spot here*/ ); 
-         getStateMachine()->changeState( SupportPlayerWithBall::getInstance() );
+         m_pMyStateMachine->changeState( SupportPlayerWithBall::getInstance() );
 
          return true;
          break;
       }
    case MESSAGE_TYPES::WAIT:
       {
-         getStateMachine()->changeState( Wait::getInstance() );
+         m_pMyStateMachine->changeState( Wait::getInstance() );
          return true;
          break;
       }

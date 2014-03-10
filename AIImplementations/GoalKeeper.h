@@ -1,5 +1,6 @@
 #pragma once
 #include "Players.h"
+#include"StateMachine.h"
 
 class Teams;
 
@@ -15,5 +16,11 @@ public:
    bool isTooFarFromGoal();
    bool isBallWithinInterceptRanger();
    bool handleMessage( const Message& msg );
+   StateMachine< GoalKeeper >* getStateMachine() const { return m_pMyStateMachine; }
+
+private:
+
+   StateMachine< GoalKeeper >* m_pMyStateMachine;  
+
 };
 

@@ -9,6 +9,7 @@
 
 GoalKeeper::GoalKeeper( Teams* pMyTeam )
    : Players( pMyTeam, PlayerPositions::GOALKEEPER )
+   , m_pMyStateMachine()
 {
 }
 
@@ -24,13 +25,13 @@ bool GoalKeeper::handleMessage( const Message& msg )
    {
    case MESSAGE_TYPES::GO_HOME:
       {
-         getStateMachine()->changeState( ReturnHome::getInstance() );
+         m_pMyStateMachine->changeState( ReturnHome::getInstance() );
          return true;
          break;
       }
    case MESSAGE_TYPES::RECEIVE_BALL:
       {
-         getStateMachine()->changeState( InterceptBall::getInstance() );
+         m_pMyStateMachine->changeState( InterceptBall::getInstance() );
          return true;
          break;
       }
@@ -70,6 +71,5 @@ bool GoalKeeper::isBallWithinInterceptRanger()
    {
       return true;
    }
-
    return false;
 }
