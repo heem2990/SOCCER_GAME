@@ -6,11 +6,12 @@
 
 class FieldPlayers;
 class GoalKeeper;
+class GoalPosts;
 
 class Teams
 {
 public:
-   Teams( TEAM::id myTeam );
+   Teams( TEAM::id myTeam, GoalPosts* pMyGoalPost );
    ~Teams( void );
    void update();
    void draw();
@@ -28,6 +29,8 @@ public:
    Players* getReceivingPlayer() const { return m_pPlayerReceivingPass; }
    Players* getClosestPlayerToBall() const { return m_pPlayerClosestToBall; }
    
+   GoalPosts* getGoalPost() const { return m_pMyGoalPost; }
+
    void setOpponent( Teams* pOpponentTeam ){ m_pOpponent = pOpponentTeam; }
    
    bool hasControl() const { return m_hasBall; };
@@ -47,6 +50,7 @@ private:
    Players* m_pPlayerClosestToBall;
    Players* m_pPlayerReceivingPass;
    Teams* m_pOpponent;
+   GoalPosts* m_pMyGoalPost;
 
    bool m_hasBall;
    

@@ -17,22 +17,22 @@ std::vector< MyRect* > SoccerGame::m_sRegions = std::vector< MyRect* >();
 std::vector< Wall* > SoccerGame::m_sWalls = std::vector< Wall* >();
 
 SoccerGame::SoccerGame(void)
-   : m_redTeamPost()
-   , m_blueTeamPost()
-   , m_redTeam( new Teams( TEAM::RED ) )
-   , m_blueTeam( new Teams( TEAM::BLUE ) )
-   , m_mySoccerBall( SoccerBall::getSoccerBallInstance() )
-   , m_background( al_load_bitmap( "soccerPitch.png" ) )
+   : m_pRedTeamPost()
+   , m_pBlueTeamPost()
+   , m_pRedTeam( new Teams( TEAM::RED, m_pRedTeamPost ) )
+   , m_pBlueTeam( new Teams( TEAM::BLUE, m_pBlueTeamPost ) )
+   , m_pMySoccerBall( SoccerBall::getSoccerBallInstance() )
+   , m_pBackground( al_load_bitmap( "soccerPitch.png" ) )
 {
-	m_redTeam->setOpponent( m_blueTeam );   
-	m_blueTeam->setOpponent( m_redTeam );
+	m_pRedTeam->setOpponent( m_pBlueTeam );   
+	m_pBlueTeam->setOpponent( m_pRedTeam );
 }
 
 SoccerGame::~SoccerGame(void)
 {
-   delete m_redTeam;
-   delete m_blueTeam;
-   al_destroy_bitmap( m_background );
+   delete m_pRedTeam;
+   delete m_pBlueTeam;
+   al_destroy_bitmap( m_pBackground );
 }
 
 SoccerGame* SoccerGame::getGameInstance()
@@ -86,19 +86,19 @@ void SoccerGame::initRegions()
 void SoccerGame::update()
 {
    draw();
-   m_redTeam->update();
-   m_blueTeam->update();
-   m_mySoccerBall->update();
+   m_pRedTeam->update();
+   m_pBlueTeam->update();
+   m_pMySoccerBall->update();
    //m_blueTeamPost->checkGoal();
    //m_redTeamPost->checkGoal();
 }
 
 void SoccerGame::draw()
 {
-   al_draw_bitmap( m_background, 0, 0, 0 );
-   m_redTeam->draw();
-   m_blueTeam->draw();
-   m_mySoccerBall->draw();
+   al_draw_bitmap( m_pBackground, 0, 0, 0 );
+   m_pRedTeam->draw();
+   m_pBlueTeam->draw();
+   m_pMySoccerBall->draw();
 
    for( int i = 0 ; i < 4 ; ++i )
    {
@@ -113,5 +113,5 @@ void SoccerGame::paused()
 
 bool SoccerGame::doGoalkeepersHaveBall() const 
 { 
-   return ( m_redTeam->doesGoalKeeperHaveBall() || m_blueTeam->doesGoalKeeperHaveBall() );
+   return ( m_pRedTeam->doesGoalKeeperHaveBall() || m_pBlueTeam->doesGoalKeeperHaveBall() );
 }

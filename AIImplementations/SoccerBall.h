@@ -17,6 +17,7 @@ public:
    float timeToCoverDistance( glm::vec2 from, glm::vec2 to, float force ) const;
    glm::vec2 futurePosition( float time ) const;
    virtual void update();
+   void setBallOwner( Players* pOwner ){ m_pBallOwner = pOwner; }
 
 private:
    SoccerBall(void);

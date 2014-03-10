@@ -1,8 +1,9 @@
 #include "GoalPosts.h"
+#include "MyRect.h"
+#include "SoccerBall.h"
 
-
-GoalPosts::GoalPosts(void)
-   : BaseGameEntity( "goalPost", glm::vec2() )
+GoalPosts::GoalPosts( glm::vec2 topLeft, glm::vec2 botRight )
+   : MyRect( topLeft, botRight )
 {
 }
 
@@ -11,14 +12,12 @@ GoalPosts::~GoalPosts(void)
 {
 }
 
-void GoalPosts::update()
+bool GoalPosts::checkGoal()
 {
-}
-
-void GoalPosts::draw()
-{
-}
-
-void GoalPosts::checkGoal()
-{
+   if( contains( SoccerBall::getSoccerBallInstance()->getPosition() ) )
+   {
+      return true;
+   }
+   
+   return false;
 }

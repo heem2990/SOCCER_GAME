@@ -1,16 +1,14 @@
 #pragma once
-#include "BaseGameEntity.h"
+#include "MyRect.h"
 
 class GoalPosts :
-   public BaseGameEntity
+   public MyRect
 {
 public:
-   GoalPosts(void);
+   GoalPosts( glm::vec2 topLeft, glm::vec2 botRight );
    ~GoalPosts(void);
 
-   void update();
-   void draw();
-   void checkGoal();
+   bool checkGoal();
 
 private:
 

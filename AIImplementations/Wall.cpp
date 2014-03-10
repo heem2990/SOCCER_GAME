@@ -1,7 +1,7 @@
 #include "Wall.h"
 #include <iostream>
 
-Wall::Wall( glm::vec2 topLeft, glm::vec2 botRight , glm::vec2 normal )
+Wall::Wall( glm::vec2 topLeft, glm::vec2 botRight, glm::vec2 normal )
    : MyRect( topLeft, botRight )
    , m_normalToWall( normal )
 {

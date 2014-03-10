@@ -7,6 +7,7 @@
 #include <iostream>
 #include "Teams.h"
 #include "SteeringBehaviors.h"
+#include "GoalPosts.h"
 
 static const char* TEAMS_NAME[2] = 
 {
@@ -15,7 +16,7 @@ static const char* TEAMS_NAME[2] =
 };
 static const int TOTAL_PLAYERS = 4;
 
-Teams::Teams( TEAM::id myTeam )
+Teams::Teams( TEAM::id myTeam, GoalPosts* pMyGoalPost )
    : m_myTeam( myTeam )
    , m_playersOnTeam()
    , m_pGoalkeeper( new GoalKeeper( this ) )
@@ -24,6 +25,7 @@ Teams::Teams( TEAM::id myTeam )
    , m_pPlayerClosestToBall( NULL )
    , m_pPlayerReceivingPass( NULL )
    , m_pOpponent( NULL )
+   , m_pMyGoalPost( pMyGoalPost )
    , m_hasBall( false )   
    , m_pMyStateMachine( new StateMachine< Teams >( this ) )
 {

@@ -32,12 +32,12 @@ private:
    static std::vector< MyRect* > m_sRegions;
    static std::vector< Wall* > m_sWalls;
 
-   GoalPosts* m_redTeamPost;
-   GoalPosts* m_blueTeamPost;
-   Teams* m_redTeam;
-   Teams* m_blueTeam;
-   SoccerBall* m_mySoccerBall;
-   ALLEGRO_BITMAP* m_background;
+   GoalPosts* m_pRedTeamPost;
+   GoalPosts* m_pBlueTeamPost;
+   Teams* m_pRedTeam;
+   Teams* m_pBlueTeam;
+   SoccerBall* m_pMySoccerBall;
+   ALLEGRO_BITMAP* m_pBackground;
    gameState m_stateFunction;
 
    bool m_hasInitialized;
