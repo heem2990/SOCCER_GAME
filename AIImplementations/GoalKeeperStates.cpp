@@ -5,6 +5,7 @@
 #include "Teams.h"
 #include "SoccerBall.h"
 #include "SoccerGame.h"
+#include "GoalPosts.h"
 
 // ReturnHome State functions
 void ReturnHome::enter( GoalKeeper* pGoalKeeper )
@@ -40,20 +41,23 @@ ReturnHome* ReturnHome::getInstance()
 void TendGoal::enter( GoalKeeper* pGoalKeeper )
 {
    std::cout<<"GoalKeeper entering TendGoal state"<<std::endl;
-   pGoalKeeper->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() ); // TODO: Change this to proper target.
+   pGoalKeeper->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() ); 
+   pGoalKeeper->getSteeringBehavior()->setInterPoseStaticTarget( pGoalKeeper->getMyTeam()->getGoalPost()->getCenter() );
    pGoalKeeper->getSteeringBehavior()->interposeOn();
 }
 
 void TendGoal::execute( GoalKeeper* pGoalKeeper )
 {
-   // TODO: set target as interpose target.
    if( pGoalKeeper->isInKickingRangeOfTheBall() )
    {
       SoccerBall::getSoccerBallInstance()->trap( pGoalKeeper );
       pGoalKeeper->getStateMachine()->changeState( GoalKick::getInstance() );
       return;
    }
-   // TODO: if ball is within intercept range, intercept. 
+   if( pGoalKeeper->isBallWithinInterceptRanger() )
+   {
+      pGoalKeeper->getStateMachine()->changeState( InterceptBall::getInstance() );
+   } 
 }
 
 void TendGoal::exit( GoalKeeper* pGoalKeeper )
@@ -106,7 +110,11 @@ void InterceptBall::enter( GoalKeeper* pGoalKeeper )
 
 void InterceptBall::execute( GoalKeeper* pGoalKeeper )
 {
-   //TODO: If keeper is too far from goal, and if keeper is not the closest player on pitch to ball change state to return home
+   if( pGoalKeeper->isTooFarFromGoal() && !pGoalKeeper->isPlayerClosestToBall() )
+   {
+      pGoalKeeper->getStateMachine()->changeState( ReturnHome::getInstance() );
+      return;
+   }
    if( pGoalKeeper->isInKickingRangeOfTheBall() )
    {
       SoccerBall::getSoccerBallInstance()->trap( pGoalKeeper );

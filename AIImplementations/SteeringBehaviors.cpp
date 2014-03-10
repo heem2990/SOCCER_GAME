@@ -17,6 +17,8 @@ float sqrmag( glm::vec2 currvector )
 SteeringBehaviors::SteeringBehaviors( MovingEntity* pOwner )
    : m_pOwner( pOwner )
    , m_pTarget( NULL )
+   , m_pInterposeTarget( NULL )
+   , m_staticInterposeTarget( glm::vec2() )
    , m_arriveTarget( glm::vec2() )
    , m_steeringBehaviorsFlag( 0 )
 {
@@ -26,7 +28,7 @@ void SteeringBehaviors::calculateForce()
 {
 	glm::vec2 totalVelocity = glm::vec2();
 	glm::vec2 totalForce = glm::vec2();
-	if( isSeekOn() )
+   if( isSeekOn() && m_pTarget != NULL )
 	{
       totalVelocity += calcSeekForce( m_pTarget->getPosition() );
 	}
@@ -34,9 +36,13 @@ void SteeringBehaviors::calculateForce()
 	{
 		totalVelocity += calcArriveVelocity( m_arriveTarget );
 	}
-	if( isInterposeOn() )
+   if( isInterposeOn() )
 	{
-		totalVelocity += calcInterposeVelocity( SoccerBall::getSoccerBallInstance(), m_pTarget );
+      if( m_pInterposeTarget != NULL )
+      {
+         m_staticInterposeTarget = m_pInterposeTarget->getPosition();
+      }
+		totalVelocity += calcInterposeVelocity( m_staticInterposeTarget, m_pTarget->getPosition() );
 	}
 	if( isPusuitOn() )
 	{
@@ -76,13 +82,13 @@ glm::vec2 SteeringBehaviors::calcSeekForce( glm::vec2 target )// this should be 
    return ( desiredVelocity - m_pOwner->getVelocity() );
 }
 
-glm::vec2 SteeringBehaviors::calcInterposeVelocity( MovingEntity* pMovingTargetA , MovingEntity* pMovingTargetB )
+glm::vec2 SteeringBehaviors::calcInterposeVelocity( glm::vec2 pMovingTargetA, glm::vec2 pMovingTargetB )
 {
-   glm::vec2 midPoint = ( pMovingTargetA->getPosition() + pMovingTargetB->getPosition() )/ 2.0f;
+   glm::vec2 midPoint = ( pMovingTargetA + pMovingTargetB )/ 2.0f;
    float timeToReachMidPoint = sqrtf( sqrmag( midPoint - m_pOwner->getPosition() ) ) / m_pOwner->getMaxSpeed();
 
-   glm::vec2 futureTargetAPos = pMovingTargetA->getPosition() + ( pMovingTargetA->getVelocity() * timeToReachMidPoint ) ;
-   glm::vec2 futureTargetBPos = pMovingTargetB->getPosition() + ( pMovingTargetB->getVelocity() * timeToReachMidPoint ) ;
+   glm::vec2 futureTargetAPos = pMovingTargetA + ( pMovingTargetA * timeToReachMidPoint ) ;
+   glm::vec2 futureTargetBPos = pMovingTargetB + ( pMovingTargetB * timeToReachMidPoint ) ;
    glm::vec2 futureMidPoint = ( futureTargetAPos + futureTargetBPos ) / 2.0f;
 
    return calcArriveVelocity( futureMidPoint );

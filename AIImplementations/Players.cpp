@@ -137,6 +137,18 @@ bool Players::isPlayerWithinReceivingRange() const
    }
 }
 
+bool Players::isBallWithinInterceptRanger()
+{
+   glm::vec2 vecToBall = getPosition() - SoccerBall::getSoccerBallInstance()->getPosition();
+   float sqrDist = vecToBall.x * vecToBall.x + vecToBall.y * vecToBall.y;
+
+   if( sqrDist <= 10000.0f ) // TODO: Magic number. Says that if ball is about 100 pixels away.
+   {
+      return true;
+   }
+   return false;
+}
+
 void Players::setHomeRegionAsTarget() const
 {
    m_pSteeringBehavior->setArriveTarget( SoccerGame::getRegions()[ m_homeRegion ]->getCenter() );
