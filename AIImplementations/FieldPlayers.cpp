@@ -10,12 +10,15 @@ static const int MAX_PASSING_FORCE = 10.0f; // check values.
 
 FieldPlayers::FieldPlayers( Teams* pMyTeam, PlayerPositions::id myPosition )
    : Players( pMyTeam, myPosition )
-   , m_pMyStateMachine()
+   , m_pMyStateMachine( new StateMachine< FieldPlayers >( this ) )
 {
+   m_pMyStateMachine->setPreviousState( FieldPlayerReturnHome::getInstance() );
+   m_pMyStateMachine->setCurrentState( FieldPlayerReturnHome::getInstance() );
 }
 
 FieldPlayers::~FieldPlayers(void)
 {
+   delete m_pMyStateMachine;
 }
 
 bool FieldPlayers::handleMessage( const Message& msg )
@@ -24,6 +27,7 @@ bool FieldPlayers::handleMessage( const Message& msg )
    {
    case MESSAGE_TYPES::GO_HOME:
       {
+         std::cout<<"\n RECEIVED GO HOME"<<std::endl;
          m_pMyStateMachine->changeState( FieldPlayerReturnHome::getInstance() );
 
          return true;

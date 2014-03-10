@@ -63,8 +63,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Agent.cpp" />
-    <ClCompile Include="Attack.cpp" />
     <ClCompile Include="BaseGameEntity.cpp" />
     <ClCompile Include="FieldPlayers.cpp" />
     <ClCompile Include="FieldPlayersState.cpp" />
@@ -85,8 +83,6 @@
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Agent.h" />
-    <ClInclude Include="Attack.h" />
     <ClInclude Include="BaseGame.h" />
     <ClInclude Include="BaseGameEntity.h" />
     <ClInclude Include="Constants.h" />

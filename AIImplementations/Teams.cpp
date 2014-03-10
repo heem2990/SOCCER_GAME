@@ -8,6 +8,9 @@
 #include "Teams.h"
 #include "SteeringBehaviors.h"
 #include "GoalPosts.h"
+#include "FieldPlayersState.h"
+#include "GoalKeeperStates.h"
+#include "MessageDispatcher.h"
 
 static const char* TEAMS_NAME[2] = 
 {
@@ -36,7 +39,6 @@ Teams::Teams( TEAM::id myTeam, GoalPosts* pMyGoalPost )
    m_pMyStateMachine->setPreviousState( Defending::getInstance() );
    m_pMyStateMachine->setCurrentState( Defending::getInstance() );
    m_pMyStateMachine->changeState( Defending::getInstance() );
-   m_pMyStateMachine->setGlobalState( NULL );
 }
 
 
@@ -79,8 +81,9 @@ void Teams::sendPlayersHome()
 {
    for( int i = 0  ; i < TOTAL_PLAYERS ; ++i )
    {
-      // set player to go home m_playersOnTeam[ i ]->goHome();
+      m_playersOnTeam[ i ]->getStateMachine()->changeState( FieldPlayerReturnHome::getInstance() );
    }
+   m_pGoalkeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
 }
 
 void Teams::changeState( State< Teams >* pToState ) const
@@ -90,6 +93,7 @@ void Teams::changeState( State< Teams >* pToState ) const
 
 bool Teams::arePlayersHome()
 {
+   MessageDispatcher::getInstance()->dispatchMessage( 0, m_playersOnTeam[ 0 ], m_playersOnTeam[ 1 ], MESSAGE_TYPES::GO_HOME, NULL );
 	for( std::vector< FieldPlayers* >::iterator iter = m_playersOnTeam.begin(); iter != m_playersOnTeam.end() ; ++iter )
 	{
 		if( !(*iter)->isPlayerHome() )

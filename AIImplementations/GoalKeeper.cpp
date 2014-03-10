@@ -8,13 +8,16 @@
 
 GoalKeeper::GoalKeeper( Teams* pMyTeam )
    : Players( pMyTeam, PlayerPositions::GOALKEEPER )
-   , m_pMyStateMachine()
+   , m_pMyStateMachine(  new StateMachine< GoalKeeper >( this )  )
 {
+   m_pMyStateMachine->setPreviousState( ReturnGoalkeeperHome::getInstance() );
+   m_pMyStateMachine->setCurrentState( ReturnGoalkeeperHome::getInstance() );
 }
 
 
 GoalKeeper::~GoalKeeper(void)
 {
+   delete m_pMyStateMachine;
 }
 
 
@@ -24,7 +27,7 @@ bool GoalKeeper::handleMessage( const Message& msg )
    {
    case MESSAGE_TYPES::GO_HOME:
       {
-         m_pMyStateMachine->changeState( ReturnHome::getInstance() );
+         m_pMyStateMachine->changeState( ReturnGoalkeeperHome::getInstance() );
          return true;
          break;
       }

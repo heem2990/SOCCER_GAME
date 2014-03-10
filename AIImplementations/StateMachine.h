@@ -7,26 +7,19 @@ class StateMachine
 public:
    StateMachine( entityType* pOwner )
       : m_pOwner( pOwner )
-      , m_pCurrentState( 0 )
-      , m_pGlobalState( 0 )
-      , m_pPreviousState( 0 )
+      , m_pCurrentState( NULL )
+      , m_pPreviousState( NULL )
    {
    }
    
-   void setGlobalState( State< entityType >* pState ){ m_pGlobalState = pState; }
    void setCurrentState( State< entityType >* pState ){ m_pCurrentState = pState; }
    void setPreviousState( State< entityType >* pState ){ m_pPreviousState = pState; }
 
    State< entityType >* getCurrentState() const { return m_pCurrentState; }
-   State< entityType >* getGlobalState() const { return m_pGlobalState; }
    State< entityType >* getPreviousState() const { return m_pPreviousState; }
 
    void update() const 
    {
-      if( m_pGlobalState )
-      {
-         m_pGlobalState->execute( m_pOwner );
-      }
       if( m_pCurrentState )
       {
          m_pCurrentState->execute( m_pOwner );
@@ -64,7 +57,5 @@ private:
    entityType* m_pOwner;
    State< entityType >* m_pCurrentState;
    State< entityType >* m_pPreviousState;
-   State< entityType >* m_pGlobalState;
-
 };
 

@@ -26,6 +26,10 @@ void MessageDispatcher::dispatchMessage( double delay, BaseGameEntity* sender, B
 
 void MessageDispatcher::dispatchDelayedMessages()
 {
+   if( m_priorityQueue.size() == 0 )
+   {
+      return;
+   }
    double currentTime = GetCurrentTime();
 
    while( ( m_priorityQueue.begin()->getDispatchTime() < currentTime ) && ( m_priorityQueue.begin()->getDispatchTime() > 0 ) )

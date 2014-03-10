@@ -8,13 +8,14 @@
 #include "GoalPosts.h"
 
 // ReturnHome State functions
-void ReturnHome::enter( GoalKeeper* pGoalKeeper )
+void ReturnGoalkeeperHome::enter( GoalKeeper* pGoalKeeper )
 {
    std::cout<<"Goalkeeper going home"<<std::endl;
+   pGoalKeeper->setHomeRegionAsTarget();
    pGoalKeeper->getSteeringBehavior()->arriveOn();
 }
 
-void ReturnHome::execute( GoalKeeper* pGoalKeeper )
+void ReturnGoalkeeperHome::execute( GoalKeeper* pGoalKeeper )
 {
    pGoalKeeper->setHomeRegionAsTarget();
 
@@ -24,14 +25,14 @@ void ReturnHome::execute( GoalKeeper* pGoalKeeper )
    }
 }
 
-void ReturnHome::exit( GoalKeeper* pGoalKeeper )
+void ReturnGoalkeeperHome::exit( GoalKeeper* pGoalKeeper )
 {
    pGoalKeeper->getSteeringBehavior()->arriveOff();
 }
 
-ReturnHome* ReturnHome::getInstance()
+ReturnGoalkeeperHome* ReturnGoalkeeperHome::getInstance()
 {
-   static ReturnHome returnHomeState;
+   static ReturnGoalkeeperHome returnHomeState;
    return &returnHomeState;
 }
  
@@ -112,7 +113,7 @@ void InterceptBall::execute( GoalKeeper* pGoalKeeper )
 {
    if( pGoalKeeper->isTooFarFromGoal() && !pGoalKeeper->isPlayerClosestToBall() )
    {
-      pGoalKeeper->getStateMachine()->changeState( ReturnHome::getInstance() );
+      pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
       return;
    }
    if( pGoalKeeper->isInKickingRangeOfTheBall() )

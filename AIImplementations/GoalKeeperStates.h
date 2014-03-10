@@ -3,19 +3,19 @@
 
 class GoalKeeper;
 
-class ReturnHome :
+class ReturnGoalkeeperHome :
    public State< GoalKeeper >
 {
 public:
    void enter( GoalKeeper* );
    void execute( GoalKeeper* );
    void exit( GoalKeeper* );
-   const char* getStateName() const { return "ReturnHome"; }
+   const char* getStateName() const { return "ReturnGoalkeeperHome"; }
    
-   static ReturnHome* getInstance();
+   static ReturnGoalkeeperHome* getInstance();
 
 private:
-   ReturnHome(void){};
+   ReturnGoalkeeperHome(void){};
 };
 
 //*****************************************************************
