@@ -29,8 +29,8 @@ const int PLAYER_POSITONS[ TEAM::NUM_TEAMS ][ NUM_PLAYERS ] =
 
 char* PLAYER_IMAGES[ TEAM::NUM_TEAMS ] = 
 {
-   "redBot.png",
-   "greenBot.png"
+   "greenBot.png",
+   "redBot.png"
 };
 
 const glm::vec2 PLAYER_DIRECTION[ TEAM::NUM_TEAMS ] =
@@ -72,7 +72,6 @@ void Players::draw()
 
 void Players::update()
 {
-   draw();
    m_pSteeringBehavior->calculateForce();
    MovingEntity::update();
 }

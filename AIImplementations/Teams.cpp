@@ -11,6 +11,7 @@
 #include "FieldPlayersState.h"
 #include "GoalKeeperStates.h"
 #include "MessageDispatcher.h"
+#include "SupportSpotCalculator.h"
 
 static const char* TEAMS_NAME[2] = 
 {
@@ -18,6 +19,11 @@ static const char* TEAMS_NAME[2] =
 	"Red"
 };
 static const int TOTAL_PLAYERS = 4;
+
+//glm::vec2 toLocalPos( glm::vec2 position, glm::vec2 axis )
+//{
+//	return glm:vec2();
+//}
 
 Teams::Teams( TEAM::id myTeam, GoalPosts* pMyGoalPost )
    : m_myTeam( myTeam )
@@ -29,6 +35,7 @@ Teams::Teams( TEAM::id myTeam, GoalPosts* pMyGoalPost )
    , m_pPlayerReceivingPass( NULL )
    , m_pOpponent( NULL )
    , m_pMyGoalPost( pMyGoalPost )
+   , m_pSupportSpotCalculator( new SupportSpotCalculator( this ) )
    , m_hasBall( false )   
    , m_pMyStateMachine( new StateMachine< Teams >( this ) )
 {
@@ -70,6 +77,7 @@ void Teams::draw()
       m_playersOnTeam[ i ]->draw();
    }
    m_pGoalkeeper->draw();
+   m_pSupportSpotCalculator->debugDraw();
 }
 
 const char* Teams::getTeamName()
@@ -111,4 +119,25 @@ bool Teams::arePlayersHome()
 bool Teams::doesGoalKeeperHaveBall() const 
 {
    return m_pGoalkeeper->isPlayerControllingTheBall();
+}
+
+bool Teams::isPassSafeFromOpponent( glm::vec2 from, glm::vec2 to, Players* const receiver, Players* const opponent, float force ) const 
+{
+	glm::vec2 toTarget = glm::normalize( to - from );
+	return false;
+	// get local position of opponent. 
+}
+
+glm::vec2 Teams::findGoalShot( float force ) const
+{
+	int numAttempts = 5;
+	glm::vec2 opponentGoalCenter = getOpponent()->getGoalPost()->getCenter();
+	float minY = getOpponent()->getGoalPost()->gettopLeft().y;
+	float maxY = getOpponent()->getGoalPost()->getbotRight().y;
+	glm::vec2 shotTarget( opponentGoalCenter.x, minY  );
+	while( --numAttempts )
+	{
+		// set Random float as the y. 
+	}
+	return glm::vec2();
 }

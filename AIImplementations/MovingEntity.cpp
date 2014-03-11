@@ -50,7 +50,6 @@ void MovingEntity::update()
 	   m_heading = glm::normalize( m_velocity );
 	   m_side = glm::vec2( m_heading.y , -1 * m_heading.x );
    }
-   draw();
 }
 
 bool MovingEntity::handleMessage( const Message& msg )

@@ -12,6 +12,8 @@
 static const int NUM_REGIONS = 18;
 static const int WALLS_HEIGHT = 20;
 static const int WALLS_WIDTH = 35;
+static const int FIELD_HEIGHT = 600; // SCREEN_HEIGHT - WALL_HEIGHT - WALL_HEIGHT
+static const int FIELD_WIDTH = 954; // SCREEN_WIDTH - WALL_WIDTH - WALL_WIDTH
 
 std::vector< MyRect* > SoccerGame::m_sRegions = std::vector< MyRect* >();
 std::vector< Wall* > SoccerGame::m_sWalls = std::vector< Wall* >();
@@ -62,19 +64,22 @@ void SoccerGame::initRegions()
       {
       case 0:
          {
-            MyRect* tempRect = new MyRect( glm::vec2( SCREEN_WIDTH - ( SCREEN_WIDTH * ( i + 3 ) / NUM_REGIONS ), SCREEN_HEIGHT - ( SCREEN_HEIGHT / 3 ) ), glm::vec2( SCREEN_WIDTH - ( SCREEN_WIDTH * i / NUM_REGIONS ), SCREEN_HEIGHT ) );
+            MyRect* tempRect = new MyRect( glm::vec2( FIELD_WIDTH - ( FIELD_WIDTH * ( i + 3 ) / NUM_REGIONS ) + WALLS_WIDTH, FIELD_HEIGHT - ( FIELD_HEIGHT / 3 ) + WALLS_HEIGHT ),
+				                           glm::vec2( FIELD_WIDTH - ( FIELD_WIDTH * i / NUM_REGIONS ) + WALLS_WIDTH, FIELD_HEIGHT + WALLS_HEIGHT ) );
             m_sRegions.push_back( tempRect );
             break;
          }
       case 1:
          {
-            MyRect* tempRect = new MyRect( glm::vec2( SCREEN_WIDTH - ( SCREEN_WIDTH * ( i + 2 ) / NUM_REGIONS ), SCREEN_HEIGHT - ( 2 * SCREEN_HEIGHT / 3 ) ), glm::vec2( SCREEN_WIDTH - ( SCREEN_WIDTH * ( i - 1 ) / NUM_REGIONS ), SCREEN_HEIGHT - ( SCREEN_HEIGHT / 3 )  ) );
+            MyRect* tempRect = new MyRect( glm::vec2( FIELD_WIDTH - ( FIELD_WIDTH * ( i + 2 ) / NUM_REGIONS ) + WALLS_WIDTH, FIELD_HEIGHT - ( 2 * FIELD_HEIGHT / 3 ) + WALLS_HEIGHT ), 
+				                           glm::vec2( FIELD_WIDTH - ( FIELD_WIDTH * ( i - 1 ) / NUM_REGIONS ) + WALLS_WIDTH, FIELD_HEIGHT - ( FIELD_HEIGHT / 3 ) + WALLS_HEIGHT ) );
             m_sRegions.push_back( tempRect );
             break;
          }
       case 2:
          {
-            MyRect* tempRect = new MyRect( glm::vec2( SCREEN_WIDTH - ( SCREEN_WIDTH * ( i + 1 ) / NUM_REGIONS ), 0 ), glm::vec2( SCREEN_WIDTH - ( SCREEN_WIDTH * ( i-2 ) / NUM_REGIONS ), SCREEN_HEIGHT - ( 2 * SCREEN_HEIGHT / 3 ) ) );
+            MyRect* tempRect = new MyRect( glm::vec2( FIELD_WIDTH - ( FIELD_WIDTH * ( i + 1 ) / NUM_REGIONS ) + WALLS_WIDTH, 0 + WALLS_HEIGHT ), 
+				                           glm::vec2( FIELD_WIDTH - ( FIELD_WIDTH * ( i-2 ) / NUM_REGIONS ) + WALLS_WIDTH, FIELD_HEIGHT - ( 2 * FIELD_HEIGHT / 3 ) + WALLS_HEIGHT ) );
             m_sRegions.push_back( tempRect );
             break;
          }
@@ -89,8 +94,8 @@ void SoccerGame::update()
    m_pRedTeam->update();
    m_pBlueTeam->update();
    m_pMySoccerBall->update();
-   //m_blueTeamPost->checkGoal();
-   //m_redTeamPost->checkGoal();
+   m_pBlueTeamPost->checkGoal();
+   m_pRedTeamPost->checkGoal();
 }
 
 void SoccerGame::draw()
@@ -106,6 +111,11 @@ void SoccerGame::draw()
    }
    m_pRedTeamPost->debugDraw();
    m_pBlueTeamPost->debugDraw();
+   
+   for( int i = 0 ; i < 18 ; ++i )
+   {
+	   m_sRegions[i]->debugDraw();
+   }
 }
 
 void SoccerGame::paused()

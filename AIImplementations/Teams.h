@@ -7,6 +7,7 @@
 class FieldPlayers;
 class GoalKeeper;
 class GoalPosts;
+class SupportSpotCalculator;
 
 class Teams
 {
@@ -36,7 +37,8 @@ public:
    bool hasControl() const { return m_hasBall; };
    bool arePlayersHome() ;
    bool doesGoalKeeperHaveBall() const ;
-
+   bool isPassSafeFromOpponent( glm::vec2 from, glm::vec2 to, Players* const receiver, Players* const opponent, float force ) const ;
+   glm::vec2 findGoalShot( float force ) const ;
    Teams* getOpponent() const { return m_pOpponent; }
    TEAM::id getTeamColor() const { return m_myTeam; }
 
@@ -51,6 +53,7 @@ private:
    Players* m_pPlayerReceivingPass;
    Teams* m_pOpponent;
    GoalPosts* m_pMyGoalPost;
+   SupportSpotCalculator* m_pSupportSpotCalculator;
 
    bool m_hasBall;
    
