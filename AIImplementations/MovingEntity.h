@@ -1,6 +1,6 @@
 #pragma once
 #include "BaseGameEntity.h"
-
+#define LOOK_AT 1<<1;
 class MovingEntity :
 	public BaseGameEntity
 {
@@ -29,9 +29,12 @@ public:
    virtual void draw();
    virtual void update();
    virtual bool handleMessage( const Message& msg );
+   void setLookAtTarget( MovingEntity* target );
+   void lookAtOff(){ m_lookAt &= ~LOOK_AT; };
 
 private:
-
+	
+   MovingEntity* m_lookAtTarget;
    glm::vec2 m_heading;
    glm::vec2 m_velocity;
    glm::vec2 m_acceleration;
@@ -42,6 +45,6 @@ private:
    int m_height;	
    int m_mass;
    double m_maxSpeed;
-
+   int m_lookAt;
 };
 

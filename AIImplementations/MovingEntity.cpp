@@ -15,6 +15,7 @@ double sqrMag( glm::vec2 currVector )
 
 MovingEntity::MovingEntity( char* imageName, glm::vec2 startingPosition, glm::vec2 startingVelocity , glm::vec2 heading, float maxSpeed, float mass )
    : BaseGameEntity( imageName,  startingPosition )
+   , m_lookAtTarget( NULL )
    , m_heading( heading )
    , m_velocity( startingVelocity )
    , m_acceleration( glm::vec2() )
@@ -24,6 +25,7 @@ MovingEntity::MovingEntity( char* imageName, glm::vec2 startingPosition, glm::ve
    , m_height( 15 )	
    , m_mass( mass )
    , m_maxSpeed( maxSpeed )
+   , m_lookAt( 0 )
 {
 }
  
@@ -45,11 +47,18 @@ void MovingEntity::update()
    glm::vec2 newPosition = getPosition() + m_velocity;
    
    setPosition( newPosition ); 
-   if( sqrMag( m_velocity ) > 0.01f )
+   int lookatTemp = m_lookAt & LOOK_AT;
+
+   if( lookatTemp != 0 && m_lookAtTarget )
+   {
+	   m_heading = glm::normalize( m_lookAtTarget->getPosition() - getPosition() );
+   }
+   else if( sqrMag( m_velocity ) > 0.01f )
    {
 	   m_heading = glm::normalize( m_velocity );
 	   m_side = glm::vec2( m_heading.y , -1 * m_heading.x );
    }
+
 }
 
 bool MovingEntity::handleMessage( const Message& msg )
@@ -60,4 +69,10 @@ bool MovingEntity::handleMessage( const Message& msg )
 double MovingEntity::getCurrentSpeed() const
 {
    return( sqrt( sqrMag( m_velocity ) ) );
+}
+
+void MovingEntity::setLookAtTarget( MovingEntity* target )
+{
+	m_lookAt |= LOOK_AT;
+	m_lookAtTarget = target;
 }

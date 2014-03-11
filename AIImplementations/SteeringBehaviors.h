@@ -29,7 +29,7 @@ public:
 
    // TODO HEEM - check why the following commented code is returning an error. 
    bool isArriveOn(); //{ return m_steeringBehaviorsFlag & FLAG_ARRIVE ; }
-   bool isPusuitOn(); //{ return m_steeringBehaviorsFlag & FLAG_PURSUIT; }
+   bool isPursuitOn(); //{ return m_steeringBehaviorsFlag & FLAG_PURSUIT; }
    bool isSeekOn(); //{ return m_steeringBehaviorsFlag & FLAG_SEEK; }
    bool isSeparationOn(); //{ return m_steeringBehaviorsFlag & FLAG_SEPARATION; }
    bool isInterposeOn(); //{ return m_steeringBehaviorsFlag & FLAG_INTERPOSE; }

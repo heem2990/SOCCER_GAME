@@ -44,7 +44,7 @@ void SteeringBehaviors::calculateForce()
       }
 		totalVelocity += calcInterposeVelocity( m_staticInterposeTarget, m_pTarget->getPosition() );
 	}
-	if( isPusuitOn() )
+	if( isPursuitOn() )
 	{
 		totalVelocity += calcPursuitVelocity( SoccerBall::getSoccerBallInstance() );
 	}
@@ -162,7 +162,7 @@ bool SteeringBehaviors::isSeekOn()
    }
 }
 
-bool SteeringBehaviors::isPusuitOn()
+bool SteeringBehaviors::isPursuitOn()
 {
    int temp = m_steeringBehaviorsFlag & FLAG_PURSUIT;
    if( temp != 0 )

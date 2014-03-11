@@ -119,7 +119,7 @@ void ReceiveBall::execute( FieldPlayers* pPlayer )
       return;
    }
 
-   if( pPlayer->getSteeringBehavior()->isPusuitOn() )
+   if( pPlayer->getSteeringBehavior()->isPursuitOn() )
    {
       pPlayer->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
    }
