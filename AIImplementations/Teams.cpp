@@ -24,13 +24,23 @@ static const int TOTAL_PLAYERS = 4;
 
 glm::vec2 toLocalPos( glm::vec2 position, glm::vec2 axis, glm::vec2 vectorToConvert )
 {
-   glm::vec2 toPosition = vectorToConvert - position;
-   glm::vec2 normalizedAxis = glm::normalize( axis );
+   glm::vec2 toPosition = vectorToConvert - position; // V
+   glm::vec2 normalizedAxis = glm::normalize( axis ); // A unity vector
+   glm::vec2 toPositionNormalized = glm::normalize( toPosition ); // V, unit vector
+   float magOfPositionVec = sqrtf( toPosition.x * toPosition.x + toPosition.y * toPosition.y ); // = |V|
 
-   float sinX = normalizedAxis.y;
+   float sinX = normalizedAxis.y; // sin( theta ) theta is the angle of new axis with original axis
    float cosX = normalizedAxis.x;
+   
+   float sinY = toPositionNormalized.y; // sin(alpha) alpha is the angle of V with original axis
+   float cosY = toPositionNormalized.x;
 
-   glm::vec2 localPosition( toPosition.x * cosX - toPosition.y * sinX , toPosition.x * sinX + toPosition.y * cosX );
+   float xOfUnit = cosY * cosX + sinY * sinX;
+   float yOfUnit = sinY * cosX - sinX * cosY;
+
+   glm::vec2 localPositionUnitVec( xOfUnit, yOfUnit );
+
+   glm::vec2 localPosition = localPositionUnitVec * magOfPositionVec;
    return localPosition;
 }
 
