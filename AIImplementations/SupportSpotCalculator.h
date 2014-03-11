@@ -27,6 +27,6 @@ public:
 
 private:
 	std::vector< SupportSpot > m_supportSpots;	
-	Teams* m_myTeam;
+	Teams* m_pMyTeam;
 };
 

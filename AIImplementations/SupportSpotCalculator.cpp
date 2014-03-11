@@ -8,7 +8,7 @@
 
 SupportSpotCalculator::SupportSpotCalculator( Teams* myteam )
 	: m_supportSpots()
-	, m_myTeam( myteam )
+	, m_pMyTeam( myteam )
 {
 	m_supportSpots.reserve( 36 );
 	int start = myteam->getTeamColor() == TEAM::BLUE? 9 : 0;
@@ -55,11 +55,38 @@ glm::vec2 SupportSpotCalculator::getBestSupportSpot()
 	for( int i = 0 ; i < 36 ; ++i )
 	{
 		m_supportSpots[ i ].m_rating = 1;
-		// if pass to spot is safe from all opponents add 3
-		// if goal can be scored from this position add 2
-		// add rating based on how far the point is. 
+		if( m_pMyTeam->isPassSafeFromAllOpponent( m_pMyTeam->getPlayerWithBall()->getPosition(), m_supportSpots[ i ].m_supportSpot, NULL, 30 ) ) //TODO: 30 should be replaced with MAX force
+		{
+			m_supportSpots[ i ].m_rating += 3;
+		}
+
+		glm::vec2 tempShotPos;
+		if( m_pMyTeam->canShoot( m_supportSpots[ i ].m_supportSpot, 30, tempShotPos ) )
+		{
+			m_supportSpots[ i ].m_rating += 2;
+		}
+
+		if( m_pMyTeam->getSupportingPlayer() )
+		{
+			const float optimalDistance = 200.0f ;
+			glm::vec2 controllingPositionToSpot = m_pMyTeam->getPlayerWithBall()->getPosition() - m_supportSpots[ i ].m_supportSpot;
+			float dist = sqrtf( controllingPositionToSpot.x * controllingPositionToSpot.x + controllingPositionToSpot.y * controllingPositionToSpot.y ); 
+
+			double temp = fabs( dist - optimalDistance );
+			
+			if( temp < optimalDistance )
+			{
+				m_supportSpots[ i ].m_rating += 4 * ( optimalDistance - temp ) / optimalDistance; 
+			}
+		}
+
+		if( m_supportSpots[ i ].m_rating > maxScore )
+		{
+			maxScore = m_supportSpots[ i ].m_rating;
+			bestSupportSpot = m_supportSpots[ i ].m_supportSpot;
+		}
 		// check if this is the current highest score, in which case set the bestSupportSpot as this point. 
 	}
 
-	return glm::vec2();
+	return bestSupportSpot;
 }

@@ -99,9 +99,22 @@ void Teams::draw()
    m_pSupportSpotCalculator->debugDraw();
 }
 
-const char* Teams::getTeamName()
+const char* Teams::getTeamName() const
 {
 	return TEAMS_NAME[ m_myTeam ];
+}
+
+// TODO: Change the code to remove so much copying. just pass a reference to the vector you want to store the players in.  
+std::vector< Players * > Teams::getPlayersOnTeam() const 
+{
+   std::vector< Players *  > playersOnTeam;
+   playersOnTeam.reserve( 5 ); // 4 + 1 goalKeeper
+   for( int i = 0 ; i < 4; ++i )
+   {
+      playersOnTeam.push_back( m_playersOnTeam[ i ] );
+   }
+   playersOnTeam.push_back( m_pGoalkeeper );
+   return playersOnTeam;
 }
 
 void Teams::sendPlayersHome()
@@ -140,7 +153,7 @@ bool Teams::doesGoalKeeperHaveBall() const
    return m_pGoalkeeper->isPlayerControllingTheBall();
 }
 
-bool Teams::isPassSafeFromOpponent( glm::vec2 from, glm::vec2 to, Players* const receiver, Players* const opponent, float force ) const 
+bool Teams::isPassSafeFromOpponent( glm::vec2 from, glm::vec2 to, const Players* const receiver, Players* const opponent, float force ) const 
 {
    glm::vec2 toTarget = to - from;
    glm::vec2 toOpponent = toOpponent - opponent->getPosition();
@@ -182,7 +195,7 @@ bool Teams::isPassSafeFromOpponent( glm::vec2 from, glm::vec2 to, Players* const
 	// get local position of opponent. 
 }
 
-bool Teams::isPassSafeFromAllOpponent( glm::vec2 from, glm::vec2 to, Players* const receiver, float force ) const 
+bool Teams::isPassSafeFromAllOpponent( glm::vec2 from, glm::vec2 to, const Players* const receiver, float force ) const 
 {
    for( int i = 0 ; i < 4 ; ++i )
    {
@@ -194,29 +207,102 @@ bool Teams::isPassSafeFromAllOpponent( glm::vec2 from, glm::vec2 to, Players* co
    return true;
 }
 
-glm::vec2 Teams::findGoalShot( float force ) const
+bool Teams::canShoot( glm::vec2 ballPos, float force, glm::vec2& shotTarget ) const
 {
-	int numAttempts = 5;
-	glm::vec2 opponentGoalCenter = getOpponent()->getGoalPost()->getCenter();
+   int numAttempts = 5;
+   glm::vec2 opponentGoalCenter = getOpponent()->getGoalPost()->getCenter();
 	
    int minY = getOpponent()->getGoalPost()->gettopLeft().y;
-	int maxY = getOpponent()->getGoalPost()->getbotRight().y;
+   int maxY = getOpponent()->getGoalPost()->getbotRight().y;
 	
-   glm::vec2 shotTarget( opponentGoalCenter.x, minY  );
+   glm::vec2 tempShotTarget( opponentGoalCenter.x, minY  );
 
-	while( --numAttempts )
-	{
-      int yDisplacement = rand() % ( maxY - minY ) + minY;
-      shotTarget.y = yDisplacement;
-      float time = SoccerBall::getSoccerBallInstance()->timeToCoverDistance( SoccerBall::getSoccerBallInstance()->getPosition(), shotTarget, force );
-      if( time > 0.0f )
-      {
-         if( isPassSafeFromAllOpponent( SoccerBall::getSoccerBallInstance()->getPosition(), shotTarget, NULL, force ) )
-         {
-            return shotTarget;
-         }
-      }
-		// set Random float as the y. 
+   while( --numAttempts )
+   {
+	   int yDisplacement = rand() % ( maxY - minY ) + minY;
+       tempShotTarget.y = yDisplacement;
+       float time = SoccerBall::getSoccerBallInstance()->timeToCoverDistance( ballPos, tempShotTarget, force );
+       if( time > 0.0f )
+       {
+		   if( isPassSafeFromAllOpponent( ballPos, tempShotTarget, NULL, force ) )
+           {
+			   shotTarget = tempShotTarget;
+			   return true;
+           }
+       }
 	}
-	return glm::vec2();
+	return false;
+}
+
+bool Teams::findPass( const Players* const passer, Players*& receiver, glm::vec2& passTarget, float force, float minPassingDistance ) const
+{
+	std::vector< Players* >::const_iterator currentPlayer = getPlayersOnTeam().begin();
+	float closestToBall = 10000.0f;// random large value. 
+	glm::vec2 ballTarget;
+	for( currentPlayer ; currentPlayer != getPlayersOnTeam().end(); ++currentPlayer )
+	{
+		glm::vec2 toReceiver = passer->getPosition() - ( *currentPlayer )->getPosition();
+		if( *currentPlayer != passer && ( toReceiver.x * toReceiver.x + toReceiver.y * toReceiver.y ) > ( minPassingDistance * minPassingDistance ) )
+		{
+			if( getBestPassToReceiver( passer, *currentPlayer, ballTarget, force ) )
+			{
+				float toGoalHorizontal = fabs( ballTarget.x - getOpponent()->getGoalPost()->getCenter().x );
+				if( toGoalHorizontal < closestToBall )
+				{
+					closestToBall = toGoalHorizontal;
+					receiver = *currentPlayer;
+
+					passTarget = ballTarget;
+				}
+			}
+		}
+	}
+
+	if( receiver )
+	{
+		return true;
+	}
+	return false;
+}
+
+bool Teams::getBestPassToReceiver( const Players* const passer, const Players* const receiver, glm::vec2& passTarget, float force ) const
+{
+	float timeForBall = SoccerBall::getSoccerBallInstance()->timeToCoverDistance( SoccerBall::getSoccerBallInstance()->getPosition(), receiver->getPosition(), force );
+	if( time <= 0 )
+	{
+		return false;
+	}
+	
+	float interceptRange = timeForBall * receiver->getMaxSpeed() * 0.3f; // TODO: Magic number 0.3f , make it const. 
+
+	glm::vec2 positionTop( receiver->getPosition().x, receiver->getPosition().y - interceptRange );
+	if( positionTop.y < 20.0f )  // height of top walls is 20 pixels
+	{ 
+		positionTop.y = 20.0f;
+	}
+	
+	glm::vec2 positionBot( receiver->getPosition().x, receiver->getPosition().y + interceptRange );
+	if( positionBot.y > 620.0f )
+	{
+		positionBot.y = 620;
+	}
+
+	glm::vec2 positionsToCheck[ 3 ] = { positionTop, receiver->getPosition(), positionBot };
+
+	float closest = 10000000.0f;
+	bool result = false;
+
+	for( int i = 0 ; i < 3 ; ++i )
+	{
+		glm::vec2 toPoint = positionsToCheck[ i ] - getOpponent()->getGoalPost()->getCenter();
+		float distance = sqrtf( toPoint.x * toPoint.x + toPoint.y * toPoint.y ); 
+		if( distance < closest && isPassSafeFromAllOpponent( SoccerBall::getSoccerBallInstance()->getPosition(), positionsToCheck[ i ], receiver, force ) )
+		{
+			closest = distance;
+			passTarget = positionsToCheck[ i ];
+			result = true;
+		}
+	}
+
+	return result;
 }

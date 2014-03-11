@@ -16,7 +16,7 @@ public:
    ~Teams( void );
    void update();
    void draw();
-   const char* getTeamName();
+   const char* getTeamName() const;
    void sendPlayersHome();
    void changeState( State< Teams >* pToState ) const ;
 
@@ -29,7 +29,9 @@ public:
    Players* getSupportingPlayer() const { return m_pSupportingPlayer; }
    Players* getReceivingPlayer() const { return m_pPlayerReceivingPass; }
    Players* getClosestPlayerToBall() const { return m_pPlayerClosestToBall; }
-   std::vector< FieldPlayers * > getPlayersOnTeam() const { return m_playersOnTeam; }
+
+   std::vector< Players * > getPlayersOnTeam() const ;
+   std::vector< FieldPlayers * > getFieldPlayersOnTeam() const { return m_playersOnTeam; }
    GoalPosts* getGoalPost() const { return m_pMyGoalPost; }
 
    void setOpponent( Teams* pOpponentTeam ){ m_pOpponent = pOpponentTeam; }
@@ -37,9 +39,13 @@ public:
    bool hasControl() const { return m_hasBall; };
    bool arePlayersHome() ;
    bool doesGoalKeeperHaveBall() const ;
-   bool isPassSafeFromAllOpponent( glm::vec2 from, glm::vec2 to,  Players* const receiver, float force ) const ;
-   bool isPassSafeFromOpponent( glm::vec2 from, glm::vec2 to, Players* const receiver, Players* const opponent, float force ) const ;
-   glm::vec2 findGoalShot( float force ) const ;
+
+   bool isPassSafeFromAllOpponent( glm::vec2 from, glm::vec2 to,  const Players* const receiver, float force ) const ;
+   bool isPassSafeFromOpponent( glm::vec2 from, glm::vec2 to, const Players* const receiver, Players* const opponent, float force ) const ;
+   bool findPass( const Players* const passer, Players*& receiver, glm::vec2& passTarget, float force, float minPassingDistance ) const;
+   bool getBestPassToReceiver( const Players* const passer, const Players* const receiver, glm::vec2& passTarget, float force ) const;
+
+   bool canShoot( glm::vec2 ballPos, float force, glm::vec2& shotTarget ) const ;
    Teams* getOpponent() const { return m_pOpponent; }
    TEAM::id getTeamColor() const { return m_myTeam; }
 
