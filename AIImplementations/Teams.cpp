@@ -12,6 +12,8 @@
 #include "GoalKeeperStates.h"
 #include "MessageDispatcher.h"
 #include "SupportSpotCalculator.h"
+#include "SoccerBall.h"
+#include <stdlib.h>
 
 static const char* TEAMS_NAME[2] = 
 {
@@ -20,10 +22,17 @@ static const char* TEAMS_NAME[2] =
 };
 static const int TOTAL_PLAYERS = 4;
 
-//glm::vec2 toLocalPos( glm::vec2 position, glm::vec2 axis )
-//{
-//	return glm:vec2();
-//}
+glm::vec2 toLocalPos( glm::vec2 position, glm::vec2 axis, glm::vec2 vectorToConvert )
+{
+   glm::vec2 toPosition = vectorToConvert - position;
+   glm::vec2 normalizedAxis = glm::normalize( axis );
+
+   float sinX = normalizedAxis.y;
+   float cosX = normalizedAxis.x;
+
+   glm::vec2 localPosition( toPosition.x * cosX - toPosition.y * sinX , toPosition.x * sinX + toPosition.y * cosX );
+   return localPosition;
+}
 
 Teams::Teams( TEAM::id myTeam, GoalPosts* pMyGoalPost )
    : m_myTeam( myTeam )
@@ -123,20 +132,80 @@ bool Teams::doesGoalKeeperHaveBall() const
 
 bool Teams::isPassSafeFromOpponent( glm::vec2 from, glm::vec2 to, Players* const receiver, Players* const opponent, float force ) const 
 {
-	glm::vec2 toTarget = glm::normalize( to - from );
-	return false;
+   glm::vec2 toTarget = to - from;
+   glm::vec2 toOpponent = toOpponent - opponent->getPosition();
+	glm::vec2 toTargetNormalized = glm::normalize( to - from );
+   glm::vec2 localPositionOfOpponent = toLocalPos( from, toTargetNormalized, opponent->getPosition() );
+   
+   if( localPositionOfOpponent.x < 0 )
+   {
+      return true;
+   }
+
+   if( ( toTarget.x * toTarget.x + toTarget.y * toTarget.y ) < ( toOpponent.x * toOpponent.x + toOpponent.y * toOpponent.y ) )
+   {
+      glm::vec2 targetToOpponent = to - opponent->getPosition();
+      glm::vec2 receiverToTarget = to - receiver->getPosition();
+      if( receiver )
+      {
+         if( ( targetToOpponent.x * targetToOpponent.x + targetToOpponent.y * targetToOpponent.y ) > ( receiverToTarget.x * receiverToTarget.x + receiverToTarget.y * receiverToTarget.y ) )
+         {
+            return true;
+         }
+      }
+      else
+      {
+         return true;
+      }
+   }
+
+   float timeForBall = SoccerBall::getSoccerBallInstance()->timeToCoverDistance( glm::vec2( 0.0f, 0.0f ), glm::vec2( localPositionOfOpponent.x, 0.0f ), force );
+
+   float OpponentsReach = opponent->getMaxSpeed() * timeForBall;
+
+   if( fabs( localPositionOfOpponent.y ) < OpponentsReach )
+   {
+      return false;
+   }
+
+	return true;
 	// get local position of opponent. 
+}
+
+bool Teams::isPassSafeFromAllOpponent( glm::vec2 from, glm::vec2 to, Players* const receiver, float force ) const 
+{
+   for( int i = 0 ; i < 4 ; ++i )
+   {
+      if( !isPassSafeFromOpponent( from, to, receiver, getOpponent()->getPlayersOnTeam()[ i ], force ) )
+      {
+         return false;
+      }
+   }
+   return true;
 }
 
 glm::vec2 Teams::findGoalShot( float force ) const
 {
 	int numAttempts = 5;
 	glm::vec2 opponentGoalCenter = getOpponent()->getGoalPost()->getCenter();
-	float minY = getOpponent()->getGoalPost()->gettopLeft().y;
-	float maxY = getOpponent()->getGoalPost()->getbotRight().y;
-	glm::vec2 shotTarget( opponentGoalCenter.x, minY  );
+	
+   int minY = getOpponent()->getGoalPost()->gettopLeft().y;
+	int maxY = getOpponent()->getGoalPost()->getbotRight().y;
+	
+   glm::vec2 shotTarget( opponentGoalCenter.x, minY  );
+
 	while( --numAttempts )
 	{
+      int yDisplacement = rand() % ( maxY - minY ) + minY;
+      shotTarget.y = yDisplacement;
+      float time = SoccerBall::getSoccerBallInstance()->timeToCoverDistance( SoccerBall::getSoccerBallInstance()->getPosition(), shotTarget, force );
+      if( time > 0.0f )
+      {
+         if( isPassSafeFromAllOpponent( SoccerBall::getSoccerBallInstance()->getPosition(), shotTarget, NULL, force ) )
+         {
+            return shotTarget;
+         }
+      }
 		// set Random float as the y. 
 	}
 	return glm::vec2();

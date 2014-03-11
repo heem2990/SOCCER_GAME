@@ -29,7 +29,7 @@ public:
    Players* getSupportingPlayer() const { return m_pSupportingPlayer; }
    Players* getReceivingPlayer() const { return m_pPlayerReceivingPass; }
    Players* getClosestPlayerToBall() const { return m_pPlayerClosestToBall; }
-   
+   std::vector< FieldPlayers * > getPlayersOnTeam() const { return m_playersOnTeam; }
    GoalPosts* getGoalPost() const { return m_pMyGoalPost; }
 
    void setOpponent( Teams* pOpponentTeam ){ m_pOpponent = pOpponentTeam; }
@@ -37,6 +37,7 @@ public:
    bool hasControl() const { return m_hasBall; };
    bool arePlayersHome() ;
    bool doesGoalKeeperHaveBall() const ;
+   bool isPassSafeFromAllOpponent( glm::vec2 from, glm::vec2 to,  Players* const receiver, float force ) const ;
    bool isPassSafeFromOpponent( glm::vec2 from, glm::vec2 to, Players* const receiver, Players* const opponent, float force ) const ;
    glm::vec2 findGoalShot( float force ) const ;
    Teams* getOpponent() const { return m_pOpponent; }
