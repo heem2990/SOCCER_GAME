@@ -19,8 +19,8 @@ std::vector< MyRect* > SoccerGame::m_sRegions = std::vector< MyRect* >();
 std::vector< Wall* > SoccerGame::m_sWalls = std::vector< Wall* >();
 
 SoccerGame::SoccerGame(void)
-   : m_pRedTeamPost( new GoalPosts( glm::vec2( 20.0f, 160.0f ), glm::vec2(  40.0f, 480.0f ) ) ) // TODO: Magic numbers should become constants
-   , m_pBlueTeamPost( new GoalPosts( glm::vec2( 984.0f, 160.0f ), glm::vec2( 1004, 480.0f ) ) ) 
+   : m_pRedTeamPost( new GoalPosts( glm::vec2( 984.0f, 160.0f ), glm::vec2( 1004, 480.0f ) ) ) // TODO: Magic numbers should become constants
+   , m_pBlueTeamPost( new GoalPosts( glm::vec2( 20.0f, 160.0f ), glm::vec2(  40.0f, 480.0f ) ) ) 
    , m_pRedTeam( new Teams( TEAM::RED, m_pRedTeamPost ) )
    , m_pBlueTeam( new Teams( TEAM::BLUE, m_pBlueTeamPost ) )
    , m_pMySoccerBall( SoccerBall::getSoccerBallInstance() )

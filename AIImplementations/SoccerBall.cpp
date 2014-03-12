@@ -3,13 +3,14 @@
 #include "SoccerGame.h"
 #include "Wall.h"
 #include <iostream>
+#include "Players.h"
 
 static const int SOCCER_BALL_MAX_SPEED = 4;
 static const float DECELERATION_MAGNITUDE_ON_BALL = 0.1f;
 static const float SOCCER_BALL_MASS = 5.0f;
 
 SoccerBall::SoccerBall(void)
-   : MovingEntity( "soccerball.png", glm::vec2( SCREEN_WIDTH>>1, SCREEN_HEIGHT>>1 ), glm::vec2( 5, 5 ), glm::vec2( 0, 0 ), SOCCER_BALL_MAX_SPEED, SOCCER_BALL_MASS )
+   : MovingEntity( "soccerball.png", glm::vec2( SCREEN_WIDTH>>1, SCREEN_HEIGHT>>1 ), glm::vec2( 10, 2 ), glm::vec2( 0, 0 ), SOCCER_BALL_MAX_SPEED, SOCCER_BALL_MASS )
 {
 }
 
@@ -48,6 +49,7 @@ void SoccerBall::trap( Players* pOwner )
 { 
    setVelocity( glm::vec2() );  
    m_pBallOwner = pOwner;
+   m_pBallOwner->setHasBall( true );
 }
 
 void SoccerBall::setBallPosition( glm::vec2 position )

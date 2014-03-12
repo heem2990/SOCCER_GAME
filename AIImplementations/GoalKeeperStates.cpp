@@ -6,6 +6,7 @@
 #include "SoccerBall.h"
 #include "SoccerGame.h"
 #include "GoalPosts.h"
+#include "MessageDispatcher.h"
 
 // ReturnHome State functions
 void ReturnGoalkeeperHome::enter( GoalKeeper* pGoalKeeper )
@@ -19,7 +20,7 @@ void ReturnGoalkeeperHome::execute( GoalKeeper* pGoalKeeper )
 {
    pGoalKeeper->setHomeRegionAsTarget();
 
-   if( pGoalKeeper->isPlayerHome() || pGoalKeeper->getMyTeam()->hasControl() )
+   if( pGoalKeeper->isPlayerHome() || !pGoalKeeper->getMyTeam()->hasControl() )
    {
       pGoalKeeper->getStateMachine()->changeState( TendGoal::getInstance() );
    }
@@ -42,28 +43,40 @@ ReturnGoalkeeperHome* ReturnGoalkeeperHome::getInstance()
 void TendGoal::enter( GoalKeeper* pGoalKeeper )
 {
    std::cout<<"GoalKeeper entering TendGoal state"<<std::endl;
-   pGoalKeeper->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() ); 
-   pGoalKeeper->getSteeringBehavior()->setInterPoseStaticTarget( pGoalKeeper->getMyTeam()->getGoalPost()->getCenter() );
+   pGoalKeeper->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
+   glm::vec2 goalCenter = pGoalKeeper->getMyTeam()->getGoalPost()->getCenter() ;
+   std::cout<<goalCenter.x<<" "<<goalCenter.y;
+   pGoalKeeper->getSteeringBehavior()->setInterPoseStaticTarget( goalCenter, 0.2 );
    pGoalKeeper->getSteeringBehavior()->interposeOn();
+   pGoalKeeper->setLookAtTarget( SoccerBall::getSoccerBallInstance() );
 }
 
 void TendGoal::execute( GoalKeeper* pGoalKeeper )
 {
+	std::cout<<"TENDING GOAL"<<std::endl;
    if( pGoalKeeper->isInKickingRangeOfTheBall() )
    {
       SoccerBall::getSoccerBallInstance()->trap( pGoalKeeper );
       pGoalKeeper->getStateMachine()->changeState( GoalKick::getInstance() );
+      pGoalKeeper->setHasBall( true );
       return;
    }
+
    if( pGoalKeeper->isBallWithinInterceptRanger() )
    {
       pGoalKeeper->getStateMachine()->changeState( InterceptBall::getInstance() );
-   } 
+   }
+
+   if( pGoalKeeper->isTooFarFromGoal() && pGoalKeeper->getMyTeam()->hasControl() )
+   {
+      pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
+   }
 }
 
 void TendGoal::exit( GoalKeeper* pGoalKeeper )
 {
    pGoalKeeper->getSteeringBehavior()->interposeOff();
+   pGoalKeeper->lookAtOff();
    std::cout<<"Goalkeeper exiting TendGoal Stae"<<std::endl;
 }
 
@@ -82,11 +95,24 @@ void GoalKick::enter( GoalKeeper* pGoalKeeper )
    pGoalKeeper->getMyTeam()->setPlayerWithBall( pGoalKeeper );
    pGoalKeeper->getMyTeam()->sendPlayersHome();
    pGoalKeeper->getMyTeam()->getOpponent()->sendPlayersHome();
+   // TODO: Check is we will need to set velocity of trapped ball equal to goalKeepers 
 }
 
 void GoalKick::execute( GoalKeeper* pGoalKeeper )
 {
-   //TODO: find pass, if found send message to the receiver else just attach ball to keeper;
+   Players* passReceivingPlayer;
+   glm::vec2 passPosition;
+   if( pGoalKeeper->getMyTeam()->findPass( pGoalKeeper, passReceivingPlayer, passPosition, 40, 100 ) )
+   {
+      if( passReceivingPlayer )
+      {
+         MessageDispatcher::getInstance()->dispatchMessage( 0,pGoalKeeper,passReceivingPlayer, MESSAGE_TYPES::RECEIVE_BALL, &passPosition );
+         pGoalKeeper->getStateMachine()->changeState( TendGoal::getInstance() );
+         
+         return;
+      }
+   }
+   SoccerBall::getSoccerBallInstance()->trap( pGoalKeeper );
 }
 
 void GoalKick::exit( GoalKeeper* pGoalKeeper )
@@ -106,6 +132,7 @@ GoalKick* GoalKick::getInstance()
 void InterceptBall::enter( GoalKeeper* pGoalKeeper )
 {
    std::cout<<"Entering the Intercept ball state"<<std::endl;
+   pGoalKeeper->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
    pGoalKeeper->getSteeringBehavior()->pursuitOn();
 }
 

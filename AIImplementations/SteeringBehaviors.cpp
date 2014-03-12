@@ -21,6 +21,7 @@ SteeringBehaviors::SteeringBehaviors( MovingEntity* pOwner )
    , m_staticInterposeTarget( glm::vec2() )
    , m_arriveTarget( glm::vec2() )
    , m_steeringBehaviorsFlag( 0 )
+   , m_interposePercent( 0.5 )
 {
 }
 
@@ -40,9 +41,12 @@ void SteeringBehaviors::calculateForce()
 	{
       if( m_pInterposeTarget != NULL )
       {
-         m_staticInterposeTarget = m_pInterposeTarget->getPosition();
+         totalVelocity += calcInterposeVelocity( m_pInterposeTarget, m_pTarget );
       }
-		totalVelocity += calcInterposeVelocity( m_staticInterposeTarget, m_pTarget->getPosition() );
+      else
+      {
+         totalVelocity += calcInterposeVelocityStatic( m_pTarget, m_staticInterposeTarget );
+      }
 	}
 	if( isPursuitOn() )
 	{
@@ -82,14 +86,26 @@ glm::vec2 SteeringBehaviors::calcSeekForce( glm::vec2 target )// this should be 
    return ( desiredVelocity - m_pOwner->getVelocity() );
 }
 
-glm::vec2 SteeringBehaviors::calcInterposeVelocity( glm::vec2 pMovingTargetA, glm::vec2 pMovingTargetB )
+glm::vec2 SteeringBehaviors::calcInterposeVelocity( MovingEntity* pMovingTargetA, MovingEntity* pMovingTargetB )
 {
-   glm::vec2 midPoint = ( pMovingTargetA + pMovingTargetB )/ 2.0f;
+   glm::vec2 midPoint = ( pMovingTargetA->getPosition() * m_interposePercent + pMovingTargetB->getPosition() * ( 1 - m_interposePercent ) );
    float timeToReachMidPoint = sqrtf( sqrmag( midPoint - m_pOwner->getPosition() ) ) / m_pOwner->getMaxSpeed();
 
-   glm::vec2 futureTargetAPos = pMovingTargetA + ( pMovingTargetA * timeToReachMidPoint ) ;
-   glm::vec2 futureTargetBPos = pMovingTargetB + ( pMovingTargetB * timeToReachMidPoint ) ;
-   glm::vec2 futureMidPoint = ( futureTargetAPos + futureTargetBPos ) / 2.0f;
+   // TODO FOLLOWING CODE IS ERRONOUS becasue its not velocity, but the position that we are multiplying. 
+   glm::vec2 futureTargetAPos = pMovingTargetA->getPosition() + ( pMovingTargetA->getVelocity() * timeToReachMidPoint ) ;
+   glm::vec2 futureTargetBPos = pMovingTargetB->getPosition() + ( pMovingTargetB->getVelocity() * timeToReachMidPoint ) ;
+   glm::vec2 futureMidPoint = ( futureTargetAPos * m_interposePercent + futureTargetBPos * ( 1 - m_interposePercent ) );
+
+   return calcArriveVelocity( futureMidPoint );
+}
+
+glm::vec2 SteeringBehaviors::calcInterposeVelocityStatic( MovingEntity* pMovingTargetA, glm::vec2 staticTargetB )
+{
+   glm::vec2 midPoint = ( pMovingTargetA->getPosition() * m_interposePercent + staticTargetB * ( 1 - m_interposePercent ) );
+   float timeToReachMidPoint = sqrtf( sqrmag( midPoint - m_pOwner->getPosition() ) ) / m_pOwner->getMaxSpeed();
+
+   glm::vec2 futureTargetAPos = pMovingTargetA->getPosition() + ( pMovingTargetA->getVelocity() * timeToReachMidPoint ) ;
+   glm::vec2 futureMidPoint = ( futureTargetAPos * m_interposePercent + staticTargetB * ( 1 - m_interposePercent ) );
 
    return calcArriveVelocity( futureMidPoint );
 }

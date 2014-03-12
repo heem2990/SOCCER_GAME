@@ -78,7 +78,14 @@ void Players::update()
 
 bool Players::isPlayerHome()
 {
-	return false;
+   if( sqrMag( getPosition() - SoccerGame::getRegions()[ m_homeRegion ]->getCenter() ) <= 100.0f ) // TODO: 100 is hardcoded, change. 
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 	//TODO check if the player is home and return true
 }
 

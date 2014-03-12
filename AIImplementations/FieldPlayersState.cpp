@@ -15,6 +15,7 @@ void Wait::enter( FieldPlayers* pPlayer )
 
 void Wait::execute( FieldPlayers* pPlayer )
 {
+	std::cout<<"Waiting"<<std::endl;
 	if( !pPlayer->isAtArriveTarget() )
    {
       pPlayer->getSteeringBehavior()->arriveOn();
@@ -255,7 +256,7 @@ void FieldPlayerReturnHome::enter( FieldPlayers* pPlayer )
 
 void FieldPlayerReturnHome::execute( FieldPlayers* pPlayer )
 {
-   if( pPlayer->isAtArriveTarget() ) 
+   if( pPlayer->isPlayerHome() ) 
    {
       pPlayer->getStateMachine()->changeState( Wait::getInstance() );
       return;

@@ -81,13 +81,18 @@ Teams::~Teams(void)
 
 void Teams::update()
 {
+   setClosestPlayerToBall();
    m_pMyStateMachine->update();
+
    for( int i = 0  ; i < TOTAL_PLAYERS ; ++i )
    {
       m_playersOnTeam[ i ]->update();
    }
    m_pGoalkeeper->update();
-   setClosestPlayerToBall();
+   if( m_pPlayerWithBall )
+   {
+      m_hasBall = true;
+   }
 }
 
 void Teams::draw()

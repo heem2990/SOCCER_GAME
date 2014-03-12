@@ -58,6 +58,7 @@ public:
    Teams* getMyTeam() const { return m_pMyTeam; }
 
    void setHomeRegionAsTarget() const;
+   void setHasBall( bool hasBall ){ m_bHasBall = hasBall; }
 
 private:
 	
