@@ -63,3 +63,9 @@ bool GoalKeeper::isTooFarFromGoal()
    }
    return false;
 }
+
+void GoalKeeper::update()
+{
+	m_pMyStateMachine->update();
+	Players::update();
+}

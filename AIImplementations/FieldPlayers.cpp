@@ -87,6 +87,7 @@ bool FieldPlayers::handleMessage( const Message& msg )
 
 void FieldPlayers::update()
 {
+	m_pMyStateMachine->update();
    if( isPlayerControllingTheBall() )
    {
       setMaxSpeed( 2.0f ); // TODO CHANGE magic number;

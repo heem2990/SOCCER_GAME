@@ -10,11 +10,12 @@
 void Wait::enter( FieldPlayers* pPlayer )
 {
    std::cout<<"Entering the Wait state"<<std::endl;
+   pPlayer->setHomeRegionAsTarget();
 }
 
 void Wait::execute( FieldPlayers* pPlayer )
 {
-   if( !pPlayer->isAtTarget() )
+	if( !pPlayer->isAtArriveTarget() )
    {
       pPlayer->getSteeringBehavior()->arriveOn();
       return;
@@ -23,14 +24,14 @@ void Wait::execute( FieldPlayers* pPlayer )
    {
       pPlayer->getSteeringBehavior()->arriveOff();
       pPlayer->setVelocity( glm::vec2( 0, 0 ) );
-
-      // TODO: track ball
+	  pPlayer->setLookAtTarget( SoccerBall::getSoccerBallInstance() );
    }
 
    if( pPlayer->getMyTeam()->hasControl() &&
       !pPlayer->isPlayerControllingTheBall() &&
        pPlayer->isPlayerAheadOfAttacker() )
    {
+	   std::cout<<" my team has control, I am not controlling it and I am ahead of attacker "<<std::endl;
       // TODO request pass
       return;
    }
@@ -41,15 +42,18 @@ void Wait::execute( FieldPlayers* pPlayer )
           pPlayer->getMyTeam()->getReceivingPlayer() == NULL &&
           SoccerGame::getGameInstance()->doGoalkeepersHaveBall() ) 
       {
+	     std::cout<<" I am closest to ball, No receiving Player and goalies dont have the ball"<<std::endl;
          pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
          return;
       }
    }
+   std::cout<<"CONFUSED!~"<<std::endl;
 
 }
 
 void Wait::exit( FieldPlayers* pPlayer )
 {
+   pPlayer->lookAtOff();
    std::cout<<"Exiting the Wait state"<<std::endl;
 }
 

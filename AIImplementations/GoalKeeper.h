@@ -17,6 +17,8 @@ public:
    bool handleMessage( const Message& msg );
    StateMachine< GoalKeeper >* getStateMachine() const { return m_pMyStateMachine; }
 
+   virtual void update();
+
 private:
 
    StateMachine< GoalKeeper >* m_pMyStateMachine;  
