@@ -64,7 +64,7 @@ Defending* Defending::getInstance()
 void KickOff::enter( Teams* pTeam )
 {
 	std::cout<<"******Team "<<pTeam->getTeamName()<<" has entered KickOff"<<std::endl;
-	pTeam->setClosestPlayerToBall( NULL );
+	pTeam->setClosestPlayerToBall();
 	pTeam->setPlayerWithBall( NULL );
 	pTeam->setReceivingPlayer( NULL );
 	pTeam->setSupportingPlayer( NULL );

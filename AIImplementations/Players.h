@@ -53,6 +53,7 @@ public:
    bool isPlayerAheadOfAttacker() const;
    bool isPlayerWithinReceivingRange() const; // should be a const function, but is not because we are calculating the sqrMag manually in there. CHANGE  
    bool isBallWithinInterceptRanger();
+   void setIsClosestToBall( bool close ){ m_isClosestPlayerToBall = close; }
    SteeringBehaviors* getSteeringBehavior() const { return m_pSteeringBehavior; }
    Teams* getMyTeam() const { return m_pMyTeam; }
 

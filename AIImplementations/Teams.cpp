@@ -87,6 +87,7 @@ void Teams::update()
       m_playersOnTeam[ i ]->update();
    }
    m_pGoalkeeper->update();
+   setClosestPlayerToBall();
 }
 
 void Teams::draw()
@@ -305,4 +306,32 @@ bool Teams::getBestPassToReceiver( const Players* const passer, const Players* c
 	}
 
 	return result;
+}
+
+void Teams::setClosestPlayerToBall()
+{ 
+   if( !m_pPlayerWithBall )
+   {
+      float closest = 10000000.0f;
+      glm::vec2 ballPosition = SoccerBall::getSoccerBallInstance()->getPosition();
+      for( int i = 0 ; i < 5 ; ++i )
+      {
+         glm::vec2 toBall = ballPosition - getPlayersOnTeam()[ i ]->getPosition();
+         if( ( toBall.x * toBall.x + toBall.y * toBall.y ) < closest )
+         {
+            m_pPlayerClosestToBall = getPlayersOnTeam()[ i ];
+         }
+         else
+         {
+            getPlayersOnTeam()[ i ]->setIsClosestToBall( false );
+         }
+      }
+
+      m_pPlayerClosestToBall->setIsClosestToBall( true );
+   }
+   else
+   {
+      m_pPlayerClosestToBall = m_pPlayerWithBall;
+      m_pPlayerWithBall->setIsClosestToBall( true );
+   }
 }

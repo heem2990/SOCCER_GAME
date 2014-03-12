@@ -23,7 +23,7 @@ public:
    void setPlayerWithBall     ( Players* pPlayer ) { m_pPlayerWithBall = pPlayer; }
    void setSupportingPlayer   ( Players* pPlayer ) { m_pSupportingPlayer = pPlayer; }
    void setReceivingPlayer    ( Players* pPlayer ) { m_pPlayerReceivingPass = pPlayer; }
-   void setClosestPlayerToBall( Players* pPlayer ) { m_pPlayerClosestToBall = pPlayer; }
+   void setClosestPlayerToBall();
 
    Players* getPlayerWithBall() const { return m_pPlayerWithBall; }
    Players* getSupportingPlayer() const { return m_pSupportingPlayer; }

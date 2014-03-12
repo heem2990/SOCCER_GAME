@@ -42,13 +42,11 @@ void Wait::execute( FieldPlayers* pPlayer )
           pPlayer->getMyTeam()->getReceivingPlayer() == NULL &&
           SoccerGame::getGameInstance()->doGoalkeepersHaveBall() ) 
       {
-	     std::cout<<" I am closest to ball, No receiving Player and goalies dont have the ball"<<std::endl;
+	      std::cout<<" I am closest to ball, No receiving Player and goalies dont have the ball"<<std::endl;
          pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
          return;
       }
    }
-   std::cout<<"CONFUSED!~"<<std::endl;
-
 }
 
 void Wait::exit( FieldPlayers* pPlayer )

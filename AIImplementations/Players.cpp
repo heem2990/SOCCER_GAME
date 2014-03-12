@@ -45,7 +45,7 @@ float sqrMag( glm::vec2 vectorToProcess )
 }
 
 Players::Players( Teams* pMyTeam, PlayerPositions::id myPosition )
-   : MovingEntity( PLAYER_IMAGES[ pMyTeam->getTeamColor() ], SoccerGame::getRegions()[ PLAYER_POSITONS[ pMyTeam->getTeamColor() ][ myPosition ] ]->getCenter(), glm::vec2() ,PLAYER_DIRECTION[ pMyTeam->getTeamColor() ], PLAYERS_MAX_SPEED ) // change this according to playerPosition and team
+   : MovingEntity( PLAYER_IMAGES[ pMyTeam->getTeamColor() ], glm::vec2( 0, 0 )/*SoccerGame::getRegions()[ PLAYER_POSITONS[ pMyTeam->getTeamColor() ][ myPosition ] ]->getCenter()*/, glm::vec2() ,PLAYER_DIRECTION[ pMyTeam->getTeamColor() ], PLAYERS_MAX_SPEED ) // change this according to playerPosition and team
    , m_playerStateFont( al_load_font( "arial.ttf" , 24, 0 ) )
    , m_pSteeringBehavior( NULL )
    , m_pMyTeam( pMyTeam )

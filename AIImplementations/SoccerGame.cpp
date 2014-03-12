@@ -25,6 +25,8 @@ SoccerGame::SoccerGame(void)
    , m_pBlueTeam( new Teams( TEAM::BLUE, m_pBlueTeamPost ) )
    , m_pMySoccerBall( SoccerBall::getSoccerBallInstance() )
    , m_pBackground( al_load_bitmap( "soccerPitch.png" ) )
+   , m_hasInitialized( true )
+   , m_isGameOn( true )
 {
 	m_pRedTeam->setOpponent( m_pBlueTeam );   
 	m_pBlueTeam->setOpponent( m_pRedTeam );

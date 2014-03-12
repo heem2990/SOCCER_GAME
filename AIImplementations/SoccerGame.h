@@ -38,7 +38,6 @@ private:
    Teams* m_pBlueTeam;
    SoccerBall* m_pMySoccerBall;
    ALLEGRO_BITMAP* m_pBackground;
-   gameState m_stateFunction;
 
    bool m_hasInitialized;
    bool m_isGameOn;
