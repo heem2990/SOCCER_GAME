@@ -175,7 +175,7 @@ bool Teams::doesGoalKeeperHaveBall() const
 bool Teams::isPassSafeFromOpponent( glm::vec2 from, glm::vec2 to, const Players* const receiver, Players* const opponent, float force ) const 
 {
    glm::vec2 toTarget = to - from;
-   glm::vec2 toOpponent = to - opponent->getPosition();
+   glm::vec2 toOpponent = from - opponent->getPosition();
 	glm::vec2 toTargetNormalized = glm::normalize( to - from );
    glm::vec2 localPositionOfOpponent = toLocalPos( from, toTargetNormalized, opponent->getPosition() );
    
@@ -186,10 +186,11 @@ bool Teams::isPassSafeFromOpponent( glm::vec2 from, glm::vec2 to, const Players*
 
    if( ( toTarget.x * toTarget.x + toTarget.y * toTarget.y ) < ( toOpponent.x * toOpponent.x + toOpponent.y * toOpponent.y ) )
    {
-      glm::vec2 targetToOpponent = to - opponent->getPosition();
-      glm::vec2 receiverToTarget = to - receiver->getPosition();
       if( receiver )
       {
+         glm::vec2 targetToOpponent = to - opponent->getPosition();
+         glm::vec2 receiverToTarget = to - receiver->getPosition();
+
          if( ( targetToOpponent.x * targetToOpponent.x + targetToOpponent.y * targetToOpponent.y ) > ( receiverToTarget.x * receiverToTarget.x + receiverToTarget.y * receiverToTarget.y ) )
          {
             return true;
