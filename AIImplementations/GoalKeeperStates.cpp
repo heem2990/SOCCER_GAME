@@ -106,7 +106,7 @@ void GoalKick::execute( GoalKeeper* pGoalKeeper )
    {
       if( passReceivingPlayer )
       {
-         SoccerBall::getSoccerBallInstance()->kick( glm::normalize( passPosition - pGoalKeeper->getPosition() ), 30 );
+         SoccerBall::getSoccerBallInstance()->kick( glm::normalize( passPosition - pGoalKeeper->getPosition() ), 60 );
          pGoalKeeper->setHasBall( false );
 
          MessageDispatcher::getInstance()->dispatchMessage( 0,pGoalKeeper,passReceivingPlayer, MESSAGE_TYPES::RECEIVE_BALL, &passPosition );

@@ -5,8 +5,10 @@
 #include "SteeringBehaviors.h"
 #include "SoccerBall.h"
 #include "MessageDispatcher.h"
+#include "Teams.h"
+#include "SupportSpotCalculator.h"
 
-static const int MAX_PASSING_FORCE = 10.0f; // check values.
+static const int MAX_PASSING_FORCE = 40.0f; // check values.
 
 FieldPlayers::FieldPlayers( Teams* pMyTeam, PlayerPositions::id myPosition )
    : Players( pMyTeam, myPosition )
@@ -37,15 +39,16 @@ bool FieldPlayers::handleMessage( const Message& msg )
       {
          glm::vec2 receivingPlayerPos = msg.getSender()->getPosition();
 
-         if( isPlayerWithinReceivingRange() )
+         if( !isInKickingRangeOfTheBall() )
          {
             return true;
          }
          
          SoccerBall::getSoccerBallInstance()->kick( receivingPlayerPos - SoccerBall::getSoccerBallInstance()->getPosition(), MAX_PASSING_FORCE );
-         MessageDispatcher::getInstance()->dispatchMessage( 0.0f, this, msg.getSender(), MESSAGE_TYPES::RECEIVE_BALL, NULL );
+         MessageDispatcher::getInstance()->dispatchMessage( 0.0f, this, msg.getSender(), MESSAGE_TYPES::RECEIVE_BALL, &receivingPlayerPos );
          m_pMyStateMachine->changeState( Wait::getInstance() );
-         // TODO: find support?
+         
+         findSupportingPlayer();
 
          return true;
          break;
@@ -64,7 +67,7 @@ bool FieldPlayers::handleMessage( const Message& msg )
             return true;
          }
 
-         getSteeringBehavior()->setArriveTarget( glm::vec2() /*TODO HEEM Get support spot here*/ ); 
+         getSteeringBehavior()->setArriveTarget( getMyTeam()->getSupportSpot()->getBestSupportSpot() ); 
          m_pMyStateMachine->changeState( SupportPlayerWithBall::getInstance() );
 
          return true;

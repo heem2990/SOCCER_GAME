@@ -5,6 +5,8 @@
 #include "SteeringBehaviors.h"
 #include "SoccerBall.h"
 #include "Teams.h"
+#include "MessageDispatcher.h"
+#include "SupportSpotCalculator.h"
 
 const int NUM_PLAYERS = 5;
 static const int PLAYERS_MAX_SPEED = 5;
@@ -127,8 +129,19 @@ bool Players::isAtArriveTarget() const
 
 bool Players::isPlayerAheadOfAttacker() const
 {
+   if( m_pMyTeam->hasControl() && m_pMyTeam->getPlayerWithBall() )
+   {
+      glm::vec2 attackerPosition = m_pMyTeam->getPlayerWithBall()->getPosition();
+      if( getPosition().x > attackerPosition.x )
+      {
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
    return false;
-   // TODO Check the 
 }
 
 bool Players::isPlayerWithinReceivingRange() const 
@@ -163,4 +176,37 @@ void Players::setHomeRegionAsTarget() const
 bool Players::handleMessage( const Message& msg )
 {
    return true;
+}
+
+void Players::findSupportingPlayer()
+{
+   if( m_pMyTeam->getSupportingPlayer() == NULL )
+   {
+      Players* bestSupporter = m_pMyTeam->determineBestSupportingPlayer();
+      m_pMyTeam->setSupportingPlayer( bestSupporter );
+      MessageDispatcher::getInstance()->dispatchMessage( 0,this, bestSupporter, MESSAGE_TYPES::RECEIVE_BALL, &( m_pMyTeam->getSupportSpot()->getBestSupportSpot() ) );
+   }
+
+   Players* bestSupporter = m_pMyTeam->determineBestSupportingPlayer();
+   if( bestSupporter && ( bestSupporter != m_pMyTeam->getSupportingPlayer() ) )
+   {
+      if( m_pMyTeam->getSupportingPlayer() )
+      {
+         MessageDispatcher::getInstance()->dispatchMessage( 0.0f, this, m_pMyTeam->getSupportingPlayer(), MESSAGE_TYPES::GO_HOME, NULL );
+      }
+
+      m_pMyTeam->setSupportingPlayer( bestSupporter );
+      MessageDispatcher::getInstance()->dispatchMessage( 0.0f, this, bestSupporter, MESSAGE_TYPES::SUPPORT_ATTACKER, NULL );
+
+   }
+}
+
+void Players::setHasBall( bool hasBall )
+{
+   m_bHasBall = hasBall;
+   if( hasBall )
+   {
+      m_pMyTeam->setPlayerWithBall( this );
+      m_pMyTeam->setHasControl( true );
+   }
 }

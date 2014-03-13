@@ -37,6 +37,8 @@ public:
    GoalPosts* getGoalPost() const { return m_pMyGoalPost; }
 
    void setOpponent( Teams* pOpponentTeam ){ m_pOpponent = pOpponentTeam; }
+   void setHasControl( bool hasControl ){ m_hasBall = hasControl; }
+   void requestPass( Players* pPlayerRequesting );
    
    bool hasControl() const { return m_hasBall; };
    bool arePlayersHome() ;
@@ -48,8 +50,11 @@ public:
    bool getBestPassToReceiver( const Players* const passer, const Players* const receiver, glm::vec2& passTarget, float force ) const;
 
    bool canShoot( glm::vec2 ballPos, float force, glm::vec2& shotTarget ) const ;
+
+   Players* determineBestSupportingPlayer();
    Teams* getOpponent() const { return m_pOpponent; }
    TEAM::id getTeamColor() const { return m_myTeam; }
+   SupportSpotCalculator* getSupportSpot() const { return m_pSupportSpotCalculator; }
 
 private:
    TEAM::id m_myTeam;

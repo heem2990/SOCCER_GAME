@@ -253,6 +253,24 @@ bool Teams::canShoot( glm::vec2 ballPos, float force, glm::vec2& shotTarget ) co
 	return false;
 }
 
+Players* Teams::determineBestSupportingPlayer()
+{
+   float minDistanceSoFar = 1000000.0f;
+   glm::vec2 bestSupportPosition = m_pSupportSpotCalculator->getBestSupportSpot();
+   Players* bestSupportPlayer = NULL;
+   for( int i = 0 ; i < 5 ; ++i )
+   {
+      glm::vec2 playerToPosition = getPlayersOnTeam()[ i ]->getPosition() - bestSupportPosition;
+      float dist = playerToPosition.x * playerToPosition.x + playerToPosition.y * playerToPosition.y;
+      if( dist < minDistanceSoFar )
+      {
+         bestSupportPlayer = getPlayersOnTeam()[ i ];
+         minDistanceSoFar = dist;
+      }
+   }
+   return bestSupportPlayer;
+}
+
 bool Teams::findPass( const Players* const passer, Players*& receiver, glm::vec2& passTarget, float force, float minPassingDistance ) const
 {
    std::vector< Players* > myPlayers = getPlayersOnTeam();
@@ -337,14 +355,14 @@ void Teams::setClosestPlayerToBall()
       for( int i = 0 ; i < 5 ; ++i )
       {
          glm::vec2 toBall = ballPosition - getPlayersOnTeam()[ i ]->getPosition();
-         if( ( toBall.x * toBall.x + toBall.y * toBall.y ) < closest )
+         float distToBall = toBall.x * toBall.x + toBall.y * toBall.y;
+         if( distToBall < closest )
          {
             m_pPlayerClosestToBall = getPlayersOnTeam()[ i ];
+            closest = distToBall;
          }
-         else
-         {
-            getPlayersOnTeam()[ i ]->setIsClosestToBall( false );
-         }
+         
+         getPlayersOnTeam()[ i ]->setIsClosestToBall( false );
       }
 
       m_pPlayerClosestToBall->setIsClosestToBall( true );
@@ -353,5 +371,13 @@ void Teams::setClosestPlayerToBall()
    {
       m_pPlayerClosestToBall = m_pPlayerWithBall;
       m_pPlayerWithBall->setIsClosestToBall( true );
+   }
+}
+
+void Teams::requestPass( Players* pPlayerRequesting )
+{
+   if( isPassSafeFromAllOpponent( m_pPlayerWithBall->getPosition(), pPlayerRequesting->getPosition(), pPlayerRequesting, 40.0f ) ) // TODO: Magic Number
+   {
+      MessageDispatcher::getInstance()->dispatchMessage( 0.0f, pPlayerRequesting, m_pPlayerWithBall, MESSAGE_TYPES::PASS_TO_ME, NULL );
    }
 }

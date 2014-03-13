@@ -25,15 +25,14 @@ void Wait::execute( FieldPlayers* pPlayer )
    {
       pPlayer->getSteeringBehavior()->arriveOff();
       pPlayer->setVelocity( glm::vec2( 0, 0 ) );
-	  pPlayer->setLookAtTarget( SoccerBall::getSoccerBallInstance() );
+	   pPlayer->setLookAtTarget( SoccerBall::getSoccerBallInstance() );
    }
 
    if( pPlayer->getMyTeam()->hasControl() &&
       !pPlayer->isPlayerControllingTheBall() &&
        pPlayer->isPlayerAheadOfAttacker() )
    {
-	   std::cout<<" my team has control, I am not controlling it and I am ahead of attacker "<<std::endl;
-      // TODO request pass
+      pPlayer->getMyTeam()->requestPass( pPlayer );
       return;
    }
 
@@ -41,7 +40,7 @@ void Wait::execute( FieldPlayers* pPlayer )
    {
       if( pPlayer->isPlayerClosestToBall() &&
           pPlayer->getMyTeam()->getReceivingPlayer() == NULL &&
-          SoccerGame::getGameInstance()->doGoalkeepersHaveBall() ) 
+          !SoccerGame::getGameInstance()->doGoalkeepersHaveBall() ) 
       {
 	      std::cout<<" I am closest to ball, No receiving Player and goalies dont have the ball"<<std::endl;
          pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
