@@ -57,8 +57,8 @@ void TendGoal::execute( GoalKeeper* pGoalKeeper )
    if( pGoalKeeper->isInKickingRangeOfTheBall() )
    {
       SoccerBall::getSoccerBallInstance()->trap( pGoalKeeper );
-      pGoalKeeper->getStateMachine()->changeState( GoalKick::getInstance() );
       pGoalKeeper->setHasBall( true );
+      pGoalKeeper->getStateMachine()->changeState( GoalKick::getInstance() );
       return;
    }
 
@@ -93,26 +93,28 @@ void GoalKick::enter( GoalKeeper* pGoalKeeper )
 {
    std::cout<<"Entering the goal kick state"<<std::endl;
    pGoalKeeper->getMyTeam()->setPlayerWithBall( pGoalKeeper );
-   pGoalKeeper->getMyTeam()->sendPlayersHome();
+   pGoalKeeper->getMyTeam()->sendFieldPlayersHome();
    pGoalKeeper->getMyTeam()->getOpponent()->sendPlayersHome();
-   // TODO: Check is we will need to set velocity of trapped ball equal to goalKeepers 
+   // TODO: Check if we will need to set velocity of trapped ball equal to goalKeepers 
 }
 
 void GoalKick::execute( GoalKeeper* pGoalKeeper )
 {
-   Players* passReceivingPlayer;
-   glm::vec2 passPosition;
-   if( pGoalKeeper->getMyTeam()->findPass( pGoalKeeper, passReceivingPlayer, passPosition, 40, 100 ) )
+   Players* passReceivingPlayer = NULL;
+   glm::vec2 passPosition( 0, 0 );
+   if( pGoalKeeper->getMyTeam()->findPass( pGoalKeeper, passReceivingPlayer, passPosition, 30, 10 ) )
    {
       if( passReceivingPlayer )
       {
+         SoccerBall::getSoccerBallInstance()->kick( glm::normalize( passPosition - pGoalKeeper->getPosition() ), 30 );
+         pGoalKeeper->setHasBall( false );
+
          MessageDispatcher::getInstance()->dispatchMessage( 0,pGoalKeeper,passReceivingPlayer, MESSAGE_TYPES::RECEIVE_BALL, &passPosition );
-         pGoalKeeper->getStateMachine()->changeState( TendGoal::getInstance() );
-         
+         pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
          return;
       }
    }
-   SoccerBall::getSoccerBallInstance()->trap( pGoalKeeper );
+   //SoccerBall::getSoccerBallInstance()->trap( pGoalKeeper );
 }
 
 void GoalKick::exit( GoalKeeper* pGoalKeeper )

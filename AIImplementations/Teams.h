@@ -18,6 +18,8 @@ public:
    void draw();
    const char* getTeamName() const;
    void sendPlayersHome();
+   void sendFieldPlayersHome();
+   void sendGoalKeeperHome();
    void changeState( State< Teams >* pToState ) const ;
 
    void setPlayerWithBall     ( Players* pPlayer ) { m_pPlayerWithBall = pPlayer; }

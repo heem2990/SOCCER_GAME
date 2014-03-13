@@ -132,6 +132,19 @@ void Teams::sendPlayersHome()
    m_pGoalkeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
 }
 
+void Teams::sendFieldPlayersHome()
+{
+   for( int i = 0  ; i < TOTAL_PLAYERS ; ++i )
+   {
+      m_playersOnTeam[ i ]->getStateMachine()->changeState( FieldPlayerReturnHome::getInstance() );
+   }
+}
+
+void Teams::sendGoalKeeperHome()
+{
+   m_pGoalkeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
+}
+
 void Teams::changeState( State< Teams >* pToState ) const
 {
    m_pMyStateMachine->changeState( pToState );
@@ -242,11 +255,13 @@ bool Teams::canShoot( glm::vec2 ballPos, float force, glm::vec2& shotTarget ) co
 
 bool Teams::findPass( const Players* const passer, Players*& receiver, glm::vec2& passTarget, float force, float minPassingDistance ) const
 {
-	std::vector< Players* >::const_iterator currentPlayer = getPlayersOnTeam().begin();
+   std::vector< Players* > myPlayers = getPlayersOnTeam();
+   std::vector< Players* >::const_iterator currentPlayer = myPlayers.begin();
 	float closestToBall = 10000.0f;// random large value. 
 	glm::vec2 ballTarget;
-	for( currentPlayer ; currentPlayer != getPlayersOnTeam().end(); ++currentPlayer )
+	for( currentPlayer ; currentPlayer != myPlayers.end(); ++currentPlayer )
 	{
+      std::cout<<" Checking layers ";
 		glm::vec2 toReceiver = passer->getPosition() - ( *currentPlayer )->getPosition();
 		if( *currentPlayer != passer && ( toReceiver.x * toReceiver.x + toReceiver.y * toReceiver.y ) > ( minPassingDistance * minPassingDistance ) )
 		{
