@@ -175,7 +175,7 @@ bool Teams::doesGoalKeeperHaveBall() const
 bool Teams::isPassSafeFromOpponent( glm::vec2 from, glm::vec2 to, const Players* const receiver, Players* const opponent, float force ) const 
 {
    glm::vec2 toTarget = to - from;
-   glm::vec2 toOpponent = toOpponent - opponent->getPosition();
+   glm::vec2 toOpponent = to - opponent->getPosition();
 	glm::vec2 toTargetNormalized = glm::normalize( to - from );
    glm::vec2 localPositionOfOpponent = toLocalPos( from, toTargetNormalized, opponent->getPosition() );
    
