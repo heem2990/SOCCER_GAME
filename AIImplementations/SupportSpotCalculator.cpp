@@ -11,8 +11,8 @@ SupportSpotCalculator::SupportSpotCalculator( Teams* myteam )
 	, m_pMyTeam( myteam )
 {
 	m_supportSpots.reserve( 36 );
-	int start = myteam->getTeamColor() == TEAM::BLUE? 9 : 0;
-	int end = myteam->getTeamColor() == TEAM::BLUE? 18: 9;
+	int start = myteam->getTeamColor() == TEAM::BLUE? 0 : 9;
+	int end = myteam->getTeamColor() == TEAM::BLUE? 9: 18;
 	for(  int i = start; i < end ; ++i )
 	{
 		MyRect currentRegion = *( SoccerGame::getRegions()[ i ] );

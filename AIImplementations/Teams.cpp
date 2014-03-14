@@ -14,6 +14,7 @@
 #include "SupportSpotCalculator.h"
 #include "SoccerBall.h"
 #include <stdlib.h>
+#include <allegro5\allegro_primitives.h>
 
 static const char* TEAMS_NAME[2] = 
 {
@@ -101,6 +102,10 @@ void Teams::draw()
    {
       m_playersOnTeam[ i ]->draw();
    }
+   if( m_pPlayerReceivingPass )
+   {   
+      al_draw_filled_rectangle( m_pPlayerReceivingPass->getPosition().x - 5, m_pPlayerReceivingPass->getPosition().y -5, m_pPlayerReceivingPass->getPosition().x - 15, m_pPlayerReceivingPass->getPosition().y - 15, al_map_rgb( 1.0f, 1.0f, 0.0f ) );
+   }
    m_pGoalkeeper->draw();
    m_pSupportSpotCalculator->debugDraw();
 }
@@ -108,6 +113,17 @@ void Teams::draw()
 const char* Teams::getTeamName() const
 {
 	return TEAMS_NAME[ m_myTeam ];
+}
+
+void Teams::setPlayerWithBall( Players* pPlayer )
+{ 
+   if( m_pPlayerWithBall )
+   {
+      m_pPlayerWithBall->setHasBall( false );
+   }
+   
+   m_pPlayerWithBall = pPlayer;
+   m_pPlayerWithBall->setHasBall( true );
 }
 
 // TODO: Change the code to remove so much copying. just pass a reference to the vector you want to store the players in.  

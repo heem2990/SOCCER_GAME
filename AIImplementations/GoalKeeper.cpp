@@ -8,7 +8,8 @@
 
 GoalKeeper::GoalKeeper( Teams* pMyTeam )
    : Players( pMyTeam, PlayerPositions::GOALKEEPER )
-   , m_pMyStateMachine(  new StateMachine< GoalKeeper >( this )  )
+   , m_pMyStateMachine( new StateMachine< GoalKeeper >( this ) )
+   , m_playerStateFont( al_load_font( "arial.ttf" , 24, 0 ) ) 
 {
    m_pMyStateMachine->setPreviousState( ReturnGoalkeeperHome::getInstance() );
    m_pMyStateMachine->setCurrentState( ReturnGoalkeeperHome::getInstance() );
@@ -57,7 +58,7 @@ float GoalKeeper::getSqrDistanceFromGoal()
 
 bool GoalKeeper::isTooFarFromGoal()
 {
-   if( getSqrDistanceFromGoal() > 22500.0f ) // TODO: Magic number make constant. Says that if distance is more than 150 pixels ( 22500 = 150 * 150 because sqrd distance )
+   if( getSqrDistanceFromGoal() > 40000.0f ) // TODO: Magic number make constant. Says that if distance is more than 150 pixels ( 22500 = 150 * 150 because sqrd distance )
    {
       return true;
    }
@@ -68,4 +69,10 @@ void GoalKeeper::update()
 {
 	m_pMyStateMachine->update();
 	Players::update();
+}
+
+void GoalKeeper::draw()
+{
+   al_draw_text( m_playerStateFont, al_map_rgb( 255, 255, 255 ), getPosition().x , getPosition().y, 0, m_pMyStateMachine->getCurrentState()->getStateName() );
+   Players::draw();
 }

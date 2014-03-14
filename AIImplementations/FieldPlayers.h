@@ -14,11 +14,13 @@ public:
 
    bool handleMessage( const Message& msg );
    virtual void update();
+   virtual void draw();
    StateMachine< FieldPlayers >* getStateMachine() const { return m_pMyStateMachine; }
 
 private:
 
-   StateMachine< FieldPlayers >* m_pMyStateMachine;  
+   StateMachine< FieldPlayers >* m_pMyStateMachine;
+   ALLEGRO_FONT* m_playerStateFont;  
 
 };
 

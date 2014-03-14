@@ -5,6 +5,8 @@
 #include "Teams.h"
 #include "SoccerGame.h"
 #include <iostream>
+#include <stdlib.h>
+#include "GoalPosts.h"
 
 // Wait State functions
 void Wait::enter( FieldPlayers* pPlayer )
@@ -66,7 +68,7 @@ void ChaseBall::enter( FieldPlayers* pPlayer )
 {
    std::cout<<"Entering Chase Ball "<<std::endl;
 	pPlayer->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
-	pPlayer->getSteeringBehavior()->seekOn();
+   pPlayer->getSteeringBehavior()->pursuitOn();
 }
 
 void ChaseBall::execute( FieldPlayers* pPlayer )
@@ -83,13 +85,14 @@ void ChaseBall::execute( FieldPlayers* pPlayer )
 		return;
 	}
 
+   pPlayer->setHasBall( false );
 	pPlayer->getStateMachine()->changeState( FieldPlayerReturnHome::getInstance() );
 }
 
 void ChaseBall::exit( FieldPlayers* pPlayer )
 {
    std::cout<<"Exiting Chase Ball"<<std::endl;
-	pPlayer->getSteeringBehavior()->seekOff();
+	pPlayer->getSteeringBehavior()->pursuitOff();
 }
 
 ChaseBall* ChaseBall::getInstance()
@@ -130,6 +133,7 @@ void ReceiveBall::execute( FieldPlayers* pPlayer )
    {
       pPlayer->getSteeringBehavior()->pursuitOff();
       pPlayer->setVelocity( glm::vec2( 0, 0 ) );
+      pPlayer->setLookAtTarget( SoccerBall::getSoccerBallInstance() );
    }
 }
 
@@ -155,15 +159,25 @@ void Dribble::enter( FieldPlayers* pPlayer )
 
 void Dribble::execute( FieldPlayers* pPlayer )
 {
-   /*if( !pPlayer->isPlayerControllingTheBall() )
+   float dot = glm::dot( pPlayer->getMyTeam()->getGoalPost()->getFacing(), pPlayer->getHeading() );
+
+   if( dot < 0 )
    {
-      pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
-   }*/
-   // check if player is facing the goal. 
-   // if player is not, then make small kicks and rotate the player 
-   // if player is facing the opponents goal, kick with max dribble force.
+      glm::vec2 playerDirection = pPlayer->getHeading();
+      float angle = ( 3.1415 / 4 ); // 3.1415 = pi TODO: Change according to whether the player turns clockwise or anticlockwise to be take the smaller turn
+
+      playerDirection = glm::vec2( playerDirection.x * cosf( angle ) - playerDirection.y * sinf( angle ), playerDirection.x * sinf( angle ) + playerDirection.y * cosf( angle ) );
+
+      const float kickingForce = 40.0f;
+      SoccerBall::getSoccerBallInstance()->kick( playerDirection,  kickingForce );
+   }
+   else
+   {
+      SoccerBall::getSoccerBallInstance()->kick( pPlayer->getMyTeam()->getGoalPost()->getFacing(),  10.0f );
+   }
 
    pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
+   return;
 }
 
 void Dribble::exit( FieldPlayers* pPlayer )
@@ -185,15 +199,45 @@ void KickBall::enter( FieldPlayers* pPlayer )
    pPlayer->getMyTeam()->setPlayerWithBall( pPlayer );
    pPlayer->setHasBall( true );
    // check how many kicks the player has attempted and change to chase ball if more than allowed attempts. 
-
+   // TODO: Check if the player has just kicked the ball.
 }
 
 void KickBall::execute( FieldPlayers* pPlayer )
 {
+   glm::vec2 toBall = SoccerBall::getSoccerBallInstance()->getPosition() - pPlayer->getPosition();
+   float dotWithBall = glm::dot( pPlayer->getHeading(), glm::normalize( toBall ) );
+
+   if( ( pPlayer->getMyTeam()->getReceivingPlayer() != NULL && pPlayer->getMyTeam()->getReceivingPlayer() != pPlayer ) || pPlayer->getMyTeam()->doesGoalKeeperHaveBall() || dotWithBall < 0 )
+   {
+      pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
+      return;
+   }
+
+   glm::vec2 ballTarget( 0, 0 );
+   float power = 10 * dotWithBall; // TODO: 40 is max force change and make it const. Magic number 
+
+   if( pPlayer->getMyTeam()->canShoot( SoccerBall::getSoccerBallInstance()->getPosition(), power, ballTarget ) || ( ( std::rand() % 10 ) < 1 ) )
+   {
+      //TODO: Add noise to kick for randomness
+      glm::vec2 kickDirection = ballTarget - SoccerBall::getSoccerBallInstance()->getPosition();
+
+      SoccerBall::getSoccerBallInstance()->kick( kickDirection, power );
+      pPlayer->getStateMachine()->changeState( Wait::getInstance() );
+      pPlayer->setHasBall( false );
+
+      pPlayer->findSupportingPlayer();
+      return;
+   }
+      
+   // Check if the player can pass TODO
+   pPlayer->getStateMachine()->changeState( Dribble::getInstance() );
+   pPlayer->findSupportingPlayer();
+   return;
 }
 
 void KickBall::exit( FieldPlayers* pPlayer )
 {
+   std::cout<<"Exiting KickBall state"<<std::endl;
 }
 
 KickBall* KickBall::getInstance()
@@ -224,7 +268,7 @@ void SupportPlayerWithBall::execute( FieldPlayers* pPlayer )
 
    // request pass if able to kcik to goal. 
 
-   if( pPlayer->isAtTarget() )
+   if( pPlayer->isAtArriveTarget() )
    {
       pPlayer->getSteeringBehavior()->arriveOff();
       // track ball
@@ -260,6 +304,7 @@ void FieldPlayerReturnHome::execute( FieldPlayers* pPlayer )
 {
    if( pPlayer->isPlayerHome() ) 
    {
+      pPlayer->setHasBall( false );
       pPlayer->getStateMachine()->changeState( Wait::getInstance() );
       return;
    }

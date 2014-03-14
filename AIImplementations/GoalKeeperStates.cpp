@@ -46,7 +46,6 @@ void TendGoal::enter( GoalKeeper* pGoalKeeper )
    std::cout<<"GoalKeeper entering TendGoal state"<<std::endl;
    pGoalKeeper->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
    glm::vec2 goalCenter = pGoalKeeper->getMyTeam()->getGoalPost()->getCenter() ;
-   std::cout<<goalCenter.x<<" "<<goalCenter.y;
    pGoalKeeper->getSteeringBehavior()->setInterPoseStaticTarget( goalCenter, 0.2 );
    pGoalKeeper->getSteeringBehavior()->interposeOn();
    pGoalKeeper->setLookAtTarget( SoccerBall::getSoccerBallInstance() );

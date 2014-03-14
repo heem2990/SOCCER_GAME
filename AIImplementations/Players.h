@@ -63,7 +63,6 @@ public:
 
 private:
 	
-   ALLEGRO_FONT* m_playerStateFont;
    SteeringBehaviors* m_pSteeringBehavior;
    Teams* m_pMyTeam;
 

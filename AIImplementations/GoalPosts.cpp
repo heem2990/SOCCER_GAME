@@ -2,8 +2,9 @@
 #include "MyRect.h"
 #include "SoccerBall.h"
 
-GoalPosts::GoalPosts( glm::vec2 topLeft, glm::vec2 botRight )
+GoalPosts::GoalPosts( glm::vec2 topLeft, glm::vec2 botRight, glm::vec2 facing  )
    : MyRect( topLeft, botRight )
+   , m_facing( facing )
 {
 }
 

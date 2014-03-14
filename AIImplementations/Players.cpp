@@ -7,6 +7,7 @@
 #include "Teams.h"
 #include "MessageDispatcher.h"
 #include "SupportSpotCalculator.h"
+#include <allegro5\allegro_primitives.h>
 
 const int NUM_PLAYERS = 5;
 static const int PLAYERS_MAX_SPEED = 5;
@@ -48,7 +49,7 @@ float sqrMag( glm::vec2 vectorToProcess )
 
 Players::Players( Teams* pMyTeam, PlayerPositions::id myPosition )
    : MovingEntity( PLAYER_IMAGES[ pMyTeam->getTeamColor() ], glm::vec2( 0, 0 )/*SoccerGame::getRegions()[ PLAYER_POSITONS[ pMyTeam->getTeamColor() ][ myPosition ] ]->getCenter()*/, glm::vec2() ,PLAYER_DIRECTION[ pMyTeam->getTeamColor() ], PLAYERS_MAX_SPEED ) // change this according to playerPosition and team
-   , m_playerStateFont( al_load_font( "arial.ttf" , 24, 0 ) )
+   //, m_playerStateFont( al_load_font( "arial.ttf" , 24, 0 ) )
    , m_pSteeringBehavior( NULL )
    , m_pMyTeam( pMyTeam )
    , m_myTeamColor( pMyTeam->getTeamColor() )
@@ -62,14 +63,18 @@ Players::Players( Teams* pMyTeam, PlayerPositions::id myPosition )
 
 Players::~Players(void)
 {
-   al_destroy_font( m_playerStateFont );
+   //al_destroy_font( m_playerStateFont );
    delete m_pSteeringBehavior;
 }
 
 void Players::draw()
 {
    MovingEntity::draw();
-   al_draw_text( m_playerStateFont, al_map_rgb( 255, 255, 255 ), getPosition().x , getPosition().y, 0, "state" );
+   if( m_bHasBall )
+   {   
+		al_draw_circle( getPosition().x, getPosition().y, 5.0f, al_map_rgb( 1.0f, 1.0f, 0.0f ), 5.0f );
+   }
+   //al_draw_text( m_playerStateFont, al_map_rgb( 255, 255, 255 ), getPosition().x , getPosition().y, 0, ge );
 }
 
 void Players::update()
@@ -93,7 +98,7 @@ bool Players::isPlayerHome()
 
 bool Players::isInKickingRangeOfTheBall() const
 {
-	if( sqrMag( getPosition() - SoccerBall::getSoccerBallInstance()->getPosition() ) <= 10.0f ) // TODO: 100 is hardcoded, change. 
+	if( sqrMag( getPosition() - SoccerBall::getSoccerBallInstance()->getPosition() ) <= 1000.0f ) // TODO: 100 is hardcoded, change. 
 	{
 		return true;
 	}
@@ -146,7 +151,7 @@ bool Players::isPlayerAheadOfAttacker() const
 
 bool Players::isPlayerWithinReceivingRange() const 
 {
-   if( sqrMag( getPosition() - SoccerBall::getSoccerBallInstance()->getPosition() ) <= ( 50 * 50.f) ) // if the ball is less 50 pixels away. 
+   if( sqrMag( getPosition() - SoccerBall::getSoccerBallInstance()->getPosition() ) <= ( 100 * 100.f) ) // if the ball is less 100 pixels away. 
    {
       return true;
    }
@@ -204,9 +209,9 @@ void Players::findSupportingPlayer()
 void Players::setHasBall( bool hasBall )
 {
    m_bHasBall = hasBall;
-   if( hasBall )
-   {
-      m_pMyTeam->setPlayerWithBall( this );
-      m_pMyTeam->setHasControl( true );
-   }
+   //if( hasBall )
+   //{
+   //   m_pMyTeam->setPlayerWithBall( this );
+   //   m_pMyTeam->setHasControl( true );
+   //}
 }

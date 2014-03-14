@@ -18,10 +18,12 @@ public:
    StateMachine< GoalKeeper >* getStateMachine() const { return m_pMyStateMachine; }
 
    virtual void update();
+   virtual void draw();
 
 private:
 
-   StateMachine< GoalKeeper >* m_pMyStateMachine;  
+   StateMachine< GoalKeeper >* m_pMyStateMachine;
+   ALLEGRO_FONT* m_playerStateFont;    
 
 };
 

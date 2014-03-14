@@ -22,7 +22,7 @@ public:
    void sendGoalKeeperHome();
    void changeState( State< Teams >* pToState ) const ;
 
-   void setPlayerWithBall     ( Players* pPlayer ) { m_pPlayerWithBall = pPlayer; }
+   void setPlayerWithBall     ( Players* pPlayer );
    void setSupportingPlayer   ( Players* pPlayer ) { m_pSupportingPlayer = pPlayer; }
    void setReceivingPlayer    ( Players* pPlayer ) { m_pPlayerReceivingPass = pPlayer; }
    void setClosestPlayerToBall();

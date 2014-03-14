@@ -13,6 +13,7 @@ static const int MAX_PASSING_FORCE = 40.0f; // check values.
 FieldPlayers::FieldPlayers( Teams* pMyTeam, PlayerPositions::id myPosition )
    : Players( pMyTeam, myPosition )
    , m_pMyStateMachine( new StateMachine< FieldPlayers >( this ) )
+   , m_playerStateFont( al_load_font( "arial.ttf" , 24, 0 ) )
 {
    m_pMyStateMachine->setPreviousState( FieldPlayerReturnHome::getInstance() );
    m_pMyStateMachine->setCurrentState( FieldPlayerReturnHome::getInstance() );
@@ -20,6 +21,7 @@ FieldPlayers::FieldPlayers( Teams* pMyTeam, PlayerPositions::id myPosition )
 
 FieldPlayers::~FieldPlayers(void)
 {
+   al_destroy_font( m_playerStateFont );
    delete m_pMyStateMachine;
 }
 
@@ -47,7 +49,8 @@ bool FieldPlayers::handleMessage( const Message& msg )
          SoccerBall::getSoccerBallInstance()->kick( receivingPlayerPos - SoccerBall::getSoccerBallInstance()->getPosition(), MAX_PASSING_FORCE );
          MessageDispatcher::getInstance()->dispatchMessage( 0.0f, this, msg.getSender(), MESSAGE_TYPES::RECEIVE_BALL, &receivingPlayerPos );
          m_pMyStateMachine->changeState( Wait::getInstance() );
-         
+         setHasBall( false );
+
          findSupportingPlayer();
 
          return true;
@@ -100,4 +103,10 @@ void FieldPlayers::update()
       setMaxSpeed( 5.0f ); // TODO change magic number
    }
    Players::update();
+}
+
+void FieldPlayers::draw()
+{
+   al_draw_text( m_playerStateFont, al_map_rgb( 255, 255, 255 ), getPosition().x , getPosition().y, 0, m_pMyStateMachine->getCurrentState()->getStateName() );
+   Players::draw();
 }
