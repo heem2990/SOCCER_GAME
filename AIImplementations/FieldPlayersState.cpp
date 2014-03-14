@@ -15,7 +15,6 @@ void Wait::enter( FieldPlayers* pPlayer )
 
 void Wait::execute( FieldPlayers* pPlayer )
 {
-	std::cout<<"Waiting"<<std::endl;
 	if( !pPlayer->isAtArriveTarget() )
    {
       pPlayer->getSteeringBehavior()->arriveOn();
@@ -42,7 +41,6 @@ void Wait::execute( FieldPlayers* pPlayer )
           pPlayer->getMyTeam()->getReceivingPlayer() == NULL &&
           !SoccerGame::getGameInstance()->doGoalkeepersHaveBall() ) 
       {
-	      std::cout<<" I am closest to ball, No receiving Player and goalies dont have the ball"<<std::endl;
          pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
          return;
       }
@@ -66,6 +64,7 @@ Wait* Wait::getInstance()
 
 void ChaseBall::enter( FieldPlayers* pPlayer )
 {
+   std::cout<<"Entering Chase Ball "<<std::endl;
 	pPlayer->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
 	pPlayer->getSteeringBehavior()->seekOn();
 }
@@ -89,6 +88,7 @@ void ChaseBall::execute( FieldPlayers* pPlayer )
 
 void ChaseBall::exit( FieldPlayers* pPlayer )
 {
+   std::cout<<"Exiting Chase Ball"<<std::endl;
 	pPlayer->getSteeringBehavior()->seekOff();
 }
 
@@ -182,6 +182,9 @@ Dribble* Dribble::getInstance()
 
 void KickBall::enter( FieldPlayers* pPlayer )
 {
+   pPlayer->getMyTeam()->setPlayerWithBall( pPlayer );
+   pPlayer->setHasBall( true );
+   // check how many kicks the player has attempted and change to chase ball if more than allowed attempts. 
 
 }
 

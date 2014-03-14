@@ -10,7 +10,7 @@ static const float DECELERATION_MAGNITUDE_ON_BALL = 0.1f;
 static const float SOCCER_BALL_MASS = 5.0f;
 
 SoccerBall::SoccerBall(void)
-   : MovingEntity( "soccerball.png", glm::vec2( SCREEN_WIDTH>>1, SCREEN_HEIGHT>>1 ), glm::vec2( 10, 2 ), glm::vec2( 0, 0 ), SOCCER_BALL_MAX_SPEED, SOCCER_BALL_MASS )
+   : MovingEntity( "soccerball.png", glm::vec2( SCREEN_WIDTH>>1, SCREEN_HEIGHT>>1 ), glm::vec2( 0, 0 ), glm::vec2( 0, 0 ), SOCCER_BALL_MAX_SPEED, SOCCER_BALL_MASS )
 {
 }
 
@@ -35,6 +35,7 @@ void SoccerBall::update()
       currVelocity -= glm::normalize( currVelocity ) * DECELERATION_MAGNITUDE_ON_BALL;
       setVelocity( currVelocity );
    }
+   //std::cout<<getPosition().x<<" "<<getPosition().y<<std::endl;
 }
 
 void SoccerBall::kick( glm::vec2 direction, float force )

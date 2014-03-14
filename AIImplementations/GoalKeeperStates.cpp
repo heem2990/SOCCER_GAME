@@ -28,6 +28,7 @@ void ReturnGoalkeeperHome::execute( GoalKeeper* pGoalKeeper )
 
 void ReturnGoalkeeperHome::exit( GoalKeeper* pGoalKeeper )
 {
+   std::cout<<"Exiting Return Home"<<std::endl;
    pGoalKeeper->getSteeringBehavior()->arriveOff();
 }
 
@@ -53,7 +54,6 @@ void TendGoal::enter( GoalKeeper* pGoalKeeper )
 
 void TendGoal::execute( GoalKeeper* pGoalKeeper )
 {
-	std::cout<<"TENDING GOAL"<<std::endl;
    if( pGoalKeeper->isInKickingRangeOfTheBall() )
    {
       SoccerBall::getSoccerBallInstance()->trap( pGoalKeeper );
