@@ -98,7 +98,7 @@ bool Players::isPlayerHome()
 
 bool Players::isInKickingRangeOfTheBall() const
 {
-	if( sqrMag( getPosition() - SoccerBall::getSoccerBallInstance()->getPosition() ) <= 1000.0f ) // TODO: 100 is hardcoded, change. 
+	if( sqrMag( getPosition() - SoccerBall::getSoccerBallInstance()->getPosition() ) <= 100.0f ) // TODO: 100 is hardcoded, change. 
 	{
 		return true;
 	}

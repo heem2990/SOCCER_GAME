@@ -84,15 +84,23 @@ void Teams::update()
 {
    setClosestPlayerToBall();
    m_pMyStateMachine->update();
+   if( !m_hasBall  )
+   {
+      m_pPlayerReceivingPass = NULL;
+   }
 
    for( int i = 0  ; i < TOTAL_PLAYERS ; ++i )
    {
       m_playersOnTeam[ i ]->update();
    }
    m_pGoalkeeper->update();
-   if( m_pPlayerWithBall )
+   m_hasBall = false;
+   for( int i = 0 ; i < 5 ; ++i )
    {
-      m_hasBall = true;
+      if( getPlayersOnTeam()[ i ]->isPlayerControllingTheBall() )
+      {
+         m_hasBall = true;
+      }
    }
 }
 
