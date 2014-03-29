@@ -190,6 +190,7 @@ void Players::findSupportingPlayer()
       Players* bestSupporter = m_pMyTeam->determineBestSupportingPlayer();
       m_pMyTeam->setSupportingPlayer( bestSupporter );
       MessageDispatcher::getInstance()->dispatchMessage( 0,this, bestSupporter, MESSAGE_TYPES::RECEIVE_BALL, &( m_pMyTeam->getSupportSpot()->getBestSupportSpot() ) );
+      setHasBall( false );
    }
 
    Players* bestSupporter = m_pMyTeam->determineBestSupportingPlayer();

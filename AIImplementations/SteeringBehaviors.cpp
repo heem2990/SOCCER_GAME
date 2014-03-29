@@ -58,16 +58,10 @@ void SteeringBehaviors::calculateForce()
 
 glm::vec2 SteeringBehaviors::calcArriveVelocity( glm::vec2 target ) 
 {
-   float timeToArrive = 1;
    glm::vec2 velocityToTarget = /*m_pTarget->getPosition()*/target - m_pOwner->getPosition();
    float distanceToTarget = sqrt( sqrmag( velocityToTarget ) );
    float speed = 0.0f;
-
-   if( distanceToTarget < 1.0f )
-   {
-      return glm::vec2( 0, 0 );
-   }
-
+   
    if( distanceToTarget > SLOW_DOWN_RADIUS )
    {
       speed = m_pOwner->getMaxSpeed();

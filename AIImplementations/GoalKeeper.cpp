@@ -58,7 +58,7 @@ float GoalKeeper::getSqrDistanceFromGoal()
 
 bool GoalKeeper::isTooFarFromGoal()
 {
-   if( getSqrDistanceFromGoal() > 40000.0f ) // TODO: Magic number make constant. Says that if distance is more than 150 pixels ( 22500 = 150 * 150 because sqrd distance )
+   if( getSqrDistanceFromGoal() > 10000.0f ) // TODO: Magic number make constant. Says that if distance is more than 150 pixels ( 22500 = 150 * 150 because sqrd distance )
    {
       return true;
    }

@@ -80,9 +80,6 @@
     <ClInclude Include="MovingEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BaseGame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>

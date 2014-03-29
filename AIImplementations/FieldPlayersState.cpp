@@ -30,7 +30,6 @@ void Wait::execute( FieldPlayers* pPlayer )
    }
 
    if( pPlayer->getMyTeam()->hasControl() &&
-      !pPlayer->isPlayerControllingTheBall() &&
        pPlayer->isPlayerAheadOfAttacker() )
    {
       pPlayer->getMyTeam()->requestPass( pPlayer );
@@ -75,6 +74,7 @@ void ChaseBall::execute( FieldPlayers* pPlayer )
 {
 	if( pPlayer->isInKickingRangeOfTheBall() )
 	{
+      pPlayer->getMyTeam()->setPlayerWithBall( pPlayer );
 		pPlayer->getStateMachine()->changeState( KickBall::getInstance() );
 		return;
 	}

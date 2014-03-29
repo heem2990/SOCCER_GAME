@@ -84,7 +84,6 @@
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseGame.h" />
     <ClInclude Include="BaseGameEntity.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="FieldPlayers.h" />
