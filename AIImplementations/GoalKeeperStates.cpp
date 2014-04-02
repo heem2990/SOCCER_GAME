@@ -11,7 +11,6 @@
 // ReturnHome State functions
 void ReturnGoalkeeperHome::enter( GoalKeeper* pGoalKeeper )
 {
-   std::cout<<"Goalkeeper going home"<<std::endl;
    pGoalKeeper->setHomeRegionAsTarget();
    pGoalKeeper->getSteeringBehavior()->arriveOn();
 }
@@ -28,7 +27,6 @@ void ReturnGoalkeeperHome::execute( GoalKeeper* pGoalKeeper )
 
 void ReturnGoalkeeperHome::exit( GoalKeeper* pGoalKeeper )
 {
-   std::cout<<"Exiting Return Home"<<std::endl;
    pGoalKeeper->getSteeringBehavior()->arriveOff();
 }
 
@@ -43,7 +41,6 @@ ReturnGoalkeeperHome* ReturnGoalkeeperHome::getInstance()
 
 void TendGoal::enter( GoalKeeper* pGoalKeeper )
 {
-   std::cout<<"GoalKeeper entering TendGoal state"<<std::endl;
    pGoalKeeper->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
    glm::vec2 goalCenter = pGoalKeeper->getMyTeam()->getGoalPost()->getCenter() ;
    pGoalKeeper->getSteeringBehavior()->setInterPoseStaticTarget( goalCenter, 0.2 );
@@ -76,7 +73,6 @@ void TendGoal::exit( GoalKeeper* pGoalKeeper )
 {
    pGoalKeeper->getSteeringBehavior()->interposeOff();
    pGoalKeeper->lookAtOff();
-   std::cout<<"Goalkeeper exiting TendGoal Stae"<<std::endl;
 }
 
 TendGoal* TendGoal::getInstance()
@@ -90,7 +86,6 @@ TendGoal* TendGoal::getInstance()
 
 void GoalKick::enter( GoalKeeper* pGoalKeeper )
 {
-   std::cout<<"Entering the goal kick state"<<std::endl;
    pGoalKeeper->getMyTeam()->setPlayerWithBall( pGoalKeeper );
    pGoalKeeper->getMyTeam()->sendFieldPlayersHome();
    pGoalKeeper->getMyTeam()->getOpponent()->sendPlayersHome();
@@ -119,7 +114,6 @@ void GoalKick::execute( GoalKeeper* pGoalKeeper )
 
 void GoalKick::exit( GoalKeeper* pGoalKeeper )
 {
-   std::cout<<"Exiting the goal kick state"<<std::endl;
 }
 
 GoalKick* GoalKick::getInstance()
@@ -133,7 +127,6 @@ GoalKick* GoalKick::getInstance()
 
 void InterceptBall::enter( GoalKeeper* pGoalKeeper )
 {
-   std::cout<<"Entering the Intercept ball state"<<std::endl;
    pGoalKeeper->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
    pGoalKeeper->getSteeringBehavior()->pursuitOn();
 }
@@ -154,7 +147,6 @@ void InterceptBall::execute( GoalKeeper* pGoalKeeper )
 
 void InterceptBall::exit( GoalKeeper* pGoalKeeper )
 {
-   std::cout<<"Exiting the Intercept ball state"<<std::endl;
 }
 
 InterceptBall* InterceptBall::getInstance()

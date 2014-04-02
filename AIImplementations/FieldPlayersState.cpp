@@ -11,7 +11,6 @@
 // Wait State functions
 void Wait::enter( FieldPlayers* pPlayer )
 {
-   std::cout<<"Entering the Wait state"<<std::endl;
    pPlayer->setHomeRegionAsTarget();
 }
 
@@ -35,23 +34,22 @@ void Wait::execute( FieldPlayers* pPlayer )
       pPlayer->getMyTeam()->requestPass( pPlayer );
       return;
    }
-
-   if( SoccerGame::getGameInstance()->isGameOn() )
+   if( pPlayer->isPlayerClosestToBall() &&
+       pPlayer->getMyTeam()->getReceivingPlayer() == NULL &&
+       !SoccerGame::getGameInstance()->doGoalkeepersHaveBall() ) 
    {
-      if( pPlayer->isPlayerClosestToBall() &&
-          pPlayer->getMyTeam()->getReceivingPlayer() == NULL &&
-          !SoccerGame::getGameInstance()->doGoalkeepersHaveBall() ) 
-      {
-         pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
-         return;
-      }
+      pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
+      return;
    }
+
+ /*  if( SoccerGame::getGameInstance()->isGameOn() )
+   {
+   }*/
 }
 
 void Wait::exit( FieldPlayers* pPlayer )
 {
    pPlayer->lookAtOff();
-   std::cout<<"Exiting the Wait state"<<std::endl;
 }
 
 Wait* Wait::getInstance()
@@ -65,7 +63,6 @@ Wait* Wait::getInstance()
 
 void ChaseBall::enter( FieldPlayers* pPlayer )
 {
-   std::cout<<"Entering Chase Ball "<<std::endl;
 	pPlayer->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
    pPlayer->getSteeringBehavior()->pursuitOn();
 }
@@ -91,7 +88,6 @@ void ChaseBall::execute( FieldPlayers* pPlayer )
 
 void ChaseBall::exit( FieldPlayers* pPlayer )
 {
-   std::cout<<"Exiting Chase Ball"<<std::endl;
 	pPlayer->getSteeringBehavior()->pursuitOff();
 }
 
@@ -106,7 +102,6 @@ ChaseBall* ChaseBall::getInstance()
 
 void ReceiveBall::enter( FieldPlayers* pPlayer )
 {
-   std::cout<<"Player has entered the Receiving ball state"<<std::endl;
    pPlayer->getMyTeam()->setReceivingPlayer( pPlayer );
    pPlayer->getMyTeam()->setPlayerWithBall( pPlayer );
 
@@ -139,7 +134,6 @@ void ReceiveBall::execute( FieldPlayers* pPlayer )
 
 void ReceiveBall::exit( FieldPlayers* pPlayer )
 {
-   std::cout<<"Player has exited the Receiving ball state"<<std::endl;
 }
 
 ReceiveBall* ReceiveBall::getInstance()
@@ -153,7 +147,6 @@ ReceiveBall* ReceiveBall::getInstance()
 
 void Dribble::enter( FieldPlayers* pPlayer )
 {
-   std::cout<<"Player entered Dribble state"<<std::endl;
    pPlayer->getMyTeam()->setPlayerWithBall( pPlayer );
 }
 
@@ -182,7 +175,6 @@ void Dribble::execute( FieldPlayers* pPlayer )
 
 void Dribble::exit( FieldPlayers* pPlayer )
 {
-   std::cout<<"Player has exited dribbling state.";
 }
 
 Dribble* Dribble::getInstance()
@@ -237,7 +229,6 @@ void KickBall::execute( FieldPlayers* pPlayer )
 
 void KickBall::exit( FieldPlayers* pPlayer )
 {
-   std::cout<<"Exiting KickBall state"<<std::endl;
 }
 
 KickBall* KickBall::getInstance()
@@ -251,7 +242,6 @@ KickBall* KickBall::getInstance()
 
 void SupportPlayerWithBall::enter( FieldPlayers* pPlayer )
 {
-   std::cout<<"Player has entered support state.";
    pPlayer->getSteeringBehavior()->arriveOn();
    //get the best support spot and set it as players target. 
 }
@@ -281,7 +271,6 @@ void SupportPlayerWithBall::execute( FieldPlayers* pPlayer )
 
 void SupportPlayerWithBall::exit( FieldPlayers* pPlayer )
 {
-   std::cout<<"Player exiting support state "<<std::endl;
 }
 
 SupportPlayerWithBall* SupportPlayerWithBall::getInstance()
@@ -295,7 +284,6 @@ SupportPlayerWithBall* SupportPlayerWithBall::getInstance()
 
 void FieldPlayerReturnHome::enter( FieldPlayers* pPlayer )
 {
-   std::cout<<"Player is returning home"<<std::endl;
    pPlayer->getSteeringBehavior()->arriveOn();
    pPlayer->setHomeRegionAsTarget(); 
 }
@@ -312,7 +300,6 @@ void FieldPlayerReturnHome::execute( FieldPlayers* pPlayer )
 
 void FieldPlayerReturnHome::exit( FieldPlayers* pPlayer )
 {
-   std::cout<<"Player exiting FieldPlayerReturnHome state"<<std::endl;
 }
 
 FieldPlayerReturnHome* FieldPlayerReturnHome::getInstance()

@@ -373,30 +373,22 @@ bool Teams::getBestPassToReceiver( const Players* const passer, const Players* c
 
 void Teams::setClosestPlayerToBall()
 { 
-   if( !m_pPlayerWithBall )
+   // TODO: Refactor the system to calculate which player is closest to the ball
+   float closest = 10000000.0f;
+   glm::vec2 ballPosition = SoccerBall::getSoccerBallInstance()->getPosition();
+   for( int i = 0 ; i < 5 ; ++i )
    {
-      float closest = 10000000.0f;
-      glm::vec2 ballPosition = SoccerBall::getSoccerBallInstance()->getPosition();
-      for( int i = 0 ; i < 5 ; ++i )
+      glm::vec2 toBall = ballPosition - getPlayersOnTeam()[ i ]->getPosition();
+      float distToBall = toBall.x * toBall.x + toBall.y * toBall.y;
+      if( distToBall < closest )
       {
-         glm::vec2 toBall = ballPosition - getPlayersOnTeam()[ i ]->getPosition();
-         float distToBall = toBall.x * toBall.x + toBall.y * toBall.y;
-         if( distToBall < closest )
-         {
-            m_pPlayerClosestToBall = getPlayersOnTeam()[ i ];
-            closest = distToBall;
-         }
-         
-         getPlayersOnTeam()[ i ]->setIsClosestToBall( false );
+         m_pPlayerClosestToBall = getPlayersOnTeam()[ i ];
+         closest = distToBall;
       }
-
-      m_pPlayerClosestToBall->setIsClosestToBall( true );
+      
+      getPlayersOnTeam()[ i ]->setIsClosestToBall( false );
    }
-   else
-   {
-      m_pPlayerClosestToBall = m_pPlayerWithBall;
-      m_pPlayerWithBall->setIsClosestToBall( true );
-   }
+   m_pPlayerClosestToBall->setIsClosestToBall( true );
 }
 
 void Teams::requestPass( Players* pPlayerRequesting )

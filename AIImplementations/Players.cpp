@@ -8,6 +8,7 @@
 #include "MessageDispatcher.h"
 #include "SupportSpotCalculator.h"
 #include <allegro5\allegro_primitives.h>
+#include "GoalPosts.h"
 
 const int NUM_PLAYERS = 5;
 static const int PLAYERS_MAX_SPEED = 5;
@@ -137,7 +138,9 @@ bool Players::isPlayerAheadOfAttacker() const
    if( m_pMyTeam->hasControl() && m_pMyTeam->getPlayerWithBall() )
    {
       glm::vec2 attackerPosition = m_pMyTeam->getPlayerWithBall()->getPosition();
-      if( getPosition().x > attackerPosition.x )
+      float goalDirection = getMyTeam()->getGoalPost()->getFacing().x;
+
+      if( goalDirection * getPosition().x > goalDirection *attackerPosition.x )
       {
          return true;
       }
