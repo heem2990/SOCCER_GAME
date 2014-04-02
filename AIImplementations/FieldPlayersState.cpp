@@ -82,7 +82,6 @@ void ChaseBall::execute( FieldPlayers* pPlayer )
 		return;
 	}
 
-   pPlayer->setHasBall( false );
 	pPlayer->getStateMachine()->changeState( FieldPlayerReturnHome::getInstance() );
 }
 
