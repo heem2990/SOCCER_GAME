@@ -4,7 +4,7 @@
 
 GoalPosts::GoalPosts( glm::vec2 topLeft, glm::vec2 botRight, glm::vec2 facing  )
    : MyRect( topLeft, botRight )
-   , m_facing( facing )
+   , m_facing( facing ) // Keeps track of which goal post it is.
 {
 }
 

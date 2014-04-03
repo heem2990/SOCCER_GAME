@@ -1,3 +1,4 @@
+// This is a class to denote the data structure for the boundaries. 
 #pragma once
 #include "MyRect.h"
 class Wall :

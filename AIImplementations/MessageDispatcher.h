@@ -1,3 +1,4 @@
+// Singleton class to handle message passing between the players. 
 #pragma once
 #include <set>
 #include "Message.h"

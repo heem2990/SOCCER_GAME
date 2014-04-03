@@ -9,6 +9,8 @@
 #include "SupportSpotCalculator.h"
 
 static const int MAX_PASSING_FORCE = 40.0f; // check values.
+static const int NORMAL_SPEED = 5.0f;
+static const int SPEED_WITH_BALL = 2.0f;
 
 FieldPlayers::FieldPlayers( Teams* pMyTeam, PlayerPositions::id myPosition )
    : Players( pMyTeam, myPosition )
@@ -31,7 +33,6 @@ bool FieldPlayers::handleMessage( const Message& msg )
    {
    case MESSAGE_TYPES::GO_HOME:
       {
-         std::cout<<"\n RECEIVED GO HOME"<<std::endl;
          m_pMyStateMachine->changeState( FieldPlayerReturnHome::getInstance() );
 
          return true;
@@ -94,20 +95,20 @@ bool FieldPlayers::handleMessage( const Message& msg )
 
 void FieldPlayers::update()
 {
+   Players::update();
 	m_pMyStateMachine->update();
    if( isPlayerControllingTheBall() )
    {
-      setMaxSpeed( 2.0f ); // TODO CHANGE magic number;
+      setMaxSpeed( SPEED_WITH_BALL ); // TODO CHANGE magic number; The speed is reduced if the player is dribbling the ball. 
    }
    else
    {
-      setMaxSpeed( 5.0f ); // TODO change magic number
+      setMaxSpeed( NORMAL_SPEED ); // TODO change magic number--- Speed set to normal
    }
-   Players::update();
 }
 
 void FieldPlayers::draw()
 {
-   al_draw_text( m_playerStateFont, al_map_rgb( 255, 255, 255 ), getPosition().x , getPosition().y, 0, m_pMyStateMachine->getCurrentState()->getStateName() );
    Players::draw();
+   al_draw_text( m_playerStateFont, al_map_rgb( 255, 255, 255 ), getPosition().x , getPosition().y, 0, m_pMyStateMachine->getCurrentState()->getStateName() ); // TODO:Remove , debug text for state names.
 }

@@ -1,3 +1,4 @@
+// specialized class for all the players except goalkeepers
 #pragma once
 #include "Players.h"
 #include"StateMachine.h"
@@ -18,9 +19,10 @@ public:
    StateMachine< FieldPlayers >* getStateMachine() const { return m_pMyStateMachine; }
 
 private:
-
+   
+   // States handled differently for goalkeepers and field players, thus this object is not in Players class
    StateMachine< FieldPlayers >* m_pMyStateMachine;
-   ALLEGRO_FONT* m_playerStateFont;  
+   ALLEGRO_FONT* m_playerStateFont;  // used to debug the player state. TODO: Remove after debugging. 
 
 };
 

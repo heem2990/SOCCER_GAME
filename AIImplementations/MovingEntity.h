@@ -1,3 +1,4 @@
+// Base class for all the entities that will move. 
 #pragma once
 #include "BaseGameEntity.h"
 #define LOOK_AT 1<<1;

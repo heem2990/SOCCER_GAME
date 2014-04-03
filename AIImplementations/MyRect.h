@@ -1,3 +1,4 @@
+// Base class to denote a rectangular region. 
 #pragma once
 #include<glm\glm.hpp>
 class MyRect

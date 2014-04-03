@@ -1,3 +1,4 @@
+// This class defines the structure for a message. 
 #pragma once
 #include<math.h>
 #include<iostream>

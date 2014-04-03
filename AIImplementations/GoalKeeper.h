@@ -1,3 +1,4 @@
+// Specialized class for goalkeepers, it will handle the messages and state of goalkeepers. 
 #pragma once
 #include "Players.h"
 #include"StateMachine.h"

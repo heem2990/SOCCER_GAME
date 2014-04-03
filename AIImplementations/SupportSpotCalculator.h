@@ -1,3 +1,5 @@
+// This class determines the different support spots a supporting player can go to, to ask for a pass. 
+// It calculates the weight of each spot based on parameters such as how easy it is to pass, if a goal can be scored etc. 
 #pragma once
 #include "glm\vec2.hpp"
 #include <vector>

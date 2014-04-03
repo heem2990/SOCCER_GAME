@@ -1,3 +1,4 @@
+// Base class for all the players. It handles all the common functionalities of a field player and a goalkeeper. 
 #pragma once
 #include"MovingEntity.h"
 #include<allegro5\allegro_font.h>
@@ -19,7 +20,7 @@ struct TEAM
    };
 };
 
-struct PlayerPositions
+struct PlayerPositions // Used to assign different roles to the players.
 {
    enum id
    {

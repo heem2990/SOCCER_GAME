@@ -1,3 +1,4 @@
+// This is the class that handls the plaeyrs and goalkeepers, basically each team.
 #pragma once
 #include <vector>
 #include "StateMachine.h"

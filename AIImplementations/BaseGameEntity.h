@@ -1,3 +1,4 @@
+// Interface class for most game entities to inherit from.
 #pragma once
 
 #include <allegro5\allegro.h>
@@ -21,7 +22,7 @@ public:
    // something for bounds. 
 
 private:
-   static int ms_iStaticID;
+   static int ms_iStaticID ;
 	int m_id;
    glm::vec2 m_position;
    ALLEGRO_BITMAP* m_sprite;

@@ -213,9 +213,4 @@ void Players::findSupportingPlayer()
 void Players::setHasBall( bool hasBall )
 {
    m_bHasBall = hasBall;
-   //if( hasBall )
-   //{
-   //   m_pMyTeam->setPlayerWithBall( this );
-   //   m_pMyTeam->setHasControl( true );
-   //}
 }

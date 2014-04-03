@@ -1,3 +1,4 @@
+// Data structure for a base state class. It is a template class becasue Goalkeepers, Teams, and players all have states. 
 #pragma once
 class Message;
 template< class entityType >

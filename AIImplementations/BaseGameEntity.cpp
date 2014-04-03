@@ -2,7 +2,7 @@
 #include<iostream>
 #include<math.h>
 
-int BaseGameEntity::ms_iStaticID = 0;
+int BaseGameEntity::ms_iStaticID = 0; //This is used to maintain a unique ID for each entity in the game.  
 BaseGameEntity::BaseGameEntity( const char* imageName , glm::vec2 position )
    : m_id( ++ms_iStaticID )
    , m_position( position )
@@ -12,9 +12,4 @@ BaseGameEntity::BaseGameEntity( const char* imageName , glm::vec2 position )
 	{
 		std::cout<<"ERROR: NO SPRITE FOUND "<<imageName<<std::endl;
 	}
-}
-
-void BaseGameEntity::draw()
-{
-   al_draw_bitmap( m_sprite, m_position.x, m_position.y, NULL );
 }

@@ -6,6 +6,8 @@
 #include <math.h>
 #include "SoccerBall.h"
 
+static const int MAX_DISTANCE_FROM_GOAL = 10000.0f; // This is squared distance, so its 100 pixels. 
+
 GoalKeeper::GoalKeeper( Teams* pMyTeam )
    : Players( pMyTeam, PlayerPositions::GOALKEEPER )
    , m_pMyStateMachine( new StateMachine< GoalKeeper >( this ) )
@@ -58,7 +60,7 @@ float GoalKeeper::getSqrDistanceFromGoal()
 
 bool GoalKeeper::isTooFarFromGoal()
 {
-   if( getSqrDistanceFromGoal() > 10000.0f ) // TODO: Magic number make constant. Says that if distance is more than 150 pixels ( 22500 = 150 * 150 because sqrd distance )
+   if( getSqrDistanceFromGoal() > MAX_DISTANCE_FROM_GOAL ) // TODO: Magic number make constant. Says that if distance is more than 150 pixels ( 22500 = 150 * 150 because sqrd distance )
    {
       return true;
    }
@@ -67,12 +69,12 @@ bool GoalKeeper::isTooFarFromGoal()
 
 void GoalKeeper::update()
 {
-	m_pMyStateMachine->update();
 	Players::update();
+	m_pMyStateMachine->update();
 }
 
 void GoalKeeper::draw()
-{
-   al_draw_text( m_playerStateFont, al_map_rgb( 255, 255, 255 ), getPosition().x , getPosition().y, 0, m_pMyStateMachine->getCurrentState()->getStateName() );
+{   
    Players::draw();
+   al_draw_text( m_playerStateFont, al_map_rgb( 255, 255, 255 ), getPosition().x , getPosition().y, 0, m_pMyStateMachine->getCurrentState()->getStateName() );
 }

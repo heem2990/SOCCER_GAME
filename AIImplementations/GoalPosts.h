@@ -1,3 +1,4 @@
+//A class to help keep track of the posts on the field.
 #pragma once
 #include "MyRect.h"
 

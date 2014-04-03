@@ -64,14 +64,14 @@ float SoccerBall::timeToCoverDistance( glm::vec2 from, glm::vec2 to, float force
    glm::vec2 displacement = to - from;
    float distance = sqrtf( displacement.x * displacement.x + displacement.y + displacement.y ) ;
    
-   float velocityAtDestination = sqrtf( speed * speed + 2* DECELERATION_MAGNITUDE_ON_BALL * distance );
+   float velocityAtDestination = sqrtf( speed * speed + 2* DECELERATION_MAGNITUDE_ON_BALL * distance );// v^2 - U^2 = 2as;
 
    if( velocityAtDestination < 0.0f )
    {
       return -1.0f;
    }
 
-   float time = ( velocityAtDestination - speed ) / DECELERATION_MAGNITUDE_ON_BALL;
+   float time = ( velocityAtDestination - speed ) / DECELERATION_MAGNITUDE_ON_BALL; // t= v/a
    return time;
 }
 

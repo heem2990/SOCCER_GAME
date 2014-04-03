@@ -1,6 +1,7 @@
 #pragma once
 #include<allegro5\allegro.h>
 #include<vector>
+// Singleton class for the main game. It has the main update loop. The object for this class is used in main.cpp. 
 #include"MyRect.h"
 
 class Wall;

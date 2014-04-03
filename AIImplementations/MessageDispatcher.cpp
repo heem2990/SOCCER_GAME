@@ -1,6 +1,7 @@
 #include "MessageDispatcher.h"
 #include "BaseGameEntity.h"
 
+// This is the function that basically calls handleMessage in the receiver. 
 void MessageDispatcher::dischargeMessage( BaseGameEntity* pReceiver, const Message& msg )
 {
    if( !pReceiver->handleMessage( msg ) )
@@ -9,6 +10,7 @@ void MessageDispatcher::dischargeMessage( BaseGameEntity* pReceiver, const Messa
    }
 }
 
+// Discharges the message, else adds it to queue.
 void MessageDispatcher::dispatchMessage( double delay, BaseGameEntity* sender, BaseGameEntity* receive, MESSAGE_TYPES::msg messageToSend, void* extraInfo )
 {
    Message messagePacket( delay, sender , receive , messageToSend, extraInfo );
@@ -24,6 +26,7 @@ void MessageDispatcher::dispatchMessage( double delay, BaseGameEntity* sender, B
    }
 }
 
+// Function to see through the messages in priority queue, and see if there are any delayed messages waiting to be sent.
 void MessageDispatcher::dispatchDelayedMessages()
 {
    if( m_priorityQueue.size() == 0 )

@@ -1,3 +1,4 @@
+// Singleton class to represent the soccer ball. It is a moving entity and handles the functions related to the ball. 
 #pragma once
 #include "MovingEntity.h"
 

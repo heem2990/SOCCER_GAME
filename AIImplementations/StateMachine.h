@@ -1,3 +1,4 @@
+// Template class to handle the states of the Goalkeepers, FieldPlayers, and teams. 
 #pragma once
 #include"State.h"
 

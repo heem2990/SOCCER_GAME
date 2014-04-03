@@ -1,3 +1,4 @@
+// This class calculates the velocity and force for the players, depending on what steering behavior they are depicting. 
 #pragma once
 #include<glm\glm.hpp>
 
