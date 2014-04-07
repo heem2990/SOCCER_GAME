@@ -196,32 +196,46 @@ bool Teams::doesGoalKeeperHaveBall() const
    return m_pGoalkeeper->isPlayerControllingTheBall();
 }
 
+// Checks if the pass is safe to a point, from an opponent. Receiver will be null is we are checking a kick. 
+// Changed implementation. Check once again for correctness. 
 bool Teams::isPassSafeFromOpponent( glm::vec2 from, glm::vec2 to, const Players* const receiver, Players* const opponent, float force ) const 
 {
    glm::vec2 toTarget = to - from;
    glm::vec2 toOpponent = opponent->getPosition() - from;
 	glm::vec2 toTargetNormalized = glm::normalize( to - from );
    glm::vec2 localPositionOfOpponent = toLocalPos( from, toTargetNormalized, opponent->getPosition() );
+   glm::vec2 targetToOpponent = to - opponent->getPosition();
    
    if( localPositionOfOpponent.x < 0 )
    {
       return true;
    }
-
-   if( ( toTarget.x * toTarget.x + toTarget.y * toTarget.y ) < ( toOpponent.x * toOpponent.x + toOpponent.y * toOpponent.y ) )
+   // TODO: Check this function, maybe better to check is distance to target is less than distance of target from opponent. 
+   if( ( toTarget.x /** toTarget.x + toTarget.y * toTarget.y*/ ) < ( toOpponent.x/* * toOpponent.x + toOpponent.y * toOpponent.y */) )// ( toTarget.x * toTarget.x + toTarget.y * toTarget.y ) > ( opponentToTarget.x * opponentToTarget.x + opponentToTarget.y * opponentToTarget.y )
    {
       if( receiver )
       {
-         glm::vec2 targetToOpponent = to - opponent->getPosition();
          glm::vec2 receiverToTarget = to - receiver->getPosition();
 
          if( ( targetToOpponent.x * targetToOpponent.x + targetToOpponent.y * targetToOpponent.y ) > ( receiverToTarget.x * receiverToTarget.x + receiverToTarget.y * receiverToTarget.y ) )
          {
             return true;
          }
+         else 
+         {
+            if( ( targetToOpponent.x * targetToOpponent.x + targetToOpponent.y * targetToOpponent.y ) >( toTarget.x * toTarget.x + toTarget.y * toTarget.y ) )
+            {
+               return true;
+            }
+            else
+            {
+               return false;
+            }
+         }
       }
       else
       {
+
          return true;
       }
    }

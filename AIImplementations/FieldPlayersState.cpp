@@ -29,11 +29,13 @@ void Wait::execute( FieldPlayers* pPlayer )
    }
 
    if( pPlayer->getMyTeam()->hasControl() &&
-       pPlayer->isPlayerAheadOfAttacker() )
+       pPlayer->isPlayerAheadOfAttacker() &&
+       !pPlayer->getMyTeam()->doesGoalKeeperHaveBall() )
    {
       pPlayer->getMyTeam()->requestPass( pPlayer );
       return;
    }
+
    if( pPlayer->isPlayerClosestToBall() &&
        pPlayer->getMyTeam()->getReceivingPlayer() == NULL &&
        !SoccerGame::getGameInstance()->doGoalkeepersHaveBall() ) 
