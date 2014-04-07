@@ -200,6 +200,8 @@ bool Teams::doesGoalKeeperHaveBall() const
 // Changed implementation. Check once again for correctness. 
 bool Teams::isPassSafeFromOpponent( glm::vec2 from, glm::vec2 to, const Players* const receiver, Players* const opponent, float force ) const 
 {
+   // debug , remove. TODO.
+   al_draw_line( from.x, from.y, to.x, to.y, al_map_rgb( 1.0f, 1.0f, 0.0f ), 2.0f );
    glm::vec2 toTarget = to - from;
    glm::vec2 toOpponent = opponent->getPosition() - from;
 	glm::vec2 toTargetNormalized = glm::normalize( to - from );
