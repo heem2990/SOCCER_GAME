@@ -42,8 +42,8 @@ int main( void )
    al_init_font_addon();
 	al_init_ttf_addon();
 
-   // Creating the timer for 1/60 seconds so that we can get an update 60 times a second = 60F PS
-   timer = al_create_timer( 1.0 / 60.0  );
+   // Creating the timer for 1/30 seconds so that we can get an update 30 times a second = 30 FPS
+   timer = al_create_timer( 1.0 / 30.0  ); // change 30-> 10 , that will update 10 times every second, leading to a slowe simulation, and more understandable for debugging. 
    eventQueue = al_create_event_queue();
 
    // Registering timer events, so that the update  loop can be called 60 times a seconds, and registering events for keyboard inputs. 
