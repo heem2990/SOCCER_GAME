@@ -4,6 +4,7 @@
 #include "BaseGameEntity.h"
 #include "MovingEntity.h"
 #include "SoccerBall.h"
+#include <allegro5\allegro_primitives.h>
 
 static const float DECELERATION = 2;
 static const float TURN_AROUND_SPEED = 0.5;
@@ -29,10 +30,10 @@ void SteeringBehaviors::calculateForce()
 {
 	glm::vec2 totalVelocity = glm::vec2();
 	glm::vec2 totalForce = glm::vec2();
-   if( isSeekOn() && m_pTarget != NULL )
-	{
-      totalVelocity += calcSeekForce( m_pTarget->getPosition() );
-	}
+ //  if( isSeekOn() && m_pTarget != NULL )
+	//{
+ //     totalVelocity += calcSeekForce( m_pTarget->getPosition() );
+	//}
 	if( isArriveOn() )
 	{
 		totalVelocity += calcArriveVelocity( m_arriveTarget );
@@ -52,12 +53,20 @@ void SteeringBehaviors::calculateForce()
 	{
 		totalVelocity += calcPursuitVelocity( SoccerBall::getSoccerBallInstance() );
 	}
+   // debug remove
+   
+   al_draw_line( m_pOwner->getPosition().x, 
+                 m_pOwner->getPosition().y, 
+                 m_pOwner->getPosition().x + totalVelocity.x * 20, 
+                 m_pOwner->getPosition().y + totalVelocity.y * 20, 
+                 al_map_rgb( 122.0f, 122.0f, 0.0f ), 5.0f ); 
    m_pOwner->setVelocity( totalVelocity );
-   m_pOwner->setForce( totalForce );
+   //m_pOwner->setForce( totalForce );
 }
 
 glm::vec2 SteeringBehaviors::calcArriveVelocity( glm::vec2 target ) 
 {
+   al_draw_circle( target.x, target.y, 10.0f, al_map_rgb( 0.0f, 0.0f, 255.0f ), 3.0f );
    glm::vec2 velocityToTarget = /*m_pTarget->getPosition()*/target - m_pOwner->getPosition();
    float distanceToTarget = sqrt( sqrmag( velocityToTarget ) );
    float speed = 0.0f;

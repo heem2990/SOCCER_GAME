@@ -56,6 +56,7 @@ public:
    Teams* getOpponent() const { return m_pOpponent; }
    TEAM::id getTeamColor() const { return m_myTeam; }
    SupportSpotCalculator* getSupportSpot() const { return m_pSupportSpotCalculator; }
+   glm::vec2 getBestSupportSpot();
 
 private:
    TEAM::id m_myTeam;

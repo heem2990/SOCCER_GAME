@@ -84,7 +84,7 @@ void ChaseBall::execute( FieldPlayers* pPlayer )
 		return;
 	}
 
-	pPlayer->getStateMachine()->changeState( FieldPlayerReturnHome::getInstance() );
+	//pPlayer->getStateMachine()->changeState( FieldPlayerReturnHome::getInstance() );
 }
 
 void ChaseBall::exit( FieldPlayers* pPlayer )
@@ -162,7 +162,7 @@ void Dribble::execute( FieldPlayers* pPlayer )
 
       playerDirection = glm::vec2( playerDirection.x * cosf( angle ) - playerDirection.y * sinf( angle ), playerDirection.x * sinf( angle ) + playerDirection.y * cosf( angle ) );
 
-      const float kickingForce = 40.0f;
+      const float kickingForce = 100.0f;
       SoccerBall::getSoccerBallInstance()->kick( playerDirection,  kickingForce );
    }
    else
@@ -207,7 +207,7 @@ void KickBall::execute( FieldPlayers* pPlayer )
    }
 
    glm::vec2 ballTarget( 0, 0 );
-   float power = 10 * dotWithBall; // TODO: 40 is max force change and make it const. Magic number 
+   float power = 40 * dotWithBall; // TODO: 40 is max force change and make it const. Magic number 
 
    if( pPlayer->getMyTeam()->canShoot( SoccerBall::getSoccerBallInstance()->getPosition(), power, ballTarget ) || ( ( std::rand() % 10 ) < 1 ) )
    {
@@ -243,6 +243,7 @@ KickBall* KickBall::getInstance()
 
 void SupportPlayerWithBall::enter( FieldPlayers* pPlayer )
 {
+   pPlayer->getSteeringBehavior()->setArriveTarget( pPlayer->getMyTeam()->getBestSupportSpot() );
    pPlayer->getSteeringBehavior()->arriveOn();
    //get the best support spot and set it as players target. 
 }
@@ -265,6 +266,7 @@ void SupportPlayerWithBall::execute( FieldPlayers* pPlayer )
       // track ball
 
       pPlayer->setVelocity( glm::vec2( 0, 0 ) );
+      pPlayer->getStateMachine()->setCurrentState( Wait::getInstance() );
 
       // request pass if not threatend by an opposing player. 
    }
@@ -291,6 +293,14 @@ void FieldPlayerReturnHome::enter( FieldPlayers* pPlayer )
 
 void FieldPlayerReturnHome::execute( FieldPlayers* pPlayer )
 {
+  /* if( pPlayer->isPlayerClosestToBall() &&
+       pPlayer->getMyTeam()->getReceivingPlayer() == NULL &&
+       !SoccerGame::getGameInstance()->doGoalkeepersHaveBall() ) 
+   {
+      pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
+      return;
+   }*/
+
    if( pPlayer->isPlayerHome() ) 
    {
       pPlayer->setHasBall( false );
@@ -301,6 +311,7 @@ void FieldPlayerReturnHome::execute( FieldPlayers* pPlayer )
 
 void FieldPlayerReturnHome::exit( FieldPlayers* pPlayer )
 {
+   pPlayer->getSteeringBehavior()->arriveOff();
 }
 
 FieldPlayerReturnHome* FieldPlayerReturnHome::getInstance()

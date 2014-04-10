@@ -112,7 +112,7 @@ void Teams::draw()
    }
    if( m_pPlayerReceivingPass )
    {   
-      al_draw_filled_rectangle( m_pPlayerReceivingPass->getPosition().x - 5, m_pPlayerReceivingPass->getPosition().y -5, m_pPlayerReceivingPass->getPosition().x - 15, m_pPlayerReceivingPass->getPosition().y - 15, al_map_rgb( 1.0f, 1.0f, 0.0f ) );
+      al_draw_filled_rectangle( m_pPlayerReceivingPass->getPosition().x - 5, m_pPlayerReceivingPass->getPosition().y -5, m_pPlayerReceivingPass->getPosition().x - 15, m_pPlayerReceivingPass->getPosition().y - 15, al_map_rgb( 1.0f, 0.0f, 0.0f ) );
    }
    m_pGoalkeeper->draw();
    m_pSupportSpotCalculator->debugDraw();
@@ -201,7 +201,7 @@ bool Teams::doesGoalKeeperHaveBall() const
 bool Teams::isPassSafeFromOpponent( glm::vec2 from, glm::vec2 to, const Players* const receiver, Players* const opponent, float force ) const 
 {
    // debug , remove. TODO.
-   al_draw_line( from.x, from.y, to.x, to.y, al_map_rgb( 1.0f, 1.0f, 0.0f ), 2.0f );
+   al_draw_line( from.x, from.y, to.x, to.y, al_map_rgb( 1.0f, 255.0f, 0.0f ), 2.0f );
    glm::vec2 toTarget = to - from;
    glm::vec2 toOpponent = opponent->getPosition() - from;
 	glm::vec2 toTargetNormalized = glm::normalize( to - from );
@@ -413,4 +413,9 @@ void Teams::requestPass( Players* pPlayerRequesting )
    {
       MessageDispatcher::getInstance()->dispatchMessage( 0.0f, pPlayerRequesting, m_pPlayerWithBall, MESSAGE_TYPES::PASS_TO_ME, NULL );
    }
+}
+
+glm::vec2 Teams::getBestSupportSpot()
+{
+   return m_pSupportSpotCalculator->getBestSupportSpot();
 }
