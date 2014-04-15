@@ -78,3 +78,16 @@ void GoalKeeper::draw()
    Players::draw();
    al_draw_text( m_playerStateFont, al_map_rgb( 255, 255, 255 ), getPosition().x , getPosition().y, 0, m_pMyStateMachine->getCurrentState()->getStateName() );
 }
+
+bool GoalKeeper::canGoalKeeperGetBall()
+{
+   glm::vec2 fromPostToBall = getMyTeam()->getGoalPost()->getCenter() - SoccerBall::getSoccerBallInstance()->getPosition();
+   if( fromPostToBall.x * fromPostToBall.x + fromPostToBall.y * fromPostToBall.y <= 10000.0f ) // TODO: 100 is hardcoded, change. 
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}

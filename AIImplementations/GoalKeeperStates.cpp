@@ -19,7 +19,24 @@ void ReturnGoalkeeperHome::execute( GoalKeeper* pGoalKeeper )
 {
    pGoalKeeper->setHomeRegionAsTarget();
 
-   if( pGoalKeeper->isPlayerHome() || !pGoalKeeper->getMyTeam()->hasControl() )
+   if( pGoalKeeper->isPlayerControllingTheBall() )
+   {
+      SoccerBall::getSoccerBallInstance()->setVelocity( pGoalKeeper->getVelocity() );
+      
+      if( !SoccerGame::getGameInstance()->isGameOn() && !pGoalKeeper->isPlayerHome() )
+      {
+         return;
+      }
+      else
+      {
+         pGoalKeeper->getStateMachine()->setCurrentState( GoalKick::getInstance() );
+         return;
+      }
+   }
+   bool isGameOn = SoccerGame::getGameInstance()->isGameOn();
+   bool teamHasControl = pGoalKeeper->getMyTeam()->hasControl();
+   bool isGKHome = pGoalKeeper->isPlayerHome();
+   if( ( isGKHome || !teamHasControl ) && isGameOn )
    {
       pGoalKeeper->getStateMachine()->changeState( TendGoal::getInstance() );
    }
@@ -50,29 +67,29 @@ void TendGoal::enter( GoalKeeper* pGoalKeeper )
 
 void TendGoal::execute( GoalKeeper* pGoalKeeper )
 {
-   if( pGoalKeeper->isInKickingRangeOfTheBall() )
-   {
-      SoccerBall::getSoccerBallInstance()->trap( pGoalKeeper );
-      pGoalKeeper->setHasBall( true );
-      pGoalKeeper->getStateMachine()->changeState( GoalKick::getInstance() );
-      return;
-   }
+   //if( pGoalKeeper->isInKickingRangeOfTheBall() )
+   //{
+   //   SoccerBall::getSoccerBallInstance()->trap( pGoalKeeper );
+   //   pGoalKeeper->setHasBall( true );
+   //   pGoalKeeper->getStateMachine()->changeState( GoalKick::getInstance() );
+   //   return;
+   //}
 
    if( pGoalKeeper->isBallWithinInterceptRanger() )
    {
       pGoalKeeper->getStateMachine()->changeState( InterceptBall::getInstance() );
    }
 
-   if( pGoalKeeper->isTooFarFromGoal() && pGoalKeeper->getMyTeam()->hasControl() )
-   {
-      pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
-   }
+   //if( pGoalKeeper->isTooFarFromGoal() && pGoalKeeper->getMyTeam()->hasControl() )
+   //{
+   //   pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
+   //}
 }
 
 void TendGoal::exit( GoalKeeper* pGoalKeeper )
 {
    pGoalKeeper->getSteeringBehavior()->interposeOff();
-   pGoalKeeper->lookAtOff();
+   //pGoalKeeper->lookAtOff();
 }
 
 TendGoal* TendGoal::getInstance()
@@ -86,29 +103,29 @@ TendGoal* TendGoal::getInstance()
 
 void GoalKick::enter( GoalKeeper* pGoalKeeper )
 {
-   pGoalKeeper->getMyTeam()->setPlayerWithBall( pGoalKeeper );
-   pGoalKeeper->getMyTeam()->sendFieldPlayersHome();
+   pGoalKeeper->getMyTeam()->sendPlayersHome();
    pGoalKeeper->getMyTeam()->getOpponent()->sendPlayersHome();
-   // TODO: Check if we will need to set velocity of trapped ball equal to goalKeepers 
+   pGoalKeeper->getMyTeam()->setPlayerWithBall( pGoalKeeper );
 }
 
 void GoalKick::execute( GoalKeeper* pGoalKeeper )
 {
-   Players* passReceivingPlayer = NULL;
-   glm::vec2 passPosition( 0, 0 );
-   if( pGoalKeeper->getMyTeam()->findPass( pGoalKeeper, passReceivingPlayer, passPosition, 30, 10 ) )
-   {
-      if( passReceivingPlayer )
-      {
-         SoccerBall::getSoccerBallInstance()->kick( glm::normalize( passPosition - pGoalKeeper->getPosition() ), 60 );
-         pGoalKeeper->setHasBall( false );
+   SoccerBall::getSoccerBallInstance()->setVelocity( pGoalKeeper->getVelocity() );
+   //Players* passReceivingPlayer = NULL;
+   //glm::vec2 passPosition( 0, 0 );
+   //if( pGoalKeeper->getMyTeam()->findPass( pGoalKeeper, passReceivingPlayer, passPosition, 30, 10 ) )
+   //{
+   //   if( passReceivingPlayer )
+   //   {
+   //      SoccerBall::getSoccerBallInstance()->kick( glm::normalize( passPosition - pGoalKeeper->getPosition() ), 60 );
+   //      pGoalKeeper->setHasBall( false );
 
-         MessageDispatcher::getInstance()->dispatchMessage( 0,pGoalKeeper,passReceivingPlayer, MESSAGE_TYPES::RECEIVE_BALL, &passPosition );
-         pGoalKeeper->setHasBall( false );
-         pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
-         return;
-      }
-   }
+   //      MessageDispatcher::getInstance()->dispatchMessage( 0,pGoalKeeper,passReceivingPlayer, MESSAGE_TYPES::RECEIVE_BALL, &passPosition );
+   //      pGoalKeeper->setHasBall( false );
+   //      pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
+   //      return;
+   //   }
+   //}
    //SoccerBall::getSoccerBallInstance()->trap( pGoalKeeper );
 }
 
@@ -133,15 +150,17 @@ void InterceptBall::enter( GoalKeeper* pGoalKeeper )
 
 void InterceptBall::execute( GoalKeeper* pGoalKeeper )
 {
-   if( pGoalKeeper->isTooFarFromGoal() && !pGoalKeeper->isPlayerClosestToBall() )
-   {
-      pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
-      return;
-   }
+   //if( pGoalKeeper->isTooFarFromGoal() && !pGoalKeeper->isPlayerClosestToBall() )
+   //{
+   //   pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
+   //   return;
+   //}
    if( pGoalKeeper->isInKickingRangeOfTheBall() )
    {
+      pGoalKeeper->getSteeringBehavior()->pursuitOff();
       SoccerBall::getSoccerBallInstance()->trap( pGoalKeeper );
       pGoalKeeper->getStateMachine()->changeState( GoalKick::getInstance() );
+      SoccerGame::getGameInstance()->setGameOn( false );
    }
 }
 

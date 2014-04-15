@@ -25,7 +25,8 @@ public:
    static SoccerGame* getGameInstance(); 
    inline static std::vector< MyRect* > getRegions(){ return m_sRegions; }
    inline static std::vector< Wall* > getWalls(){ return m_sWalls; }
-   bool isGameOn() const{ return m_isGameOn; }
+   void setGameOn( bool isOn ) { ms_bIsGameOn = isOn; }
+   bool isGameOn() const { return ms_bIsGameOn; }
    bool doGoalkeepersHaveBall() const ;
 
 private:
@@ -41,6 +42,6 @@ private:
    ALLEGRO_BITMAP* m_pBackground;
 
    bool m_hasInitialized;
-   bool m_isGameOn;
+   static bool ms_bIsGameOn;
 };
 

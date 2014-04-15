@@ -114,6 +114,11 @@ void Teams::draw()
    {   
       al_draw_filled_rectangle( m_pPlayerReceivingPass->getPosition().x - 5, m_pPlayerReceivingPass->getPosition().y -5, m_pPlayerReceivingPass->getPosition().x - 15, m_pPlayerReceivingPass->getPosition().y - 15, al_map_rgb( 1.0f, 0.0f, 0.0f ) );
    }
+   
+   if( doesGoalKeeperHaveBall() )
+   {   
+      al_draw_filled_rectangle( m_pGoalkeeper->getPosition().x - 5, m_pGoalkeeper->getPosition().y -5, m_pGoalkeeper->getPosition().x - 15, m_pGoalkeeper->getPosition().y - 15, al_map_rgb( 100.0f, 100.0f, 0.0f ) );
+   }
    m_pGoalkeeper->draw();
    m_pSupportSpotCalculator->debugDraw();
 }
@@ -176,7 +181,7 @@ void Teams::changeState( State< Teams >* pToState ) const
 
 bool Teams::arePlayersHome()
 {
-   MessageDispatcher::getInstance()->dispatchMessage( 0, m_playersOnTeam[ 0 ], m_playersOnTeam[ 1 ], MESSAGE_TYPES::GO_HOME, NULL );
+   //errored call - MessageDispatcher::getInstance()->dispatchMessage( 0, m_playersOnTeam[ 0 ], m_playersOnTeam[ 1 ], MESSAGE_TYPES::GO_HOME, NULL );
 	for( std::vector< FieldPlayers* >::iterator iter = m_playersOnTeam.begin(); iter != m_playersOnTeam.end() ; ++iter )
 	{
 		if( !(*iter)->isPlayerHome() )

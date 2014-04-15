@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 #include "Wall.h"
+#include <allegro5\allegro_primitives.h>
 
 static const int NUM_REGIONS = 18;
 static const int WALLS_HEIGHT = 20;
@@ -17,6 +18,7 @@ static const int FIELD_WIDTH = 954; // SCREEN_WIDTH - WALL_WIDTH - WALL_WIDTH
 
 std::vector< MyRect* > SoccerGame::m_sRegions = std::vector< MyRect* >();
 std::vector< Wall* > SoccerGame::m_sWalls = std::vector< Wall* >();
+bool SoccerGame::ms_bIsGameOn = false ;
 
 SoccerGame::SoccerGame(void)
    : m_pRedTeamPost( new GoalPosts( glm::vec2( 984.0f, 160.0f ), glm::vec2( 1004, 480.0f ), glm::vec2( -1, 0 ) ) ) // TODO: Magic numbers should become constants
@@ -26,7 +28,6 @@ SoccerGame::SoccerGame(void)
    , m_pMySoccerBall( SoccerBall::getSoccerBallInstance() )
    , m_pBackground( al_load_bitmap( "soccerPitch.png" ) )
    , m_hasInitialized( true )
-   , m_isGameOn( true )
 {
 	m_pRedTeam->setOpponent( m_pBlueTeam );   
 	m_pBlueTeam->setOpponent( m_pRedTeam );
@@ -92,6 +93,10 @@ void SoccerGame::initRegions()
 
 void SoccerGame::update()
 {
+   if( m_pRedTeam->arePlayersHome() && m_pBlueTeam->arePlayersHome() )
+   {
+      ms_bIsGameOn = true;
+   }
    draw();
    m_pRedTeam->update();
    m_pBlueTeam->update();
@@ -117,6 +122,12 @@ void SoccerGame::draw()
    for( int i = 0 ; i < 18 ; ++i )
    {
 	   m_sRegions[i]->debugDraw();
+   }
+   
+   // DEBUG ONLY
+   if( !ms_bIsGameOn )
+   {
+      al_draw_filled_rectangle( 0.0f, 0.0f, 1024.0f, 30.0f, al_map_rgb( 100.0f, 100.0f, 100.0f ) );
    }
 }
 

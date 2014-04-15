@@ -17,6 +17,7 @@ public:
    bool isTooFarFromGoal();
    bool handleMessage( const Message& msg );
    StateMachine< GoalKeeper >* getStateMachine() const { return m_pMyStateMachine; }
+   bool canGoalKeeperGetBall();
 
    virtual void update();
    virtual void draw();
