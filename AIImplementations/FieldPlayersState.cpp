@@ -65,12 +65,17 @@ Wait* Wait::getInstance()
 
 void ChaseBall::enter( FieldPlayers* pPlayer )
 {
-	//pPlayer->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
- //  pPlayer->getSteeringBehavior()->pursuitOn();
+	pPlayer->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
+   pPlayer->getSteeringBehavior()->pursuitOn();
 }
 
 void ChaseBall::execute( FieldPlayers* pPlayer )
 {
+   if( pPlayer->isPlayerControllingTheBall() && pPlayer->isAtTarget() )
+   {
+      pPlayer->getStateMachine()->changeState( Dribble::getInstance() );
+      return;
+   }
 	//if( pPlayer->isInKickingRangeOfTheBall() )
 	//{
  //     pPlayer->getMyTeam()->setPlayerWithBall( pPlayer );
@@ -107,11 +112,11 @@ ChaseBall* ChaseBall::getInstance()
 
 void ReceiveBall::enter( FieldPlayers* pPlayer )
 {
-   //pPlayer->getMyTeam()->setReceivingPlayer( pPlayer );
+ //  pPlayer->getMyTeam()->setReceivingPlayer( pPlayer );
 
    //// TODO Change behavior depending on the location of the current player, and chances of it getting intercepted. If they are low, use arrive. 
-   //pPlayer->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
-   //pPlayer->getSteeringBehavior()->pursuitOn();
+   pPlayer->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
+   pPlayer->getSteeringBehavior()->pursuitOn();
 }
 
 void ReceiveBall::execute( FieldPlayers* pPlayer )
@@ -123,17 +128,14 @@ void ReceiveBall::execute( FieldPlayers* pPlayer )
    //   return;
    //}
 
-   //if( pPlayer->getSteeringBehavior()->isPursuitOn() )
-   //{
-   //   pPlayer->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
-   //}
-
-   //if( pPlayer->isAtTarget() )
-   //{
-   //   pPlayer->getSteeringBehavior()->pursuitOff();
-   //   pPlayer->setVelocity( glm::vec2( 0, 0 ) );
-   //   pPlayer->setLookAtTarget( SoccerBall::getSoccerBallInstance() );
-   //}
+   if( pPlayer->isAtTarget() )
+   {
+      pPlayer->getSteeringBehavior()->pursuitOff();
+      pPlayer->setVelocity( glm::vec2( 0, 0 ) );
+      SoccerBall::getSoccerBallInstance()->trap( pPlayer );
+      //pPlayer->setLookAtTarget( SoccerBall::getSoccerBallInstance() );
+      pPlayer->getStateMachine()->setCurrentState( Dribble::getInstance() );
+   }
 }
 
 void ReceiveBall::exit( FieldPlayers* pPlayer )
@@ -156,24 +158,24 @@ void Dribble::enter( FieldPlayers* pPlayer )
 
 void Dribble::execute( FieldPlayers* pPlayer )
 {
-   //float dot = glm::dot( pPlayer->getMyTeam()->getGoalPost()->getFacing(), pPlayer->getHeading() );
+   float dot = glm::dot( pPlayer->getMyTeam()->getGoalPost()->getFacing(), pPlayer->getHeading() );
 
-   //if( dot < 0 )
-   //{
-   //   glm::vec2 playerDirection = pPlayer->getHeading();
-   //   float angle = ( 3.1415 / 4 ); // 3.1415 = pi TODO: Change according to whether the player turns clockwise or anticlockwise to be take the smaller turn
+   if( dot < 0 )
+   {
+      glm::vec2 playerDirection = pPlayer->getHeading();
+      float angle = ( 3.1415 / 4 ); // 3.1415 = pi TODO: Change according to whether the player turns clockwise or anticlockwise to be take the smaller turn
 
-   //   playerDirection = glm::vec2( playerDirection.x * cosf( angle ) - playerDirection.y * sinf( angle ), playerDirection.x * sinf( angle ) + playerDirection.y * cosf( angle ) );
+      playerDirection = glm::vec2( playerDirection.x * cosf( angle ) - playerDirection.y * sinf( angle ), playerDirection.x * sinf( angle ) + playerDirection.y * cosf( angle ) );
 
-   //   const float kickingForce = 100.0f;
-   //   SoccerBall::getSoccerBallInstance()->kick( playerDirection,  kickingForce );
-   //}
-   //else
-   //{
-   //   SoccerBall::getSoccerBallInstance()->kick( pPlayer->getMyTeam()->getGoalPost()->getFacing(),  10.0f );
-   //}
+      const float kickingForce = 100.0f;
+      SoccerBall::getSoccerBallInstance()->kick( playerDirection,  5.0f );
+   }
+   else
+   {
+      SoccerBall::getSoccerBallInstance()->kick( pPlayer->getMyTeam()->getGoalPost()->getFacing(),  5.0f );
+   }
 
-   //pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
+   pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
    //return;
 }
 

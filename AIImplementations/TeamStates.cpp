@@ -12,10 +12,10 @@ void Attacking::enter( Teams* pTeam )
 void Attacking::execute( Teams* pTeam )
 {
 	//std::cout<<"******Team "<<pTeam->getTeamName()<<" is attacking"<<std::endl;
-	if( !pTeam->hasControl() )
-	{
-		pTeam->changeState( Defending::getInstance() );
-	}
+	//if( !pTeam->hasControl() )
+	//{
+	//	pTeam->changeState( Defending::getInstance() );
+	//}
 	//Supporting player code
 }
 
@@ -35,16 +35,16 @@ Attacking* Attacking::getInstance()
 void Defending::enter( Teams* pTeam )
 {
 	std::cout<<"Team "<<pTeam->getTeamName()<<" Entered Defending State"<<std::endl;
-	pTeam->sendPlayersHome();
+	//pTeam->sendPlayersHome();
 }
 
 void Defending::execute( Teams* pTeam )
 {
 	//std::cout<<"******Team "<<pTeam->getTeamName()<<" is defending"<<std::endl;
-	if( pTeam->hasControl() )
+	/*if( pTeam->hasControl() )
 	{
 		pTeam->changeState( Attacking::getInstance() );
-	}
+	}*/
 	//if( team )
 }
 
@@ -65,7 +65,7 @@ void KickOff::enter( Teams* pTeam )
 {
 	std::cout<<"******Team "<<pTeam->getTeamName()<<" has entered KickOff"<<std::endl;
 	pTeam->setClosestPlayerToBall();
-	pTeam->setPlayerWithBall( NULL );
+	//pTeam->setPlayerWithBall( NULL );
 	pTeam->setReceivingPlayer( NULL );
 	pTeam->setSupportingPlayer( NULL );
 
@@ -74,13 +74,19 @@ void KickOff::enter( Teams* pTeam )
 
 void KickOff::execute( Teams* pTeam )
 {
-	if( pTeam->arePlayersHome() && pTeam->getOpponent()->arePlayersHome() )
-	{
-		pTeam->changeState( Defending::getInstance() );
-	}
+	//if( pTeam->arePlayersHome() && pTeam->getOpponent()->arePlayersHome() )
+	//{
+	//	pTeam->changeState( Defending::getInstance() );
+	//}
 }
 
 void KickOff::exit( Teams* pTeam )
 {
 	std::cout<<"******Team "<<pTeam->getTeamName()<<" has exited KickOff"<<std::endl;
+}
+
+KickOff* KickOff::getInstance()
+{
+	static KickOff kickOffStateInstance;
+	return &kickOffStateInstance;
 }

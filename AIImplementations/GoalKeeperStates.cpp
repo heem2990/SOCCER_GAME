@@ -114,7 +114,6 @@ void GoalKick::execute( GoalKeeper* pGoalKeeper )
          pGoalKeeper->setHasBall( false );
 
          MessageDispatcher::getInstance()->dispatchMessage( 0,pGoalKeeper,passReceivingPlayer, MESSAGE_TYPES::RECEIVE_BALL, &passPosition );
-         pGoalKeeper->setHasBall( false );
          pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
          return;
       }

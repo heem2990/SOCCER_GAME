@@ -61,7 +61,6 @@ bool FieldPlayers::handleMessage( const Message& msg )
       {
          getSteeringBehavior()->setArriveTarget( *( static_cast< glm::vec2* >( msg.getExtraInfo() ) ) );
          m_pMyStateMachine->changeState( ReceiveBall::getInstance() );
-         setHasBall( true );
          return true;
          break;
       }

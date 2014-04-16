@@ -63,9 +63,9 @@ Teams::Teams( TEAM::id myTeam, GoalPosts* pMyGoalPost )
    {
       m_playersOnTeam.push_back( new FieldPlayers( this, ( PlayerPositions::id )( i+1 ) ) ); 
    }
-   m_pMyStateMachine->setPreviousState( Defending::getInstance() );
-   m_pMyStateMachine->setCurrentState( Defending::getInstance() );
-   m_pMyStateMachine->changeState( Defending::getInstance() );
+   m_pMyStateMachine->setPreviousState( KickOff::getInstance() );
+   m_pMyStateMachine->setCurrentState( KickOff::getInstance() );
+   m_pMyStateMachine->changeState( KickOff::getInstance() );
 }
 
 
