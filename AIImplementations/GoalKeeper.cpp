@@ -6,7 +6,7 @@
 #include <math.h>
 #include "SoccerBall.h"
 
-static const int MAX_DISTANCE_FROM_GOAL = 10000.0f; // This is squared distance, so its 100 pixels. 
+static const int MAX_DISTANCE_FROM_GOAL = 40000.0f; // This is squared distance, so its 100 pixels. 
 
 GoalKeeper::GoalKeeper( Teams* pMyTeam )
    : Players( pMyTeam, PlayerPositions::GOALKEEPER )

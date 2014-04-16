@@ -89,7 +89,7 @@ void TendGoal::execute( GoalKeeper* pGoalKeeper )
 void TendGoal::exit( GoalKeeper* pGoalKeeper )
 {
    pGoalKeeper->getSteeringBehavior()->interposeOff();
-   //pGoalKeeper->lookAtOff();
+   pGoalKeeper->lookAtOff();
 }
 
 TendGoal* TendGoal::getInstance()
@@ -110,23 +110,21 @@ void GoalKick::enter( GoalKeeper* pGoalKeeper )
 
 void GoalKick::execute( GoalKeeper* pGoalKeeper )
 {
-   SoccerBall::getSoccerBallInstance()->setVelocity( pGoalKeeper->getVelocity() );
-   //Players* passReceivingPlayer = NULL;
-   //glm::vec2 passPosition( 0, 0 );
-   //if( pGoalKeeper->getMyTeam()->findPass( pGoalKeeper, passReceivingPlayer, passPosition, 30, 10 ) )
-   //{
-   //   if( passReceivingPlayer )
-   //   {
-   //      SoccerBall::getSoccerBallInstance()->kick( glm::normalize( passPosition - pGoalKeeper->getPosition() ), 60 );
-   //      pGoalKeeper->setHasBall( false );
+   Players* passReceivingPlayer = NULL;
+   glm::vec2 passPosition( 0, 0 );
+   if( pGoalKeeper->getMyTeam()->findPass( pGoalKeeper, passReceivingPlayer, passPosition, 30, 10 ) )
+   {
+      if( passReceivingPlayer )
+      {
+         SoccerBall::getSoccerBallInstance()->kick( glm::normalize( passPosition - pGoalKeeper->getPosition() ), 40 );
+         pGoalKeeper->setHasBall( false );
 
-   //      MessageDispatcher::getInstance()->dispatchMessage( 0,pGoalKeeper,passReceivingPlayer, MESSAGE_TYPES::RECEIVE_BALL, &passPosition );
-   //      pGoalKeeper->setHasBall( false );
-   //      pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
-   //      return;
-   //   }
-   //}
-   //SoccerBall::getSoccerBallInstance()->trap( pGoalKeeper );
+         MessageDispatcher::getInstance()->dispatchMessage( 0,pGoalKeeper,passReceivingPlayer, MESSAGE_TYPES::RECEIVE_BALL, &passPosition );
+         pGoalKeeper->setHasBall( false );
+         pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
+         return;
+      }
+   }
 }
 
 void GoalKick::exit( GoalKeeper* pGoalKeeper )
@@ -150,11 +148,11 @@ void InterceptBall::enter( GoalKeeper* pGoalKeeper )
 
 void InterceptBall::execute( GoalKeeper* pGoalKeeper )
 {
-   //if( pGoalKeeper->isTooFarFromGoal() && !pGoalKeeper->isPlayerClosestToBall() )
-   //{
-   //   pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
-   //   return;
-   //}
+   if( pGoalKeeper->isTooFarFromGoal() || !pGoalKeeper->isPlayerClosestToBall() )
+   {
+      pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
+      return;
+   }
    if( pGoalKeeper->isInKickingRangeOfTheBall() )
    {
       pGoalKeeper->getSteeringBehavior()->pursuitOff();
