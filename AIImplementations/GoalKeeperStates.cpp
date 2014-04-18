@@ -37,7 +37,7 @@ void ReturnGoalkeeperHome::execute( GoalKeeper* pGoalKeeper )
    bool teamHasControl = pGoalKeeper->getMyTeam()->hasControl();
    bool isGKHome = pGoalKeeper->isPlayerHome();
 
-   if( ( isGKHome || !teamHasControl ) && isGameOn )
+   if( ( isGKHome && !teamHasControl ) && isGameOn )
    {
       pGoalKeeper->getStateMachine()->changeState( TendGoal::getInstance() );
    }
@@ -111,7 +111,7 @@ void GoalKick::execute( GoalKeeper* pGoalKeeper )
       if( passReceivingPlayer )
       {
          SoccerBall::getSoccerBallInstance()->kick( glm::normalize( passPosition - pGoalKeeper->getPosition() ), 40 );
-         pGoalKeeper->setHasBall( false );
+         pGoalKeeper->getMyTeam()->setPlayerWithBall( NULL );
 
          MessageDispatcher::getInstance()->dispatchMessage( 0,pGoalKeeper,passReceivingPlayer, MESSAGE_TYPES::RECEIVE_BALL, &passPosition );
          pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
@@ -157,6 +157,7 @@ void InterceptBall::execute( GoalKeeper* pGoalKeeper )
 
 void InterceptBall::exit( GoalKeeper* pGoalKeeper )
 {
+      pGoalKeeper->getSteeringBehavior()->pursuitOff();
 }
 
 InterceptBall* InterceptBall::getInstance()

@@ -16,25 +16,25 @@ void Wait::enter( FieldPlayers* pPlayer )
 
 void Wait::execute( FieldPlayers* pPlayer )
 {
-	//if( !pPlayer->isAtArriveTarget() )
- //  {
- //     pPlayer->getSteeringBehavior()->arriveOn();
- //     return;
- //  }
- //  else
- //  {
- //     pPlayer->getSteeringBehavior()->arriveOff();
- //     pPlayer->setVelocity( glm::vec2( 0, 0 ) );
-	//   pPlayer->setLookAtTarget( SoccerBall::getSoccerBallInstance() );
- //  }
+	if( !pPlayer->isAtArriveTarget() )
+   {
+      pPlayer->getSteeringBehavior()->arriveOn();
+      return;
+   }
+   else
+   {
+      pPlayer->getSteeringBehavior()->arriveOff();
+      pPlayer->setVelocity( glm::vec2( 0, 0 ) );
+	   pPlayer->setLookAtTarget( SoccerBall::getSoccerBallInstance() );
+   }
 
- //  //if( pPlayer->getMyTeam()->hasControl() &&
- //  //    pPlayer->isPlayerAheadOfAttacker() &&
- //  //    !pPlayer->getMyTeam()->doesGoalKeeperHaveBall() )
- //  //{
- //  //   pPlayer->getMyTeam()->requestPass( pPlayer );
- //  //   return;
- //  //}
+   if( pPlayer->getMyTeam()->hasControl() &&
+       pPlayer->isPlayerAheadOfAttacker() &&
+       !pPlayer->getMyTeam()->doesGoalKeeperHaveBall() )
+   {
+      pPlayer->getMyTeam()->requestPass( pPlayer );
+      return;
+   }
 
  //  if( pPlayer->isPlayerClosestToBall() &&
  //      pPlayer->getMyTeam()->getReceivingPlayer() == NULL /*&&
@@ -128,10 +128,11 @@ void ReceiveBall::execute( FieldPlayers* pPlayer )
    //   return;
    //}
 
-   if( pPlayer->isAtTarget() )
+   if( pPlayer->isPlayerWithinReceivingRange() )
    {
       pPlayer->getSteeringBehavior()->pursuitOff();
       pPlayer->setVelocity( glm::vec2( 0, 0 ) );
+      pPlayer->getMyTeam()->setPlayerWithBall( pPlayer );
       SoccerBall::getSoccerBallInstance()->trap( pPlayer );
       //pPlayer->setLookAtTarget( SoccerBall::getSoccerBallInstance() );
       pPlayer->getStateMachine()->setCurrentState( Dribble::getInstance() );
@@ -153,7 +154,7 @@ ReceiveBall* ReceiveBall::getInstance()
 
 void Dribble::enter( FieldPlayers* pPlayer )
 {
-   //pPlayer->getMyTeam()->setPlayerWithBall( pPlayer );
+   pPlayer->getMyTeam()->setPlayerWithBall( pPlayer );
 }
 
 void Dribble::execute( FieldPlayers* pPlayer )
@@ -248,8 +249,8 @@ KickBall* KickBall::getInstance()
 
 void SupportPlayerWithBall::enter( FieldPlayers* pPlayer )
 {
-   //pPlayer->getSteeringBehavior()->setArriveTarget( pPlayer->getMyTeam()->getBestSupportSpot() );
-   //pPlayer->getSteeringBehavior()->arriveOn();
+   pPlayer->getSteeringBehavior()->setArriveTarget( pPlayer->getMyTeam()->getBestSupportSpot() );
+   pPlayer->getSteeringBehavior()->arriveOn();
    //get the best support spot and set it as players target. 
 }
 
@@ -279,6 +280,7 @@ void SupportPlayerWithBall::execute( FieldPlayers* pPlayer )
 
 void SupportPlayerWithBall::exit( FieldPlayers* pPlayer )
 {
+   pPlayer->getSteeringBehavior()->arriveOff();
 }
 
 SupportPlayerWithBall* SupportPlayerWithBall::getInstance()
@@ -308,7 +310,7 @@ void FieldPlayerReturnHome::execute( FieldPlayers* pPlayer )
 
    if( pPlayer->isPlayerHome() ) 
    {
-      pPlayer->setHasBall( false );
+      //pPlayer->getMyTeam()->setPlayerWithBall( NULL );
       pPlayer->getStateMachine()->changeState( Wait::getInstance() );
       return;
    }

@@ -135,8 +135,11 @@ void Teams::setPlayerWithBall( Players* pPlayer )
       m_pPlayerWithBall->setHasBall( false );
    }
    
-   m_pPlayerWithBall = pPlayer;
-   m_pPlayerWithBall->setHasBall( true );
+   if( pPlayer )
+   {
+      m_pPlayerWithBall = pPlayer;
+      m_pPlayerWithBall->setHasBall( true );
+   }
 }
 
 // TODO: Change the code to remove so much copying. just pass a reference to the vector you want to store the players in.  
@@ -206,7 +209,7 @@ bool Teams::doesGoalKeeperHaveBall() const
 bool Teams::isPassSafeFromOpponent( glm::vec2 from, glm::vec2 to, const Players* const receiver, Players* const opponent, float force ) const 
 {
    // debug , remove. TODO.
-   al_draw_line( from.x, from.y, to.x, to.y, al_map_rgb( 1.0f, 255.0f, 0.0f ), 2.0f );
+   al_draw_line( from.x, from.y, to.x, to.y, al_map_rgb( 0.0f, 255.0f, 255.0f ), 2.0f );
    glm::vec2 toTarget = to - from;
    glm::vec2 toOpponent = opponent->getPosition() - from;
 	glm::vec2 toTargetNormalized = glm::normalize( to - from );

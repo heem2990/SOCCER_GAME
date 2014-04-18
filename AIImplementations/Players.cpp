@@ -140,7 +140,7 @@ bool Players::isPlayerAheadOfAttacker() const
       glm::vec2 attackerPosition = m_pMyTeam->getPlayerWithBall()->getPosition();
       float goalDirection = getMyTeam()->getGoalPost()->getFacing().x;
 
-      if( goalDirection * getPosition().x > goalDirection *attackerPosition.x )
+      if( goalDirection * getPosition().x > goalDirection * attackerPosition.x )
       {
          return true;
       }
@@ -154,7 +154,7 @@ bool Players::isPlayerAheadOfAttacker() const
 
 bool Players::isPlayerWithinReceivingRange() const 
 {
-   if( sqrMag( getPosition() - SoccerBall::getSoccerBallInstance()->getPosition() ) <= ( 100 * 100.f) ) // if the ball is less 100 pixels away. 
+   if( sqrMag( getPosition() - SoccerBall::getSoccerBallInstance()->getPosition() ) <= ( 20.0f * 20.f) ) // if the ball is less 100 pixels away. 
    {
       return true;
    }

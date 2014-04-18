@@ -73,7 +73,6 @@ bool FieldPlayers::handleMessage( const Message& msg )
 
          getSteeringBehavior()->setArriveTarget( getMyTeam()->getSupportSpot()->getBestSupportSpot() ); 
          m_pMyStateMachine->changeState( SupportPlayerWithBall::getInstance() );
-         setHasBall( false );
          return true;
          break;
       }
