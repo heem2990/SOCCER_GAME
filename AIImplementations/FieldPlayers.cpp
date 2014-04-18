@@ -8,7 +8,7 @@
 #include "Teams.h"
 #include "SupportSpotCalculator.h"
 
-static const int MAX_PASSING_FORCE = 40.0f; // check values.
+static const int MAX_PASSING_FORCE = 100.0f; // check values.
 static const int NORMAL_SPEED = 5.0f;
 static const int SPEED_WITH_BALL = 2.0f;
 
@@ -50,9 +50,9 @@ bool FieldPlayers::handleMessage( const Message& msg )
          SoccerBall::getSoccerBallInstance()->kick( receivingPlayerPos - SoccerBall::getSoccerBallInstance()->getPosition(), MAX_PASSING_FORCE );
          MessageDispatcher::getInstance()->dispatchMessage( 0.0f, this, msg.getSender(), MESSAGE_TYPES::RECEIVE_BALL, &receivingPlayerPos );
          m_pMyStateMachine->changeState( Wait::getInstance() );
-         setHasBall( false );
-
-         findSupportingPlayer();
+         //setHasBall( false );
+         getMyTeam()->setPlayerWithBall( NULL );
+         //findSupportingPlayer();
 
          return true;
          break;
