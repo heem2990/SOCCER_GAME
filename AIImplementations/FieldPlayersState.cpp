@@ -16,6 +16,11 @@ void Wait::enter( FieldPlayers* pPlayer )
 
 void Wait::execute( FieldPlayers* pPlayer )
 {
+   if( !SoccerGame::getGameInstance()->isGameOn() )
+   {
+      return;
+   }
+
 	if( !pPlayer->isAtArriveTarget() )
    {
       pPlayer->getSteeringBehavior()->arriveOn();
@@ -36,13 +41,14 @@ void Wait::execute( FieldPlayers* pPlayer )
       return;
    }
 
- //  if( pPlayer->isPlayerClosestToBall() &&
- //      pPlayer->getMyTeam()->getReceivingPlayer() == NULL /*&&
- //      !SoccerGame::getGameInstance()->doGoalkeepersHaveBall()*/ ) 
- //  {
- //     pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
- //     return;
- //  }
+   if( pPlayer->isPlayerClosestToBall() &&
+       pPlayer->getMyTeam()->getReceivingPlayer() == NULL &&
+       !pPlayer->getMyTeam()->hasControl() &&
+       !SoccerGame::getGameInstance()->doGoalkeepersHaveBall() ) 
+   {
+      pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
+      return;
+   }
 
  /*  if( SoccerGame::getGameInstance()->isGameOn() )
    {
@@ -98,7 +104,7 @@ void ChaseBall::execute( FieldPlayers* pPlayer )
 
 void ChaseBall::exit( FieldPlayers* pPlayer )
 {
-	//pPlayer->getSteeringBehavior()->pursuitOff();
+	pPlayer->getSteeringBehavior()->pursuitOff();
 }
 
 ChaseBall* ChaseBall::getInstance()
@@ -164,7 +170,7 @@ void Dribble::execute( FieldPlayers* pPlayer )
    if( dot < 0 )
    {
       glm::vec2 playerDirection = pPlayer->getHeading();
-      float angle = ( 3.1415 / 4 ); // 3.1415 = pi TODO: Change according to whether the player turns clockwise or anticlockwise to be take the smaller turn
+      float angle = ( 3.1415f / 2.0f ); // 3.1415 = pi TODO: Change according to whether the player turns clockwise or anticlockwise to be take the smaller turn
 
       playerDirection = glm::vec2( playerDirection.x * cosf( angle ) - playerDirection.y * sinf( angle ), playerDirection.x * sinf( angle ) + playerDirection.y * cosf( angle ) );
 
@@ -173,7 +179,7 @@ void Dribble::execute( FieldPlayers* pPlayer )
    }
    else
    {
-      SoccerBall::getSoccerBallInstance()->kick( pPlayer->getMyTeam()->getGoalPost()->getFacing(),  5.0f );
+      SoccerBall::getSoccerBallInstance()->kick( pPlayer->getMyTeam()->getGoalPost()->getFacing(),  20.0f );
    }
 
    pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
@@ -251,31 +257,36 @@ void SupportPlayerWithBall::enter( FieldPlayers* pPlayer )
 {
    pPlayer->getSteeringBehavior()->setArriveTarget( pPlayer->getMyTeam()->getBestSupportSpot() );
    pPlayer->getSteeringBehavior()->arriveOn();
+   pPlayer->setLookAtTarget( SoccerBall::getSoccerBallInstance() );
    //get the best support spot and set it as players target. 
 }
 
 void SupportPlayerWithBall::execute( FieldPlayers* pPlayer )
 {
-   //if( !pPlayer->getMyTeam()->hasControl() )
-   //{
-   //   pPlayer->getStateMachine()->changeState( FieldPlayerReturnHome::getInstance() );
-   //   return;
-   //}
+   if( pPlayer->getMyTeam()->getOpponent()->hasControl() )
+   {
+      pPlayer->getStateMachine()->changeState( FieldPlayerReturnHome::getInstance() );
+      return;
+   }
 
    //// if the best support spot changes, change the steering target. 
 
+   // pPlayer->getSteeringBehavior()->setArriveTarget( pPlayer->getMyTeam()->getBestSupportSpot() );
+
    //// request pass if able to kcik to goal. 
 
-   //if( pPlayer->isAtArriveTarget() )
-   //{
-   //   pPlayer->getSteeringBehavior()->arriveOff();
-   //   // track ball
+   if( pPlayer->isAtArriveTarget() )
+   {
 
-   //   pPlayer->setVelocity( glm::vec2( 0, 0 ) );
-   //   pPlayer->getStateMachine()->setCurrentState( Wait::getInstance() );
+      pPlayer->getSteeringBehavior()->setArriveTarget( pPlayer->getMyTeam()->getBestSupportSpot() );
+      //pPlayer->getSteeringBehavior()->arriveOff();
+      // track ball
 
-      // request pass if not threatend by an opposing player. 
-   //}
+      //pPlayer->setVelocity( glm::vec2( 0, 0 ) );
+      pPlayer->getStateMachine()->setCurrentState( Wait::getInstance() );
+
+     // request pass if not threatend by an opposing player. 
+   }
 }
 
 void SupportPlayerWithBall::exit( FieldPlayers* pPlayer )

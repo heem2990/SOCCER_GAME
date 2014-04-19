@@ -71,10 +71,19 @@ Players::~Players(void)
 void Players::draw()
 {
    MovingEntity::draw();
-   if( m_bHasBall )
-   {   
-		al_draw_circle( getPosition().x, getPosition().y, 5.0f, al_map_rgb( 1.0f, 1.0f, 0.0f ), 5.0f );
+
+   if( isThreatened() )
+   {
+      al_draw_circle( getPosition().x, getPosition().y, 5.0f, al_map_rgb( 100.0f, 1.0f, 100.0f ), 20.0f );   
    }
+
+   if( m_bHasBall )
+   { 
+     // al_draw_filled_triangle( getPosition().x, getPosition().y, getPosition().x + 5.0f, getPosition().y + 5.0f, getPosition().x - 5.0f, getPosition().y - 5.0f , al_map_rgb( 100.0f, 0.0f, 100.0f ) );   
+
+      al_draw_circle( getPosition().x, getPosition().y, 5.0f, al_map_rgb( 1.0f, 1.0f, 0.0f ), 5.0f );
+   }
+
    //al_draw_text( m_playerStateFont, al_map_rgb( 255, 255, 255 ), getPosition().x , getPosition().y, 0, ge );
 }
 
@@ -213,4 +222,21 @@ void Players::findSupportingPlayer()
 void Players::setHasBall( bool hasBall )
 {
    m_bHasBall = hasBall;
+}
+
+bool Players::isThreatened() const
+{
+   std::vector<Players *> opponentPlayers = getMyTeam()->getOpponent()->getPlayersOnTeam();
+   for( int i = 0 ; i < opponentPlayers.size() ; ++i )
+   {
+      glm::vec2 toOpponent = opponentPlayers[ i ]->getPosition() - getPosition();
+
+      if( ( toOpponent.x * toOpponent.x + toOpponent.y * toOpponent.y ) < 15.0f * 15.0f )
+      {
+         return true;
+      }
+      
+   }
+   //getMyTeam()
+   return false;
 }

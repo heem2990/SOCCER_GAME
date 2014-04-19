@@ -49,8 +49,8 @@ bool FieldPlayers::handleMessage( const Message& msg )
          
          SoccerBall::getSoccerBallInstance()->kick( receivingPlayerPos - SoccerBall::getSoccerBallInstance()->getPosition(), MAX_PASSING_FORCE );
          MessageDispatcher::getInstance()->dispatchMessage( 0.0f, this, msg.getSender(), MESSAGE_TYPES::RECEIVE_BALL, &receivingPlayerPos );
-         m_pMyStateMachine->changeState( Wait::getInstance() );
-         //setHasBall( false );
+         m_pMyStateMachine->changeState( SupportPlayerWithBall::getInstance() );
+         //setHasBall( false )w;
          getMyTeam()->setPlayerWithBall( NULL );
          //findSupportingPlayer();
 
