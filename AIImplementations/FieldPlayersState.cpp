@@ -7,6 +7,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include "GoalPosts.h"
+#include "MessageDispatcher.h"
 
 // Wait State functions
 void Wait::enter( FieldPlayers* pPlayer )
@@ -166,7 +167,17 @@ void Dribble::enter( FieldPlayers* pPlayer )
 void Dribble::execute( FieldPlayers* pPlayer )
 {
    float dot = glm::dot( pPlayer->getMyTeam()->getGoalPost()->getFacing(), pPlayer->getHeading() );
-
+   
+   if( pPlayer->isThreatened() )
+   {
+      pPlayer->findSupportingPlayer();
+      SoccerBall::getSoccerBallInstance()->kick( pPlayer->getMyTeam()->getSupportingPlayer()->getPosition() - SoccerBall::getSoccerBallInstance()->getPosition(), 100.0f );
+      MessageDispatcher::getInstance()->dispatchMessage( 0.0f, pPlayer, pPlayer->getMyTeam()->getSupportingPlayer(), MESSAGE_TYPES::RECEIVE_BALL, &pPlayer->getMyTeam()->getSupportingPlayer()->getPosition() );
+      pPlayer->getStateMachine()->changeState( Wait::getInstance() );
+      pPlayer->getMyTeam()->setPlayerWithBall( NULL );
+      return;   
+   }
+   
    if( dot < 0 )
    {
       glm::vec2 playerDirection = pPlayer->getHeading();
