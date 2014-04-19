@@ -94,6 +94,7 @@ void Teams::update()
       m_playersOnTeam[ i ]->update();
    }
    m_pGoalkeeper->update();
+   
    m_hasBall = false;
    for( int i = 0 ; i < 5 ; ++i )
    {
@@ -132,7 +133,7 @@ void Teams::setPlayerWithBall( Players* pPlayer )
 { 
    if( m_pPlayerWithBall )
    {
-      m_pPlayerWithBall->setHasBall( false );
+      m_pPlayerWithBall->setHasBall( false ); 
    }
    
    if( pPlayer )

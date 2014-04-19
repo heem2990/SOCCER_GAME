@@ -47,7 +47,7 @@ void SoccerBall::kick( glm::vec2 direction, float force )
 
 void SoccerBall::trap( Players* pOwner )
 { 
-   setVelocity( glm::vec2() );  
+   setVelocity( glm::vec2( 0.0f, 0.0f ) );  
    m_pBallOwner = pOwner;
    m_pBallOwner->setHasBall( true );
 }

@@ -7,6 +7,7 @@
 #include "MessageDispatcher.h"
 #include "Teams.h"
 #include "SupportSpotCalculator.h"
+#include "SoccerGame.h"
 
 static const int MAX_PASSING_FORCE = 100.0f; // check values.
 static const int NORMAL_SPEED = 5.0f;
@@ -29,6 +30,11 @@ FieldPlayers::~FieldPlayers(void)
 
 bool FieldPlayers::handleMessage( const Message& msg )
 {
+   if( !SoccerGame::getGameInstance()->isGameOn() )
+   {
+      return false;
+   }
+
    switch ( msg.getMessageType() )
    {
    case MESSAGE_TYPES::GO_HOME:

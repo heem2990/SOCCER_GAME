@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include "GoalPosts.h"
 #include "MessageDispatcher.h"
+#include <allegro5/allegro_primitives.h>
 
 // Wait State functions
 void Wait::enter( FieldPlayers* pPlayer )
@@ -83,9 +84,10 @@ void ChaseBall::execute( FieldPlayers* pPlayer )
       pPlayer->getStateMachine()->changeState( Dribble::getInstance() );
       return;
    }
+
 	//if( pPlayer->isInKickingRangeOfTheBall() )
 	//{
- //     pPlayer->getMyTeam()->setPlayerWithBall( pPlayer );
+ //     pPlayer->getMyTeam()->setPlayerWithBall( pPlayer );                                                                                                                                                                                                                                                                                                                                  
 	//	pPlayer->getStateMachine()->changeState( KickBall::getInstance() );
 	//	return;
 	//}
@@ -135,7 +137,7 @@ void ReceiveBall::execute( FieldPlayers* pPlayer )
    //   return;
    //}
 
-   if( pPlayer->isPlayerWithinReceivingRange() )
+   if( pPlayer->isPlayerWithinReceivingRange() /*&& SoccerGame::getGameInstance()->isGameOn()*/ )
    {
       pPlayer->getSteeringBehavior()->pursuitOff();
       pPlayer->setVelocity( glm::vec2( 0, 0 ) );
@@ -166,6 +168,7 @@ void Dribble::enter( FieldPlayers* pPlayer )
 
 void Dribble::execute( FieldPlayers* pPlayer )
 {
+   al_draw_rectangle( pPlayer->getPosition().x, pPlayer->getPosition().y, pPlayer->getPosition().x + 40.0f, pPlayer->getPosition().y + 40.0f, al_map_rgb( 200.0f, 130.0f, 50.0f ), 10.0f );
    float dot = glm::dot( pPlayer->getMyTeam()->getGoalPost()->getFacing(), pPlayer->getHeading() );
    
    if( pPlayer->isThreatened() )
@@ -193,12 +196,16 @@ void Dribble::execute( FieldPlayers* pPlayer )
       SoccerBall::getSoccerBallInstance()->kick( pPlayer->getMyTeam()->getGoalPost()->getFacing(),  20.0f );
    }
 
-   pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
+   if( !pPlayer->getMyTeam()->doesGoalKeeperHaveBall() && SoccerGame::getGameInstance()->isGameOn() )
+   {
+      pPlayer->getStateMachine()->changeState( ChaseBall::getInstance() );
+   }
    //return;
 }
 
 void Dribble::exit( FieldPlayers* pPlayer )
 {
+   std::cout<<"\n ************** EXITING DRIBBLE *************\n ";
 }
 
 Dribble* Dribble::getInstance()
@@ -316,8 +323,13 @@ SupportPlayerWithBall* SupportPlayerWithBall::getInstance()
 
 void FieldPlayerReturnHome::enter( FieldPlayers* pPlayer )
 {
-   pPlayer->getSteeringBehavior()->arriveOn();
    pPlayer->setHomeRegionAsTarget(); 
+   pPlayer->getSteeringBehavior()->pursuitOff();
+   pPlayer->getSteeringBehavior()->interposeOff();
+   pPlayer->getSteeringBehavior()->seekOff();
+
+   pPlayer->getSteeringBehavior()->arriveOn();
+   pPlayer->setHasBall( false );
 }
 
 void FieldPlayerReturnHome::execute( FieldPlayers* pPlayer )
