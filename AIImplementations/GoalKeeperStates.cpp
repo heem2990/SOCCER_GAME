@@ -72,6 +72,7 @@ void TendGoal::execute( GoalKeeper* pGoalKeeper )
    if( pGoalKeeper->isBallWithinInterceptRanger() )
    {
       pGoalKeeper->getStateMachine()->changeState( InterceptBall::getInstance() );
+      return;
    }
 
    if( pGoalKeeper->getMyTeam()->hasControl() )
@@ -141,11 +142,6 @@ void InterceptBall::enter( GoalKeeper* pGoalKeeper )
 
 void InterceptBall::execute( GoalKeeper* pGoalKeeper )
 {
-   if( pGoalKeeper->isTooFarFromGoal() || !pGoalKeeper->isPlayerClosestToBall() && !pGoalKeeper->isInKickingRangeOfTheBall() )
-   {
-      pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
-      return;
-   }
 
    if( pGoalKeeper->isInKickingRangeOfTheBall() )
    {
@@ -153,6 +149,13 @@ void InterceptBall::execute( GoalKeeper* pGoalKeeper )
       SoccerBall::getSoccerBallInstance()->trap( pGoalKeeper );
       pGoalKeeper->getStateMachine()->changeState( GoalKick::getInstance() );
       SoccerGame::getGameInstance()->setGameOn( false );
+      return;
+   }
+
+   if( pGoalKeeper->isTooFarFromGoal() /*|| !pGoalKeeper->isPlayerClosestToBall()*/ )
+   {
+      pGoalKeeper->getStateMachine()->changeState( ReturnGoalkeeperHome::getInstance() );
+      return;
    }
 }
 

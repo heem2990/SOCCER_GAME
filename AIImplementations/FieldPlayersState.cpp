@@ -13,7 +13,7 @@
 // Wait State functions
 void Wait::enter( FieldPlayers* pPlayer )
 {
-   pPlayer->setHomeRegionAsTarget();
+   //pPlayer->setHomeRegionAsTarget();
 }
 
 void Wait::execute( FieldPlayers* pPlayer )
@@ -60,6 +60,7 @@ void Wait::execute( FieldPlayers* pPlayer )
 void Wait::exit( FieldPlayers* pPlayer )
 {
    pPlayer->lookAtOff();
+   pPlayer->getSteeringBehavior()->arriveOff();
 }
 
 Wait* Wait::getInstance()
@@ -168,7 +169,7 @@ void Dribble::enter( FieldPlayers* pPlayer )
 
 void Dribble::execute( FieldPlayers* pPlayer )
 {
-   al_draw_rectangle( pPlayer->getPosition().x, pPlayer->getPosition().y, pPlayer->getPosition().x + 40.0f, pPlayer->getPosition().y + 40.0f, al_map_rgb( 200.0f, 130.0f, 50.0f ), 10.0f );
+   //al_draw_rectangle( pPlayer->getPosition().x, pPlayer->getPosition().y, pPlayer->getPosition().x + 40.0f, pPlayer->getPosition().y + 40.0f, al_map_rgb( 200.0f, 130.0f, 50.0f ), 10.0f );
    float dot = glm::dot( pPlayer->getMyTeam()->getGoalPost()->getFacing(), pPlayer->getHeading() );
    
    if( pPlayer->isThreatened() )
@@ -184,7 +185,7 @@ void Dribble::execute( FieldPlayers* pPlayer )
    if( dot < 0 )
    {
       glm::vec2 playerDirection = pPlayer->getHeading();
-      float angle = ( 3.1415f / 2.0f ); // 3.1415 = pi TODO: Change according to whether the player turns clockwise or anticlockwise to be take the smaller turn
+      float angle = ( 3.1415f / 1.0f ); // 3.1415 = pi TODO: Change according to whether the player turns clockwise or anticlockwise to be take the smaller turn
 
       playerDirection = glm::vec2( playerDirection.x * cosf( angle ) - playerDirection.y * sinf( angle ), playerDirection.x * sinf( angle ) + playerDirection.y * cosf( angle ) );
 
@@ -309,7 +310,7 @@ void SupportPlayerWithBall::execute( FieldPlayers* pPlayer )
 
 void SupportPlayerWithBall::exit( FieldPlayers* pPlayer )
 {
-   pPlayer->getSteeringBehavior()->arriveOff();
+   //pPlayer->getSteeringBehavior()->arriveOff();
 }
 
 SupportPlayerWithBall* SupportPlayerWithBall::getInstance()
