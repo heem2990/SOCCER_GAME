@@ -97,11 +97,12 @@ void ChaseBall::execute( FieldPlayers* pPlayer )
  //     pPlayer->setHasBall( false );
  //  }
 
-	//if( pPlayer->isPlayerClosestToBall() )
-	//{
-	//	pPlayer->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
-	//	return;
-	//}
+	if( !pPlayer->isPlayerClosestToBall() )
+	{
+		//pPlayer->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
+      pPlayer->getStateMachine()->changeState( FieldPlayerReturnHome::getInstance() );
+      return;
+	}
 
 	////pPlayer->getStateMachine()->changeState( FieldPlayerReturnHome::getInstance() );
 }
@@ -125,6 +126,7 @@ void ReceiveBall::enter( FieldPlayers* pPlayer )
  //  pPlayer->getMyTeam()->setReceivingPlayer( pPlayer );
 
    //// TODO Change behavior depending on the location of the current player, and chances of it getting intercepted. If they are low, use arrive. 
+   pPlayer->getSteeringBehavior()->arriveOff();
    pPlayer->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );
    pPlayer->getSteeringBehavior()->pursuitOn();
 }
@@ -151,6 +153,7 @@ void ReceiveBall::execute( FieldPlayers* pPlayer )
 
 void ReceiveBall::exit( FieldPlayers* pPlayer )
 {
+   pPlayer->getSteeringBehavior()->pursuitOff();
 }
 
 ReceiveBall* ReceiveBall::getInstance()
