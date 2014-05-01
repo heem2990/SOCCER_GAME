@@ -86,17 +86,6 @@ void ChaseBall::execute( FieldPlayers* pPlayer )
       return;
    }
 
-	//if( pPlayer->isInKickingRangeOfTheBall() )
-	//{
- //     pPlayer->getMyTeam()->setPlayerWithBall( pPlayer );                                                                                                                                                                                                                                                                                                                                  
-	//	pPlayer->getStateMachine()->changeState( KickBall::getInstance() );
-	//	return;
-	//}
- //  else
- //  {
- //     pPlayer->setHasBall( false );
- //  }
-
 	if( !pPlayer->isPlayerClosestToBall() )
 	{
 		//pPlayer->getSteeringBehavior()->setTarget( SoccerBall::getSoccerBallInstance() );

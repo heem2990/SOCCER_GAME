@@ -55,18 +55,18 @@ void SteeringBehaviors::calculateForce()
 	}
    // debug remove
    
-   al_draw_line( m_pOwner->getPosition().x, 
+  /* al_draw_line( m_pOwner->getPosition().x, 
                  m_pOwner->getPosition().y, 
                  m_pOwner->getPosition().x + totalVelocity.x * 20, 
                  m_pOwner->getPosition().y + totalVelocity.y * 20, 
-                 al_map_rgb( 122.0f, 122.0f, 0.0f ), 5.0f ); 
+                 al_map_rgb( 122.0f, 122.0f, 0.0f ), 5.0f ); */ // DRAWS line to indicate player velocity
    m_pOwner->setVelocity( totalVelocity );
    //m_pOwner->setForce( totalForce );
 }
 
 glm::vec2 SteeringBehaviors::calcArriveVelocity( glm::vec2 target ) 
 {
-   al_draw_circle( target.x, target.y, 10.0f, al_map_rgb( 0.0f, 0.0f, 255.0f ), 3.0f );
+   //al_draw_circle( target.x, target.y, 10.0f, al_map_rgb( 0.0f, 0.0f, 255.0f ), 3.0f ); // DRAWS players arrive target
    glm::vec2 velocityToTarget = /*m_pTarget->getPosition()*/target - m_pOwner->getPosition();
    float distanceToTarget = sqrt( sqrmag( velocityToTarget ) );
    float speed = 0.0f;

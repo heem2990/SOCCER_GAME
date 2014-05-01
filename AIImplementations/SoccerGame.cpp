@@ -121,7 +121,7 @@ void SoccerGame::draw()
    
    for( int i = 0 ; i < 18 ; ++i )
    {
-	   m_sRegions[i]->debugDraw();
+	   //m_sRegions[i]->debugDraw();
    }
    
    // DEBUG ONLY

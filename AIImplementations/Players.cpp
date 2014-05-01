@@ -74,14 +74,14 @@ void Players::draw()
 
    if( isThreatened() )
    {
-      al_draw_circle( getPosition().x, getPosition().y, 5.0f, al_map_rgb( 100.0f, 1.0f, 100.0f ), 20.0f );   
+      //al_draw_circle( getPosition().x, getPosition().y, 5.0f, al_map_rgb( 100.0f, 1.0f, 100.0f ), 20.0f );   
    }
 
    if( m_bHasBall )
    { 
      // al_draw_filled_triangle( getPosition().x, getPosition().y, getPosition().x + 5.0f, getPosition().y + 5.0f, getPosition().x - 5.0f, getPosition().y - 5.0f , al_map_rgb( 100.0f, 0.0f, 100.0f ) );   
 
-      al_draw_circle( getPosition().x, getPosition().y, 5.0f, al_map_rgb( 1.0f, 1.0f, 0.0f ), 5.0f );
+      //al_draw_circle( getPosition().x, getPosition().y, 5.0f, al_map_rgb( 1.0f, 1.0f, 0.0f ), 5.0f );
    }
 
    //al_draw_text( m_playerStateFont, al_map_rgb( 255, 255, 255 ), getPosition().x , getPosition().y, 0, ge );
